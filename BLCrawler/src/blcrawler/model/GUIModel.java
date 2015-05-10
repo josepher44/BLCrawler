@@ -18,7 +18,7 @@ public class GUIModel {
 	
 	public GUIModel(String name) {
 		
-		headerLabel = "yo";
+		headerLabel = "Test for region that's having some issues displaying text, it looks all funny";
 		statusLabel = "status";
 		guiController = new GUIMainController(this);
 		guiView = new GUIView(guiController, this);
