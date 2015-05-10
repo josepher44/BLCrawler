@@ -2,44 +2,87 @@ package blcrawler.model;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
+import blcrawler.controller.GUIMainController;
+import blcrawler.view.GUIView;
 
 public class GUIModel {
 	
-	private JFrame mainFrame;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
-	private JPanel controlPanel;
+	private GUIMainController guiController;
+	private GUIView guiView;
+	
+	private String headerLabel;
+	private String statusLabel;
 	
 	public GUIModel(String name) {
-		 mainFrame = new JFrame("Bricklink");
-	      mainFrame.setSize(800,600);
-	      mainFrame.setLayout(new GridLayout(3, 1));
-	      
-	      //Center on the screen
-	      Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-	      int x = (int) ((dimension.getWidth() - mainFrame.getWidth()) / 2);
-	      int y = (int) ((dimension.getHeight() - mainFrame.getHeight()) / 2);
-	      mainFrame.setLocation(x, y);
+		
+		headerLabel = "yo";
+		statusLabel = "status";
+		guiController = new GUIMainController(this);
+		guiView = new GUIView(guiController, this);
 
-	      headerLabel = new JLabel("Yo",JLabel.CENTER );
-	      statusLabel = new JLabel("Status",JLabel.CENTER);        
-
-	      statusLabel.setSize(350,100);
-	      mainFrame.addWindowListener(new WindowAdapter() {
-	         public void windowClosing(WindowEvent windowEvent){
-		        System.exit(0);
-	         }        
-	      });    
-	      controlPanel = new JPanel();
-	      controlPanel.setLayout(new FlowLayout());
-
-	      mainFrame.add(headerLabel);
-	      mainFrame.add(controlPanel);
-	      mainFrame.add(statusLabel);
-	      mainFrame.setVisible(true);  
+		
+		 
 	      
 	      
+	}
+
+	/**
+	 * @return the guiController
+	 */
+	public GUIMainController getGuiController() {
+		return guiController;
+	}
+
+	/**
+	 * @param guiController the guiController to set
+	 */
+	public void setGuiController(GUIMainController guiController) {
+		this.guiController = guiController;
+	}
+
+	/**
+	 * @return the guiView
+	 */
+	public GUIView getGuiView() {
+		return guiView;
+	}
+
+	/**
+	 * @param guiView the guiView to set
+	 */
+	public void setGuiView(GUIView guiView) {
+		this.guiView = guiView;
+	}
+
+	/**
+	 * @return the headerLabel
+	 */
+	public String getHeaderLabel() {
+		return headerLabel;
+	}
+
+	/**
+	 * @param headerLabel the headerLabel to set
+	 */
+	public void setHeaderLabel(String headerLabel) {
+		this.headerLabel = headerLabel;
+	}
+
+	/**
+	 * @return the statusLabel
+	 */
+	public String getStatusLabel() {
+		return statusLabel;
+	}
+
+	/**
+	 * @param statusLabel the statusLabel to set
+	 */
+	public void setStatusLabel(String statusLabel) {
+		this.statusLabel = statusLabel;
 	}
 
 }
