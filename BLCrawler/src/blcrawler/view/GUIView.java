@@ -32,6 +32,8 @@ public class GUIView {
 	private JLabel statusLabel;
 	private JPanel controlPanel;
 	private JTextArea consoleOut;
+	private JTextArea commandLine;
+	private JScrollPane scrollableConsole;
 	
 
 	public GUIView(GUIMainController guiMainController, GUIModel guiModel) {
@@ -54,15 +56,19 @@ public class GUIView {
 		  int y = (int) ((dimension.getHeight() - mainFrame.getHeight()) / 2);
 		  mainFrame.setLocation(x, y);
 		  
-		  consoleOut=new JTextArea();
+		  consoleOut=new JTextArea(25,45);
 		  consoleOut.setEditable(true);
 		  consoleOut.setLineWrap(true);
-		  consoleOut.setSize(new Dimension(200,100));
+		  JScrollPane scrollableConsole = new JScrollPane(consoleOut);
+		  
+		  commandLine=new JTextArea(5,45);
+		  commandLine.setEditable(true);
+		  commandLine.setLineWrap(true);
 		  
 		  headerLabel = new JLabel(guiModel.getHeaderLabel(),JLabel.CENTER );
 		  statusLabel = new JLabel(guiModel.getStatusLabel(),JLabel.CENTER);        
 		
-		  statusLabel.setSize(50,50);
+		  
 		  mainFrame.addWindowListener(new WindowAdapter() {
 		     public void windowClosing(WindowEvent windowEvent){
 		        System.exit(0);
@@ -70,11 +76,16 @@ public class GUIView {
 		  });    
 		  
 		  mainFrame.add(mainPanel);
-		  mainPanel.add(headerLabel);
-		  mainPanel.add(consoleOut);
-		  mainPanel.add(statusLabel);
+		  mainPanel.add(headerLabel, "wrap 40");
+		  mainPanel.add(scrollableConsole, "span 6");
+		  mainPanel.add(statusLabel, "wrap");
+		  mainPanel.add(commandLine, "span 6 6");
+		  
+		  
 		  
 		  mainFrame.setVisible(true);
+		  
+
 
 	}
 
