@@ -103,5 +103,194 @@ public class GUIView {
 
 
 	}
+	
+	
+	/**
+	 * @return the guiMainController
+	 */
+	public static GUIMainController getGuiMainController() {
+		return guiMainController;
+	}
+
+
+	/**
+	 * @param guiMainController the guiMainController to set
+	 */
+	public static void setGuiMainController(GUIMainController guiMainController) {
+		GUIView.guiMainController = guiMainController;
+	}
+
+
+	/**
+	 * @return the guiModel
+	 */
+	public static GUIModel getGuiModel() {
+		return guiModel;
+	}
+
+
+	/**
+	 * @param guiModel the guiModel to set
+	 */
+	public static void setGuiModel(GUIModel guiModel) {
+		GUIView.guiModel = guiModel;
+	}
+
+
+	/**
+	 * @return the mainFrame
+	 */
+	public JFrame getMainFrame() {
+		return mainFrame;
+	}
+
+
+	/**
+	 * @param mainFrame the mainFrame to set
+	 */
+	public void setMainFrame(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+	}
+
+
+	/**
+	 * @return the mainPanel
+	 */
+	public JPanel getMainPanel() {
+		return mainPanel;
+	}
+
+
+	/**
+	 * @param mainPanel the mainPanel to set
+	 */
+	public void setMainPanel(JPanel mainPanel) {
+		this.mainPanel = mainPanel;
+	}
+
+
+	/**
+	 * @return the headerLabel
+	 */
+	public JLabel getHeaderLabel() {
+		return headerLabel;
+	}
+
+
+	/**
+	 * @param headerLabel the headerLabel to set
+	 */
+	public void setHeaderLabel(JLabel headerLabel) {
+		this.headerLabel = headerLabel;
+	}
+
+
+	/**
+	 * @return the statusLabel
+	 */
+	public JLabel getStatusLabel() {
+		return statusLabel;
+	}
+
+
+	/**
+	 * @param statusLabel the statusLabel to set
+	 */
+	public void setStatusLabel(JLabel statusLabel) {
+		this.statusLabel = statusLabel;
+	}
+
+
+	/**
+	 * @return the controlPanel
+	 */
+	public JPanel getControlPanel() {
+		return controlPanel;
+	}
+
+
+	/**
+	 * @param controlPanel the controlPanel to set
+	 */
+	public void setControlPanel(JPanel controlPanel) {
+		this.controlPanel = controlPanel;
+	}
+
+
+	/**
+	 * @return the consoleOut
+	 */
+	public JTextArea getConsoleOut() {
+		return consoleOut;
+	}
+
+
+	/**
+	 * @param consoleOut the consoleOut to set
+	 */
+	public void setConsoleOut(JTextArea consoleOut) {
+		this.consoleOut = consoleOut;
+	}
+
+
+	/**
+	 * @return the commandLine
+	 */
+	public JTextArea getCommandLine() {
+		return commandLine;
+	}
+
+
+	/**
+	 * @param commandLine the commandLine to set
+	 */
+	public void setCommandLine(JTextArea commandLine) {
+		this.commandLine = commandLine;
+	}
+
+
+	/**
+	 * @return the scrollableConsole
+	 */
+	public JScrollPane getScrollableConsole() {
+		return scrollableConsole;
+	}
+
+
+	/**
+	 * @param scrollableConsole the scrollableConsole to set
+	 */
+	public void setScrollableConsole(JScrollPane scrollableConsole) {
+		this.scrollableConsole = scrollableConsole;
+	}
+
+
+	/**
+	 * @return the keyStroke
+	 */
+	public KeyStroke getKeyStroke() {
+		return keyStroke;
+	}
+
+
+	/**
+	 * @param keyStroke the keyStroke to set
+	 */
+	public void setKeyStroke(KeyStroke keyStroke) {
+		this.keyStroke = keyStroke;
+	}
+
+
+	/**
+	 * @return the key
+	 */
+	public static String getKey() {
+		return key;
+	}
+
+
+	public void clearConsoleIn() {
+		commandLine.setText(null);
+	}
 
 }

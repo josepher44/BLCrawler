@@ -2,6 +2,9 @@ package blcrawler.model;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import javax.swing.*;
 
@@ -22,6 +25,7 @@ public class GUIModel {
 		statusLabel = "status";
 		guiController = new GUIMainController(this);
 		guiView = new GUIView(guiController, this);
+		redirectSystemStreams();
 
 		
 		 
@@ -29,6 +33,40 @@ public class GUIModel {
 	      
 	}
 
+	
+	private void updateTextArea(final String text) {
+		  SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		      guiView.getConsoleOut().append(text);
+		    }
+		  });
+		}
+		 
+		private void redirectSystemStreams() {
+		  OutputStream out = new OutputStream() {
+		    @Override
+		    public void write(int b) throws IOException {
+		      updateTextArea(String.valueOf((char) b));
+		    }
+		 
+		    @Override
+		    public void write(byte[] b, int off, int len) throws IOException {
+		      updateTextArea(new String(b, off, len));
+		    }
+		 
+		    @Override
+		    public void write(byte[] b) throws IOException {
+		      write(b, 0, b.length);
+		    }
+		  };
+		 
+		  System.setOut(new PrintStream(out, true));
+		  System.setErr(new PrintStream(out, true));
+		}
+	
+	
+	
+	
 	/**
 	 * @return the guiController
 	 */

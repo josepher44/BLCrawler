@@ -18,6 +18,7 @@ public class GUIMainController {
 		Thing = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gui.getGuiView().clearConsoleIn();
 				System.out.println("Hello World");
 				
 				}
