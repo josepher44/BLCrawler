@@ -5,19 +5,23 @@ package blcrawler.view;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 import blcrawler.model.GUIModel;
 import blcrawler.controller.GUIMainController;
-
 import net.miginfocom.swing.MigLayout;
 
 
@@ -34,6 +38,8 @@ public class GUIView {
 	private JTextArea consoleOut;
 	private JTextArea commandLine;
 	private JScrollPane scrollableConsole;
+	private static final String key = "ENTER";
+    private KeyStroke keyStroke;
 	
 
 	public GUIView(GUIMainController guiMainController, GUIModel guiModel) {
@@ -61,9 +67,18 @@ public class GUIView {
 		  consoleOut.setLineWrap(true);
 		  JScrollPane scrollableConsole = new JScrollPane(consoleOut);
 		  
+
+		  
 		  commandLine=new JTextArea(5,45);
+		  keyStroke = KeyStroke.getKeyStroke(key);
 		  commandLine.setEditable(true);
 		  commandLine.setLineWrap(true);
+		  commandLine.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke,"Thing");
+		  commandLine.getActionMap().put("Thing", this.guiMainController.getThing());
+
+
+		  
+		  
 		  
 		  headerLabel = new JLabel(guiModel.getHeaderLabel(),JLabel.CENTER );
 		  statusLabel = new JLabel(guiModel.getStatusLabel(),JLabel.CENTER);        
@@ -84,7 +99,7 @@ public class GUIView {
 		  
 		  
 		  mainFrame.setVisible(true);
-		  
+		 		  
 
 
 	}
