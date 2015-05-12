@@ -6,6 +6,7 @@ import java.io.PrintStream;
 
 import javax.swing.SwingUtilities;
 
+import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 
 public class ConsoleController {
@@ -42,7 +43,7 @@ public class ConsoleController {
 		  System.setErr(new PrintStream(out, true));
 		}
 	
-	
+
 	private void updateTextAreaFromSystem(final String text) {
 		  SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
@@ -55,5 +56,9 @@ public class ConsoleController {
 		    }
 		  });
 		}
-
+	
+	public void outputConsole(ConsoleOutput output)
+	{
+		GUIModel.getGuiView().getConsoleOut().append(output.getCombined());
+	}
 }

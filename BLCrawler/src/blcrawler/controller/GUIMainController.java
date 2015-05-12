@@ -5,6 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 
 public class GUIMainController {
@@ -18,7 +19,8 @@ public class GUIMainController {
 		Thing = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
+				sendInToOut(gui.getGuiView().getCLText());
 				gui.getGuiView().clearConsoleIn();
 				System.out.println("Hello World");
 				
@@ -28,6 +30,12 @@ public class GUIMainController {
 	
 	  
 	
+	protected void sendInToOut(String input) {
+		new ConsoleOutput("Command", input);
+	}
+
+
+
 	/**
 	 * @return the gui
 	 */

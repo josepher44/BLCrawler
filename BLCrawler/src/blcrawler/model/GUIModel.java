@@ -17,7 +17,7 @@ public class GUIModel {
 	//private static GUIModel instance = new GUIModel("gui");
 	private GUIMainController guiController;
 	private static GUIView guiView;
-	private ConsoleController consoleController;
+	private static ConsoleController consoleController;
 	
 	private String headerLabel;
 	private String statusLabel;
@@ -29,7 +29,7 @@ public class GUIModel {
 		statusLabel = "status";
 		guiController = new GUIMainController(this);
 		guiView = new GUIView(guiController, this);
-		//redirectSystemStreams();
+
 
 		
 		 
@@ -39,33 +39,33 @@ public class GUIModel {
 
 	
 
-	/*	 
-		private void redirectSystemStreams() {
-		  OutputStream out = new OutputStream() {
-		    @Override
-		    public void write(int b) throws IOException {
-		      updateTextAreaFromSystem(String.valueOf((char) b));
-		    }
-		 
-		    @Override
-		    public void write(byte[] b, int off, int len) throws IOException {
 
-		      updateTextAreaFromSystem(new String(b, off, len));
-		    }
-		 
-		    @Override
-		    public void write(byte[] b) throws IOException {
-		      write(b, 0, b.length);
-		    }
-		  };
-		 
-		  System.setOut(new PrintStream(out, true));
-		  System.setErr(new PrintStream(out, true));
-		}
-	
-	*/
 	
 	
+	/**
+	 * @return the consoleController
+	 */
+	public static ConsoleController getConsoleController() {
+		return consoleController;
+	}
+
+
+
+
+
+
+	/**
+	 * @param consoleController the consoleController to set
+	 */
+	public void setConsoleController(ConsoleController consoleController) {
+		this.consoleController = consoleController;
+	}
+
+
+
+
+
+
 	/**
 	 * @return the guiController
 	 */

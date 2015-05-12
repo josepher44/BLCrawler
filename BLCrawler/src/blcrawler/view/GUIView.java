@@ -239,6 +239,10 @@ public class GUIView {
 	public JTextArea getCommandLine() {
 		return commandLine;
 	}
+	
+	public String getCLText() {
+		return commandLine.getText();
+	}
 
 
 	/**
