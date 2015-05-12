@@ -8,24 +8,28 @@ import java.io.PrintStream;
 
 import javax.swing.*;
 
+import blcrawler.controller.ConsoleController;
 import blcrawler.controller.GUIMainController;
 import blcrawler.view.GUIView;
 
 public class GUIModel {
 	
+	//private static GUIModel instance = new GUIModel("gui");
 	private GUIMainController guiController;
-	private GUIView guiView;
+	private static GUIView guiView;
+	private ConsoleController consoleController;
 	
 	private String headerLabel;
 	private String statusLabel;
 	
 	public GUIModel(String name) {
 		
+		consoleController = new ConsoleController();
 		headerLabel = "Test for region that's having some issues displaying text, it looks all funny";
 		statusLabel = "status";
 		guiController = new GUIMainController(this);
 		guiView = new GUIView(guiController, this);
-		redirectSystemStreams();
+		//redirectSystemStreams();
 
 		
 		 
@@ -34,24 +38,19 @@ public class GUIModel {
 	}
 
 	
-	private void updateTextArea(final String text) {
-		  SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		      guiView.getConsoleOut().append(text);
-		    }
-		  });
-		}
-		 
+
+	/*	 
 		private void redirectSystemStreams() {
 		  OutputStream out = new OutputStream() {
 		    @Override
 		    public void write(int b) throws IOException {
-		      updateTextArea(String.valueOf((char) b));
+		      updateTextAreaFromSystem(String.valueOf((char) b));
 		    }
 		 
 		    @Override
 		    public void write(byte[] b, int off, int len) throws IOException {
-		      updateTextArea(new String(b, off, len));
+
+		      updateTextAreaFromSystem(new String(b, off, len));
 		    }
 		 
 		    @Override
@@ -64,7 +63,7 @@ public class GUIModel {
 		  System.setErr(new PrintStream(out, true));
 		}
 	
-	
+	*/
 	
 	
 	/**
@@ -84,7 +83,7 @@ public class GUIModel {
 	/**
 	 * @return the guiView
 	 */
-	public GUIView getGuiView() {
+	public static GUIView getGuiView() {
 		return guiView;
 	}
 
