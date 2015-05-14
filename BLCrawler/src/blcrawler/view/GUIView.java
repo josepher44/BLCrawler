@@ -50,7 +50,7 @@ public class GUIView {
 		  
 		
 		  mainFrame = new JFrame("Bricklink");
-		  mainFrame.setSize(800,600);
+		  mainFrame.setSize(1000,600);
 		  
 		  
 		  mainPanel = new JPanel();
@@ -62,14 +62,14 @@ public class GUIView {
 		  int y = (int) ((dimension.getHeight() - mainFrame.getHeight()) / 2);
 		  mainFrame.setLocation(x, y);
 		  
-		  consoleOut=new JTextArea(25,45);
+		  consoleOut=new JTextArea(25,60);
 		  consoleOut.setEditable(true);
 		  consoleOut.setLineWrap(true);
 		  JScrollPane scrollableConsole = new JScrollPane(consoleOut);
 		  
 
 		  
-		  commandLine=new JTextArea(5,45);
+		  commandLine=new JTextArea(5,60);
 		  keyStroke = KeyStroke.getKeyStroke(key);
 		  commandLine.setEditable(true);
 		  commandLine.setLineWrap(true);

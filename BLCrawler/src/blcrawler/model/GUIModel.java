@@ -15,7 +15,7 @@ import blcrawler.view.GUIView;
 public class GUIModel {
 	
 	//private static GUIModel instance = new GUIModel("gui");
-	private GUIMainController guiController;
+	private static GUIMainController guiController;
 	private static GUIView guiView;
 	private static ConsoleController consoleController;
 	
@@ -23,8 +23,14 @@ public class GUIModel {
 	private String statusLabel;
 	
 	public GUIModel(String name) {
-		
-		consoleController = new ConsoleController();
+		try
+		{
+			consoleController = new ConsoleController();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Caught CommandErr exception: " + e.getMessage());
+		}
 		
 		headerLabel = "Test for region that's having some issues displaying text, it looks all funny";
 		statusLabel = "status";
@@ -70,7 +76,7 @@ public class GUIModel {
 	/**
 	 * @return the guiController
 	 */
-	public GUIMainController getGuiController() {
+	public static GUIMainController getGuiController() {
 		return guiController;
 	}
 
