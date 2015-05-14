@@ -11,18 +11,18 @@ import blcrawler.model.GUIModel;
 public class GUIMainController {
 	
 	private static GUIModel gui;
-	Action Thing;
+	Action CommandEntered;
 	
 	public GUIMainController(GUIModel gui) {
 		this.gui = gui;
 		
-		Thing = new AbstractAction() {
+		CommandEntered = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				gui.getConsoleController().InterpretText(gui.getGuiView().getCLText());
 				sendInToOut(gui.getGuiView().getCLText());
 				gui.getGuiView().clearConsoleIn();
-				System.out.println("Hello World");
+				
 				
 				}
 		  };
@@ -57,17 +57,16 @@ public class GUIMainController {
 	/**
 	 * @return the thing
 	 */
-	public Action getThing() {
-		return Thing;
+	public Action getCommandEntered() {
+		return CommandEntered;
 	}
-
 
 
 	/**
 	 * @param thing the thing to set
 	 */
-	public void setThing(Action thing) {
-		Thing = thing;
+	public void setCommandEntered(Action thing) {
+			CommandEntered = thing;
 	}
 
 

@@ -25,6 +25,7 @@ public class GUIModel {
 	public GUIModel(String name) {
 		
 		consoleController = new ConsoleController();
+		
 		headerLabel = "Test for region that's having some issues displaying text, it looks all funny";
 		statusLabel = "status";
 		guiController = new GUIMainController(this);
