@@ -1,4 +1,4 @@
-package Commands;
+package blcrawler.commands;
 
 import blcrawler.model.ConsoleOutput;
 

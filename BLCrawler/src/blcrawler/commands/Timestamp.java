@@ -1,4 +1,4 @@
-package Commands;
+package blcrawler.commands;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

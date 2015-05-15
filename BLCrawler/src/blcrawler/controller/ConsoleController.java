@@ -11,9 +11,9 @@ import java.lang.reflect.Method;
 
 import javax.swing.SwingUtilities;
 
-import Commands.Command;
-import Commands.InvalidCommand;
-import Commands.Timestamp;
+import blcrawler.commands.Command;
+import blcrawler.commands.InvalidCommand;
+import blcrawler.commands.Timestamp;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 

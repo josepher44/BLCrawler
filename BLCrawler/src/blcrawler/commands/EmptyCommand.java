@@ -1,4 +1,4 @@
-package Commands;
+package blcrawler.commands;
 
 public class EmptyCommand implements Command {
 
