@@ -1,30 +1,38 @@
 package blcrawler.commands;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import blcrawler.model.ConsoleOutput;
+import blcrawler.model.GUIModel;
+import blcrawler.model.queue.TaskTimer;
 
-public class Timestamp implements Command {
 
-	public Timestamp() {
+//Command used to initialize the current command field. Should not be used otherwise
+public class InitialCommand implements Command {
+	private TaskTimer timer;
+	private int timeout;
+	private int delay;
+	private boolean isFinished;
+	
+	public InitialCommand() {
+		timeout=0;
+		delay=0;
+		isFinished=true;
 
 	}
+
+	
 	
 	@Override
 	public void execute() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
 
-		new ConsoleOutput("CommandResult", dateFormat.format(date));
-
+		isFinished=true;
+		
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void queue() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -34,11 +42,15 @@ public class Timestamp implements Command {
 		
 	}
 
+
+
 	@Override
 	public boolean executeImmediately() {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
+
+
 
 	@Override
 	public boolean executeNext() {
@@ -46,22 +58,31 @@ public class Timestamp implements Command {
 		return false;
 	}
 
+
+
 	@Override
 	public int getTimeout() {
 		// TODO Auto-generated method stub
-		return 0;
+		return timeout;
 	}
+
+
 
 	@Override
 	public boolean isFinished() {
+
 		// TODO Auto-generated method stub
-		return true;
+		return isFinished;
 	}
+
+
 
 	@Override
 	public long getDelay() {
 		// TODO Auto-generated method stub
-		return 0;
+		return delay;
 	}
+	
+	
 
 }

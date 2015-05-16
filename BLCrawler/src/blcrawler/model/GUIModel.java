@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import blcrawler.controller.ConsoleController;
 import blcrawler.controller.GUIMainController;
+import blcrawler.model.queue.TaskTimer;
 import blcrawler.view.GUIView;
 
 public class GUIModel {
@@ -18,6 +19,7 @@ public class GUIModel {
 	private static GUIMainController guiController;
 	private static GUIView guiView;
 	private static ConsoleController consoleController;
+	private static TaskTimer taskTimer;
 	
 	private String headerLabel;
 	private String statusLabel;
@@ -36,6 +38,7 @@ public class GUIModel {
 		statusLabel = "status";
 		guiController = new GUIMainController(this);
 		guiView = new GUIView(guiController, this);
+		taskTimer = new TaskTimer();
 
 
 		
@@ -49,6 +52,30 @@ public class GUIModel {
 
 	
 	
+	/**
+	 * @return the taskTimer
+	 */
+	public static TaskTimer getTaskTimer() {
+		return taskTimer;
+	}
+
+
+
+
+
+
+	/**
+	 * @param taskTimer the taskTimer to set
+	 */
+	public static void setTaskTimer(TaskTimer taskTimer) {
+		GUIModel.taskTimer = taskTimer;
+	}
+
+
+
+
+
+
 	/**
 	 * @return the consoleController
 	 */

@@ -24,4 +24,34 @@ public class EmptyCommand implements Command {
 		
 	}
 
+	@Override
+	public boolean executeImmediately() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean executeNext() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getTimeout() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isFinished() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public long getDelay() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

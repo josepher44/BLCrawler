@@ -11,8 +11,11 @@ import java.lang.reflect.Method;
 
 import javax.swing.SwingUtilities;
 
+
+import blcrawler.commands.*;
 import blcrawler.commands.Command;
 import blcrawler.commands.InvalidCommand;
+import blcrawler.commands.TimerTest;
 import blcrawler.commands.Timestamp;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
@@ -25,6 +28,7 @@ public class ConsoleController {
 		this.validBaseCommands = new ArrayList<String>();
 		this.commandLibrary = new HashMap<String, Runnable>();
 		commandLibrary.put("time", () -> {createTimestamp();});
+		commandLibrary.put("timertest", () -> {createTimertest();});
 		commandLibrary.put("invalid", () -> {createInvalid();});
 		validBaseCommands.add("GetDate");
 		redirectSystemStreams();
@@ -111,7 +115,13 @@ public class ConsoleController {
 	
 	
 	public void createTimestamp() {
-		new Timestamp();
+		GUIModel.getTaskTimer().addToQueue(new Timestamp());
+	}
+	
+	public void createTimertest() {
+		TimerTest timertest=new TimerTest();
+		timertest.queue();
+		GUIModel.getTaskTimer().addToQueue(timertest);
 	}
 	
 	public void createInvalid() {
