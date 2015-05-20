@@ -23,6 +23,7 @@ import blcrawler.model.GUIModel;
 public class ConsoleController {
 	private List<String> validBaseCommands;
 	private HashMap<String, Runnable> commandLibrary;
+	private String commandBuffer;
 	
 	public ConsoleController() throws Exception {
 		this.validBaseCommands = new ArrayList<String>();
@@ -30,6 +31,7 @@ public class ConsoleController {
 		commandLibrary.put("time", () -> {createTimestamp();});
 		commandLibrary.put("timertest", () -> {createTimertest();});
 		commandLibrary.put("invalid", () -> {createInvalid();});
+		commandLibrary.put("addpage", () -> {createAddPage();});
 		validBaseCommands.add("GetDate");
 		redirectSystemStreams();
 
@@ -85,11 +87,22 @@ public class ConsoleController {
 		}
 	
 	public void InterpretText(String textInput) {
-		
-		
-		if (commandLibrary.containsKey(textInput))
+		String command;
+		int i = textInput.indexOf(' ');
+		if (i!=-1)
 		{
-			commandLibrary.get(textInput).run();
+			command = textInput.substring(0, i);
+		}
+		else
+		{
+			command = textInput;
+		}
+
+		
+		if (commandLibrary.containsKey(command))
+		{
+			commandBuffer = textInput;
+			commandLibrary.get(command).run();
 		}
 			
 	
@@ -113,9 +126,13 @@ public class ConsoleController {
 		return ConsoleController.class.getMethod(s);
 	}
 	
+	public void createAddPage() {
+		GUIModel.getTaskTimer().addToQueue(new AddUrl(commandBuffer.substring(commandBuffer.indexOf(' '))));
+	}
 	
 	public void createTimestamp() {
 		GUIModel.getTaskTimer().addToQueue(new Timestamp());
+		
 	}
 	
 	public void createTimertest() {

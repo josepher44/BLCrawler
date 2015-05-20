@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import blcrawler.controller.ConsoleController;
 import blcrawler.controller.GUIMainController;
+import blcrawler.model.page.PageManager;
 import blcrawler.model.queue.TaskTimer;
 import blcrawler.view.GUIView;
 
@@ -20,6 +21,7 @@ public class GUIModel {
 	private static GUIView guiView;
 	private static ConsoleController consoleController;
 	private static TaskTimer taskTimer;
+	private static PageManager pageManager;
 	
 	private String headerLabel;
 	private String statusLabel;
@@ -39,6 +41,7 @@ public class GUIModel {
 		guiController = new GUIMainController(this);
 		guiView = new GUIView(guiController, this);
 		taskTimer = new TaskTimer();
+		pageManager = new PageManager();
 
 
 		
@@ -57,6 +60,10 @@ public class GUIModel {
 	 */
 	public static TaskTimer getTaskTimer() {
 		return taskTimer;
+	}
+	
+	public static PageManager getPageManager() {
+		return pageManager;
 	}
 
 
