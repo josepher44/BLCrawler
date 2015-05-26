@@ -1,4 +1,6 @@
 package blcrawler.commands;
+import blcrawler.model.ConsoleOutput;
+import blcrawler.model.GUIModel;
 
 public class AddUrl implements Command {
 	
@@ -10,7 +12,9 @@ public class AddUrl implements Command {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		
+		new ConsoleOutput("CommandResult", "URL input: "+ url);
+		GUIModel.getSeleniumModel().getURL(url);
 		
 	}
 
