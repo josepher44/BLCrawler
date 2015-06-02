@@ -24,6 +24,10 @@ public class SeleniumModel {
 		new ConsoleOutput("Selenium: ", "Page title is: " + driver.getTitle());
 	}
 	
+	public String getHTML() {
+		return driver.getPageSource();
+	}
+	
 	
 
 }
