@@ -20,8 +20,16 @@ public class AddPartBrowse implements Command {
 
 	@Override
 	public void execute() {
-		new PartBrowse(url);
-		new ConsoleOutput("CommandResult", "Page of type PartBrowse at url=" +url+ " successfully accessed and recorded");
+		if (GUIModel.getPageManager().partBrowseFileMap.containsValue(url))
+		{
+			new ConsoleOutput("PageManager", "Partbrowse page of url "+url+" already stored.");
+		
+		}
+		else
+		{
+			new PartBrowse(url);
+			new ConsoleOutput("CommandResult", "Page of type PartBrowse at url=" +url+ " successfully accessed and recorded");
+		}
 		isFinished=true;
 		
 	}
