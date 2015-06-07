@@ -1,6 +1,7 @@
 package blcrawler.model.page;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,35 +29,39 @@ public class PartBrowse implements Page {
 	private List<Date> pullTimeStamps;
 	private String pageHTML;
 	private String txtRep;
+	private File folder;
 	
 	public PartBrowse(String input) {
-		this.url=input;
-		this.pullTimeStamps = new ArrayList<Date>();
-		this.pullTimeStamps.add(new Date());
+		url=input;
+		pullTimeStamps = new ArrayList<Date>();
+		pullTimeStamps.add(new Date());
 		GUIModel.getSeleniumModel().getURL(url);
-		this.pageHTML = GUIModel.getSeleniumModel().getHTML();
+		pageHTML = GUIModel.getSeleniumModel().getHTML();
 		pageDoc = Jsoup.parse(pageHTML, "http://bricklink.com");
-		this.txtRep = formTxtRep();
-		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-	              new FileOutputStream("C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartBrowse/"+"partbrowse_00001.txt"), "utf-8"))) {
-	   writer.write(txtRep);
-	} catch (UnsupportedEncodingException e) {
-		new ConsoleOutput("System:", "You dummy. That's not a real encoding type!");
-		e.printStackTrace();
-	} catch (FileNotFoundException e) {
-		new ConsoleOutput("System:", "File not found exception thrown by new partbrowse");
-		e.printStackTrace();
-	} catch (IOException e) {
-		new ConsoleOutput("System:", "IO exception thrown by new partbrowse");
-		e.printStackTrace();
+		txtRep = formTxtRep();
+		GUIModel.getPageManager().addPartBrowse(this);
+		memSave();
 	}
+
+	/**
+	 * @return the txtRep
+	 */
+	public String getTxtRep() {
+		return txtRep;
+	}
+
+	/**
+	 * @param txtRep the txtRep to set
+	 */
+	public void setTxtRep(String txtRep) {
+		this.txtRep = txtRep;
 	}
 
 	@Override
 	public void parseFromWeb() {
 
 		GUIModel.getSeleniumModel().getURL(url);
-		this.pageHTML = GUIModel.getSeleniumModel().getHTML();
+		pageHTML = GUIModel.getSeleniumModel().getHTML();
 		
 		pullTimeStamps.add(new Date());
 
@@ -89,6 +94,16 @@ public class PartBrowse implements Page {
 		returnText = returnText+"\n"+"\n"+"Raw HTML: "+"\n"+"\n"+pageHTML;
 		returnText = returnText.replaceAll("\n", System.lineSeparator());
 		return returnText;
+	}
+	
+	/**
+	 * Reduces the memory saved in the object by nullifying fields which store raw HTML when not used
+	 * Call at the conclusion of any method which calls getHTML or getTxtRep
+	 */
+	public void memSave()
+	{
+		txtRep="";
+		pageHTML = "";
 	}
 	
 }

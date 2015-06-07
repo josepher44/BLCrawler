@@ -14,8 +14,8 @@ public class Timestamp implements Command {
 	
 	@Override
 	public void execute() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
+		final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		final Date date = new Date();
 
 		new ConsoleOutput("CommandResult", dateFormat.format(date));
 

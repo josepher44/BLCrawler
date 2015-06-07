@@ -6,9 +6,9 @@ import blcrawler.model.page.PartBrowse;
 
 public class AddPartBrowse implements Command {
 	
-	private String url;
-	private int timeout;
-	private int delay;
+	private final String url;
+	private final int timeout;
+	private final int delay;
 	private boolean isFinished;
 	
 	public AddPartBrowse(String url) {

@@ -9,7 +9,7 @@ public class ConsoleOutput {
 	public ConsoleOutput(String source, String text) {
 		this.text=text;
 		this.source=source;
-		this.combined = source+": "+text+"\n";
+		combined = source+": "+text+"\n";
 		GUIModel.getConsoleController().outputConsole(this);
 		GUIModel.getGuiView().getConsoleOut().setCaretPosition(GUIModel.getGuiView().getConsoleOut().getDocument().getLength());
 	}

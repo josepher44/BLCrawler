@@ -28,7 +28,7 @@ public class TaskTimer {
 	{
 		nextStepFlag=false;
 		currentCommand=new InitialCommand();
-		this.thread = new Thread() {
+		thread = new Thread() {
 			public void run() {
 				while(true)
 				{
@@ -90,7 +90,9 @@ public class TaskTimer {
 			
 
 		}
-		//new ConsoleOutput("Queue","Queue executed");
+		
+		//Possibly a bad idea, but it's been working wonders on memory allocation
+		//System.gc();
 	}
 	
 	public boolean isDone() {
