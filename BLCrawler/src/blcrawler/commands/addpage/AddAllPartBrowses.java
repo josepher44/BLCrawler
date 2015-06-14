@@ -3,43 +3,33 @@ import blcrawler.commands.Command;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 import blcrawler.model.page.PartBrowse;
+import blcrawler.model.page.PartBrowseIndex;
 
-public class AddPartBrowse implements Command {
+public class AddAllPartBrowses implements Command {
 	
-	private final String url;
 	private final int timeout;
 	private final int delay;
 	private boolean isFinished;
 	
-	public AddPartBrowse(String url) {
-		timeout=30;
-		delay=20;
+	public AddAllPartBrowses() {
+		timeout=10;
+		delay=5;
 		isFinished=false;
-		this.url=url;
 	}
 
 	@Override
 	public void execute() {
-		if (GUIModel.getPageManager().partBrowseFileMap.containsValue(url))
-		{
-			new ConsoleOutput("PageManager", "Partbrowse page of url "+url+" already stored.");
 		
-		}
-		else
-		{
-			new PartBrowse(url);
-			new ConsoleOutput("CommandResult", "Page of type PartBrowse at url=" +url+ " successfully accessed and recorded");
-		}
+		PartBrowseIndex index = new PartBrowseIndex("http://www.bricklink.com/browseTree.asp?itemType=P");
+		new ConsoleOutput("CommandResult", "Page of type PartBrowseIndex at url=http://www.bricklink.com/browseTree.asp?itemType=P successfully accessed and recorded");
+		index.listPartBrowseMasterPages();
 		isFinished=true;
 		
 	}
 
 	@Override
 	public void queue() {
-		if (GUIModel.getTaskTimer().queue.size() > 0)
-		{
-			new ConsoleOutput("CommandResult", "Addition of url " + url + " added to queue. " + GUIModel.getTaskTimer().queue.size() + " tasks queued, standby");
-		}
+
 	}
 
 	@Override

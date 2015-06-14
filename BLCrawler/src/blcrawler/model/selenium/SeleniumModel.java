@@ -19,7 +19,7 @@ public class SeleniumModel {
 		
 	}
 	
-	public void getURL(String url) {
+	public void gotoURL(String url) {
 		driver.get(url);
 		new ConsoleOutput("Selenium: ", "Page title is: " + driver.getTitle());
 	}

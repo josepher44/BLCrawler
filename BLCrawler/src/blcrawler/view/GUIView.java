@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
@@ -40,8 +41,11 @@ public class GUIView {
 	private JTextArea consoleOut;
 	private JTextArea commandLine;
 	private JScrollPane scrollableConsole;
+	private JProgressBar queueBar;
+	private JProgressBar taskBar;
 	private static final String key = "ENTER";
     private KeyStroke keyStroke;
+    
 	
 
 	public GUIView(GUIMainController guiMainController, GUIModel guiModel) {
@@ -52,7 +56,7 @@ public class GUIView {
 		  
 		
 		  mainFrame = new JFrame("Bricklink");
-		  mainFrame.setSize(1000,600);
+		  mainFrame.setSize(1000,640);
 		  
 		  
 		  mainPanel = new JPanel();
@@ -83,7 +87,12 @@ public class GUIView {
 		  commandLine.getActionMap().put("Thing", this.guiMainController.getCommandEntered());
 
 
+		  queueBar = new JProgressBar(0,100);
+		  queueBar.setPreferredSize(new Dimension(660,10));
 		  
+
+		  taskBar = new JProgressBar(0,100);
+		  taskBar.setPreferredSize(new Dimension(660,10));
 		  
 		  
 		  headerLabel = new JLabel(guiModel.getHeaderLabel(),JLabel.CENTER );
@@ -97,11 +106,12 @@ public class GUIView {
 		  });    
 		  
 		  mainFrame.add(mainPanel);
-		  mainPanel.add(headerLabel, "wrap 40");
+		  mainPanel.add(headerLabel, "wrap 20");
 		  mainPanel.add(scrollableConsole, "span 6");
 		  mainPanel.add(statusLabel, "wrap");
-		  mainPanel.add(commandLine, "span 6 6");
-		  
+		  mainPanel.add(commandLine, "wrap 6");
+		  mainPanel.add(queueBar, "wrap");
+		  mainPanel.add(taskBar, "wrap");
 		  
 		  
 		  mainFrame.setVisible(true);

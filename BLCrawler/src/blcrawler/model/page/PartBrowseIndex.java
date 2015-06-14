@@ -11,8 +11,10 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +25,7 @@ import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 
 
-public class PartBrowse implements Page {
+public class PartBrowseIndex implements Page {
 	
 
 	private Document pageDoc;
@@ -32,47 +34,21 @@ public class PartBrowse implements Page {
 	private String pageHTML;
 	private String txtRep;
 	private File folder;
+	private String filename;
+	private ArrayList<String> linkList;
 	
-	public PartBrowse(String input) throws IllegalArgumentException {
-		if (input.startsWith("http://"))
-		{
-			url=input;
-			pullTimeStamps = new ArrayList<Date>();
-			pullTimeStamps.add(new Date());
-			GUIModel.getSeleniumModel().gotoURL(url);
-			pageHTML = GUIModel.getSeleniumModel().getHTML();
-			pageDoc = Jsoup.parse(pageHTML, "http://www.bricklink.com");
-			txtRep = formTxtRep();
-			GUIModel.getPageManager().addPartBrowse(this);
-			memSave();
-		}
-		else if (input.startsWith("partbrowse_"))
-		{
-			BufferedReader in;
-			
-			try {
-				in = new BufferedReader(new FileReader("C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartBrowse"+input));
-				String line;
-				while((line = in.readLine()) != null)
-				{
-				    txtRep=txtRep+line+System.lineSeparator();
-				}
-				in.close();
-			} 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			
-			
-		}
-		else
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		
-
+	public PartBrowseIndex(String input) {
+		url=input;
+		linkList = new ArrayList<String>();
+		filename = "C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartBrowseIndex/partbrowseindex.txt";
+		pullTimeStamps = new ArrayList<Date>();
+		pullTimeStamps.add(new Date());
+		GUIModel.getSeleniumModel().gotoURL(url);
+		pageHTML = GUIModel.getSeleniumModel().getHTML();
+		pageDoc = Jsoup.parse(pageHTML, "http://www.bricklink.com");
+		txtRep = formTxtRep();
+		GUIModel.getPageManager().updatePartBrowseIndex(this);
+		memSave();
 	}
 
 	/**
@@ -87,6 +63,50 @@ public class PartBrowse implements Page {
 	 */
 	public void setTxtRep(String txtRep) {
 		this.txtRep = txtRep;
+	}
+	
+	public void listPartBrowseMasterPages() {
+		
+
+		BufferedReader in;
+		
+		try {
+			in = new BufferedReader(new FileReader(filename));
+			String line;
+			while((line = in.readLine()) != null)
+			{
+			    txtRep=txtRep+line+System.lineSeparator();
+			}
+			in.close();
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		pageHTML = txtRep.substring(txtRep.indexOf("Raw HTML:"));
+		pageDoc = Jsoup.parse(pageHTML, "http://www.bricklink.com");
+		Elements links = pageDoc.select("a[href]");
+		String buffer = "";
+		for(int i=0; i<links.size(); i++)
+		{
+			
+			buffer = links.get(i).attr("abs:href");
+			if (buffer.startsWith("http://www.bricklink.com/browseList.asp?itemType=P")&&buffer.contains("catString"))
+			{
+				linkList.add(buffer);
+			}
+			
+		}
+		
+		Collections.shuffle(linkList);
+		
+		
+		
+		for (int i=0; i<linkList.size(); i++)
+		{
+			GUIModel.getConsoleController().createPartBrowse(linkList.get(i));
+			new ConsoleOutput("Partbrowseindex", "Added URL "+linkList.get(i));
+		}
 	}
 
 	@Override
@@ -120,6 +140,10 @@ public class PartBrowse implements Page {
 		return pullTimeStamps.get(pullTimeStamps.size()-1);
 	}
 	
+	
+	/**
+	 * Combines fields into a single string representation for saving to .txt format
+	 */
 	public String formTxtRep()
 	{
 		String returnText = "URL: " + url + "\n" + "\n" + pullTimeStamps.toString();

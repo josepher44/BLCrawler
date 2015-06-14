@@ -12,7 +12,10 @@ import java.lang.reflect.Method;
 import javax.swing.SwingUtilities;
 
 import blcrawler.commands.*;
+import blcrawler.commands.addpage.AddAllPartBrowses;
+import blcrawler.commands.addpage.AddAllPartCatalogs;
 import blcrawler.commands.addpage.AddPartBrowse;
+import blcrawler.commands.addpage.AddPartCatalog;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 
@@ -31,6 +34,10 @@ public class ConsoleController {
 		commandLibrary.put("addsite", () -> {createAddPage();});
 		commandLibrary.put("addurl", () -> {createAddPage();});
 		commandLibrary.put("addpartbrowse", () -> {createPartBrowse();});
+		commandLibrary.put("addpartbrowseindex", () -> {createPartBrowseIndex();});
+		commandLibrary.put("addpartcatalog", () -> {createPartCatalog();});
+		commandLibrary.put("addpartcatalogindex", () -> {createPartCatalogIndex();});
+		commandLibrary.put("expandpartcatalog", () -> {expandPartCatalog();});
 		validBaseCommands.add("GetDate");
 		redirectSystemStreams();
 
@@ -145,6 +152,43 @@ public class ConsoleController {
 		GUIModel.getTaskTimer().addToQueue(addPartBrowse);
 	
 	}
+	
+	public void createPartCatalog() {
+		AddPartCatalog addPartCatalog = new AddPartCatalog(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
+		addPartCatalog.queue();
+		GUIModel.getTaskTimer().addToQueue(addPartCatalog);
+	
+	}
+	
+	public void expandPartCatalog() {
+		GUIModel.getPageManager().expandPartCatalog();
+	
+	}
+	
+	public void createPartBrowse(String string) {
+		AddPartBrowse addPartBrowse = new AddPartBrowse(string);
+		addPartBrowse.queue();
+		GUIModel.getTaskTimer().addToQueue(addPartBrowse);
+	
+	}
+	
+	public void createPartBrowseIndex() {
+		AddAllPartBrowses index = new AddAllPartBrowses();
+		GUIModel.getTaskTimer().addToQueue(index);
+	}
+	
+	public void createPartCatalog(String string) {
+		AddPartCatalog addPartCatalog = new AddPartCatalog(string);
+		addPartCatalog.queue();
+		GUIModel.getTaskTimer().addToQueue(addPartCatalog);
+	
+	}
+	
+	public void createPartCatalogIndex() {
+		AddAllPartCatalogs index = new AddAllPartCatalogs();
+		GUIModel.getTaskTimer().addToQueue(index);
+	}	
+	
 	
 	public void createInvalid() {
 		new InvalidCommand();

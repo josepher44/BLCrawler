@@ -11,8 +11,8 @@ public class TimerTest implements Command {
 	private boolean isFinished;
 	
 	public TimerTest() {
-		timeout=10;
-		delay=5;
+		timeout=100;
+		delay=100;
 		isFinished=false;
 
 	}

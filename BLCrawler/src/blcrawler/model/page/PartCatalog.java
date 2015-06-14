@@ -23,7 +23,7 @@ import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 
 
-public class PartBrowse implements Page {
+public class PartCatalog implements Page {
 	
 
 	private Document pageDoc;
@@ -33,7 +33,7 @@ public class PartBrowse implements Page {
 	private String txtRep;
 	private File folder;
 	
-	public PartBrowse(String input) throws IllegalArgumentException {
+	public PartCatalog(String input) throws IllegalArgumentException {
 		if (input.startsWith("http://"))
 		{
 			url=input;
@@ -43,15 +43,15 @@ public class PartBrowse implements Page {
 			pageHTML = GUIModel.getSeleniumModel().getHTML();
 			pageDoc = Jsoup.parse(pageHTML, "http://www.bricklink.com");
 			txtRep = formTxtRep();
-			GUIModel.getPageManager().addPartBrowse(this);
+			GUIModel.getPageManager().addPartCatalog(this);
 			memSave();
 		}
-		else if (input.startsWith("partbrowse_"))
+		else if (input.startsWith("partcatalog_"))
 		{
 			BufferedReader in;
 			
 			try {
-				in = new BufferedReader(new FileReader("C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartBrowse"+input));
+				in = new BufferedReader(new FileReader("C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartCatalog"+input));
 				String line;
 				while((line = in.readLine()) != null)
 				{
@@ -122,8 +122,9 @@ public class PartBrowse implements Page {
 	
 	public String formTxtRep()
 	{
-		String returnText = "URL: " + url + "\n" + "\n" + pullTimeStamps.toString();
-		returnText = returnText+"\n"+"\n"+"Raw HTML: "+"\n"+"\n"+pageHTML;
+		String returnText = "[URL]" + url + "\n" + "[/URL]" + "\n";
+		returnText = returnText + "[TIMESTAMPS]"+ pullTimeStamps.toString() + "\n" + "[/TIMESTAMPS]" + System.lineSeparator();
+		returnText = returnText+"[HTML]: "+System.lineSeparator()+System.lineSeparator()+pageHTML+"\n"+"[/HTML]";
 		returnText = returnText.replaceAll("\n", System.lineSeparator());
 		return returnText;
 	}

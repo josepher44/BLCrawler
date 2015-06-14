@@ -3,15 +3,16 @@ import blcrawler.commands.Command;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
 import blcrawler.model.page.PartBrowse;
+import blcrawler.model.page.PartCatalog;
 
-public class AddPartBrowse implements Command {
+public class AddPartCatalog implements Command {
 	
 	private final String url;
 	private final int timeout;
 	private final int delay;
 	private boolean isFinished;
 	
-	public AddPartBrowse(String url) {
+	public AddPartCatalog(String url) {
 		timeout=30;
 		delay=20;
 		isFinished=false;
@@ -20,15 +21,15 @@ public class AddPartBrowse implements Command {
 
 	@Override
 	public void execute() {
-		if (GUIModel.getPageManager().partBrowseFileMap.containsValue(url))
+		if (GUIModel.getPageManager().partCatalogFileMap.containsValue(url))
 		{
-			new ConsoleOutput("PageManager", "Partbrowse page of url "+url+" already stored.");
+			new ConsoleOutput("PageManager", "Partcatalog page of url "+url+" already stored.");
 		
 		}
 		else
 		{
-			new PartBrowse(url);
-			new ConsoleOutput("CommandResult", "Page of type PartBrowse at url=" +url+ " successfully accessed and recorded");
+			new PartCatalog(url);
+			new ConsoleOutput("CommandResult", "Page of type Partcatalog at url=" +url+ " successfully accessed and recorded");
 		}
 		isFinished=true;
 		
