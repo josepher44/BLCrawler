@@ -3,6 +3,7 @@ package blcrawler.model.page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,6 +16,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.GUIModel;
@@ -33,13 +38,91 @@ public class PageManager {
 	public File partCatalogDirectory;
 	public File[] partCatalogFiles;
 	
+	public List<Part> partPages; 
+	public HashMap<String, String> partFileMap;
+	
+	public File partDirectory;
+	public File[] partFiles;
+	
 	public PageManager()
 	{
 		initializePartBrowse();
 		initializePartCatalog();
+		initializePart();
 		
 	
 	}
+	
+	public void buildPartIndex () {
+		
+		
+		partCatalogFiles = partCatalogDirectory.listFiles();
+		ArrayList<String> urls = new ArrayList<String>();
+		for(int i=0; i<partCatalogFiles.length; i++)
+		{
+			BufferedReader in;
+			String txtRep="";
+			try {
+				in = new BufferedReader(new FileReader(
+						"C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartCatalog/partcatalog_"+fiveDigits(i+1)+".txt"));
+				String line;
+				while((line = in.readLine()) != null)
+				{
+				    txtRep=txtRep+line+System.lineSeparator();
+				}
+				in.close();
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			String html = txtRep.substring(txtRep.indexOf("[HTML]")+8);
+			
+			Document pageDoc = Jsoup.parse(html, "http://www.bricklink.com");
+			Elements links = pageDoc.select("a[href]");
+			String buffer = "";
+			for(int k=0; k<links.size(); k++)
+			{
+
+				buffer = links.get(k).attr("abs:href");
+				if (buffer.startsWith("http://www.bricklink.com/catalogItem.asp?P"))
+				{
+					urls.add(buffer);
+				}
+				
+			}
+			new ConsoleOutput("PageManager", "Scraped " + i + " of " + partCatalogFiles.length + " files.");
+			
+		}
+		Collections.sort(urls);
+		urls = new ArrayList<String>(new LinkedHashSet<String>(urls));
+		
+		String txtRep="";
+		for (int k = 0; k<urls.size(); k++)
+		{
+			txtRep = txtRep+urls.get(k) + System.lineSeparator();
+		}
+		
+		
+		
+		
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+	              new FileOutputStream("C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartIndex/partindex.txt"), "utf-8"))) {
+	   writer.write(txtRep);
+		} catch (UnsupportedEncodingException e) {
+			new ConsoleOutput("System:", "You dummy. That's not a real encoding type!");
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			new ConsoleOutput("System:", "File not found exception thrown by new partbrowse");
+			e.printStackTrace();
+		} catch (IOException e) {
+			new ConsoleOutput("System:", "IO exception thrown by new partbrowse");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 	
 	public void updatePartBrowseIndex(PartBrowseIndex index) {
 		partBrowseIndex = index;
@@ -169,6 +252,98 @@ public class PageManager {
 		}
 	}
 	
+	
+	
+	
+	
+	public void scrapeRemainingParts() {
+		BufferedReader in;
+		ArrayList<String> shuffledList = new ArrayList<String>();
+		
+		try {
+			in = new BufferedReader(new FileReader("C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartIndex/partindex.txt"));
+			String line;
+			
+			while((line = in.readLine()) != null)
+			{
+			    if (!partFileMap.containsValue(line))
+			    {
+			    	shuffledList.add(line);
+			    }
+			}
+			in.close();
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Collections.shuffle(shuffledList);
+		for(int i=0; i<shuffledList.size(); i++)
+		{
+			GUIModel.getConsoleController().createPart(shuffledList.get(i));
+		}
+		
+		
+		
+	}
+	
+	
+	public void addPart(Part part) {
+		
+		
+		if (partFileMap.containsValue(part.getUrl()))
+		{
+			new ConsoleOutput("PageManager", "Part page of url "+part.getUrl()+" already stored.");
+		}
+		else
+		{
+			partPages.add(part);
+			
+			partFiles = partDirectory.listFiles();
+			String fileName= "";
+			if (partFiles.length==0)
+			{
+				fileName = "part_00001.txt";
+			}
+			else
+			{
+			String highestValue = partFiles[partFiles.length-1].getName();
+			highestValue = highestValue.substring(highestValue.indexOf("_")+1, highestValue.indexOf("_")+6);
+			int fileNumber = Integer.parseInt(highestValue)+1;
+			fileName = partNameGenerator(fileNumber);
+			}
+			try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+		              new FileOutputStream("C:/Users/Joe/Documents/BLCrawl/Database/Pages/Part/"+fileName), "utf-8"))) {
+		   writer.write(part.getTxtRep());
+			} catch (UnsupportedEncodingException e) {
+				new ConsoleOutput("System:", "You dummy. That's not a real encoding type!");
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				new ConsoleOutput("System:", "File not found exception thrown by new part");
+				e.printStackTrace();
+			} catch (IOException e) {
+				new ConsoleOutput("System:", "IO exception thrown by new part");
+				e.printStackTrace();
+			}
+			
+			partFileMap.put(fileName, part.getUrl());	
+			
+			
+			
+			new ConsoleOutput("PageManager", "Page saved as "+fileName+".");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void expandPartCatalog() {
 		
 		partCatalogFiles = partCatalogDirectory.listFiles();
@@ -197,10 +372,21 @@ public class PageManager {
 			{
 				if (html.charAt(html.indexOf("Page <b>1</b>")+20)!=1)
 				{
-					for (int k=2; k<1+Character.getNumericValue(html.charAt(html.indexOf("Page <b>1</b>")+20)); k++)
+					int forEnd;
+					if (html.charAt(html.indexOf("Page <b>1</b>")+21)=='<') 
+					{
+						forEnd = Character.getNumericValue(html.charAt(html.indexOf("Page <b>1</b>")+20));
+					}
+					else
+					{
+						forEnd = Character.getNumericValue(html.charAt(html.indexOf("Page <b>1</b>")+20))*10+Character.getNumericValue(html.charAt(html.indexOf("Page <b>1</b>")+21));
+					}
+					
+					for (int k=2; k<1+forEnd; k++)
 					{
 						String url = "http://www.bricklink.com/catalogList.asp?pg=" + k + "&"+txtRep.substring(46, txtRep.indexOf("[/URL]"));
 						urls.add(url);
+						new ConsoleOutput("PageManager", "From File " + fiveDigits(i+1)+ ", url " +url+ " recorded for parsing");
 					}
 				}
 			}
@@ -266,6 +452,16 @@ public class PageManager {
 		return pbfileName;
 	}
 	
+	public String partNameGenerator(int index) {
+		String pfileName = "part_";
+		for (int i=index; i<10000; i=i*10)
+		{
+			pfileName=pfileName+Integer.toString(0);
+		}
+		pfileName=pfileName+Integer.toString(index)+".txt";
+		return pfileName;
+	}
+	
 	/*
 	 * Initialization methods. 
 	 * These are called during the constructor, to pull from the database and repopulate the program
@@ -279,11 +475,11 @@ public class PageManager {
 		partBrowseFileMap = new HashMap<String,String>();
 
 		
-		
+
+		BufferedReader txtReader=null;
 		
 		for (int k=0; k<partBrowseFiles.length;k++)
 		{
-			BufferedReader txtReader=null;
 			try {
 				txtReader = new BufferedReader(new FileReader(
 						"C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartBrowse/"+partBrowseNameGenerator(k+1)));
@@ -292,10 +488,12 @@ public class PageManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+
+			new ConsoleOutput("Initialization", "PartBrowse File Stored: "+ partBrowseFileMap.get(partBrowseFiles[k].getName())+ " from " +partBrowseFiles[k].getName());
 		}
 		
 		
-		new ConsoleOutput("Initialization", "PartBrowse Files Found: "+ partBrowseFileMap.toString());
 	}
 	
 	public void initializePartCatalog() {
@@ -304,12 +502,12 @@ public class PageManager {
 		partCatalogFiles = partCatalogDirectory.listFiles();
 		partCatalogFileMap = new HashMap<String,String>();
 
-		
+
+		BufferedReader txtReader=null;
 		
 		
 		for (int k=0; k<partCatalogFiles.length;k++)
 		{
-			BufferedReader txtReader=null;
 			try {
 				txtReader = new BufferedReader(new FileReader(
 						"C:/Users/Joe/Documents/BLCrawl/Database/Pages/PartCatalog/"+partCatalogNameGenerator(k+1)));
@@ -318,11 +516,48 @@ public class PageManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			new ConsoleOutput("Initialization", "PartCatalog File Stored: "+ partCatalogFileMap.get(partCatalogFiles[k].getName())+" from " +partCatalogFiles[k].getName());
 		}
 		
 		
-		new ConsoleOutput("Initialization", "PartCatalog Files Found: "+ partCatalogFileMap.toString());
+		
 	}
+	
+	
+	public void initializePart() {
+		partPages=new ArrayList<Part>();
+		partDirectory = new File("C:/Users/Joe/Documents/BLCrawl/Database/Pages/Part");
+		partFiles = partDirectory.listFiles();
+		partFileMap = new HashMap<String,String>();
+
+
+		BufferedReader txtReader=null;
+		
+		
+		for (int k=0; k<partFiles.length;k++)
+		{
+			try {
+				txtReader = new BufferedReader(new FileReader(
+						"C:/Users/Joe/Documents/BLCrawl/Database/Pages/Part/"+partNameGenerator(k+1)));
+				partFileMap.put(partFiles[k].getName(), txtReader.readLine().substring(5));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			new ConsoleOutput("Initialization", "Part File Stored: " + partFileMap.get(partFiles[k].getName())+ " from " + partFiles[k].getName());
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public String fiveDigits(int i)
 	{

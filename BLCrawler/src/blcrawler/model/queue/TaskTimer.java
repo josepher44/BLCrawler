@@ -1,5 +1,6 @@
 package blcrawler.model.queue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,6 +10,7 @@ import blcrawler.commands.InitialCommand;
 import blcrawler.commands.TimerTest;
 import blcrawler.commands.Timestamp;
 import blcrawler.model.ConsoleOutput;
+import blcrawler.model.GUIModel;
 
 public class TaskTimer {
 	public long millis;
@@ -18,6 +20,7 @@ public class TaskTimer {
 	public long delay;
 	public Thread thread;
 	public Command currentCommand;
+	public int totalCommands;
 	public ArrayList<QueueEntry> queue;
 	public boolean nextStepFlag;
 
@@ -26,6 +29,7 @@ public class TaskTimer {
 	
 	public TaskTimer()
 	{
+		totalCommands = 0;
 		nextStepFlag=false;
 		currentCommand=new InitialCommand();
 		thread = new Thread() {
@@ -69,23 +73,39 @@ public class TaskTimer {
 	}
 	
 	public void executeQueue() {
+		double percentDone;
 		if ((currentCommand.equals(null)||currentCommand.isFinished())&&queue.size()!=0)
 		{
 			if (!nextStepFlag)
 			{
 				nextStepFlag=true;
 				delay=queue.get(0).getCommand().getDelay();
+				GUIModel.getGuiView().setTaskBar(0);
 			}
 			else
 			{
 				delay--;
+				percentDone = 1.0 - ((double)delay/(double)queue.get(0).getCommand().getDelay());
+				GUIModel.getGuiView().setTaskBar((int)(percentDone*100));
 			}
 			if (delay<=0)
 			{
 				currentCommand = queue.get(0).getCommand();
 				currentCommand.execute();
+				GUIModel.getGuiView().setTaskBar(0);
 				queue.remove(0);
 				nextStepFlag=false;
+				totalCommands++;
+				if (totalCommands%75 == 0)
+				{
+					try {
+						GUIModel.getSeleniumModel().relaunchTor();
+					} catch (InterruptedException | IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+					
 			}
 			
 

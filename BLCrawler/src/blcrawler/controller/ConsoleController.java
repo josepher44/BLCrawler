@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import blcrawler.commands.*;
 import blcrawler.commands.addpage.AddAllPartBrowses;
 import blcrawler.commands.addpage.AddAllPartCatalogs;
+import blcrawler.commands.addpage.AddPart;
 import blcrawler.commands.addpage.AddPartBrowse;
 import blcrawler.commands.addpage.AddPartCatalog;
 import blcrawler.model.ConsoleOutput;
@@ -38,6 +39,11 @@ public class ConsoleController {
 		commandLibrary.put("addpartcatalog", () -> {createPartCatalog();});
 		commandLibrary.put("addpartcatalogindex", () -> {createPartCatalogIndex();});
 		commandLibrary.put("expandpartcatalog", () -> {expandPartCatalog();});
+		commandLibrary.put("addpartindex", () -> {addPartIndex();});
+		commandLibrary.put("scrapeallparts", () -> {scrapeAllParts();});
+		commandLibrary.put("addpart", () -> {createPart();});
+		commandLibrary.put("killfirefox", () -> {killFirefox();});
+		commandLibrary.put("killtor", () -> {killTor();});
 		validBaseCommands.add("GetDate");
 		redirectSystemStreams();
 
@@ -153,6 +159,13 @@ public class ConsoleController {
 	
 	}
 	
+	public void createPart() {
+		AddPart addPart = new AddPart(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
+		addPart.queue();
+		GUIModel.getTaskTimer().addToQueue(addPart);
+	
+	}
+	
 	public void createPartCatalog() {
 		AddPartCatalog addPartCatalog = new AddPartCatalog(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		addPartCatalog.queue();
@@ -165,11 +178,50 @@ public class ConsoleController {
 	
 	}
 	
+	public void scrapeAllParts() {
+		GUIModel.getPageManager().scrapeRemainingParts();
+	}
+	
+	public void addPartIndex() {
+		GUIModel.getPageManager().buildPartIndex();
+	
+	}
+	
 	public void createPartBrowse(String string) {
 		AddPartBrowse addPartBrowse = new AddPartBrowse(string);
 		addPartBrowse.queue();
 		GUIModel.getTaskTimer().addToQueue(addPartBrowse);
 	
+	}
+	
+	public void createPart(String string) {
+		AddPart addPart = new AddPart(string);
+		addPart.queue();
+		GUIModel.getTaskTimer().addToQueue(addPart);
+	
+	}
+	
+	public void killFirefox() {
+		Runtime rt = Runtime.getRuntime();
+
+		try {
+			rt.exec("taskkill /F /IM firefox.exe");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void killTor() {
+		try {
+			GUIModel.getSeleniumModel().relaunchTor();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void createPartBrowseIndex() {

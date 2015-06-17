@@ -94,6 +94,7 @@ public class GUIView {
 		  taskBar = new JProgressBar(0,100);
 		  taskBar.setPreferredSize(new Dimension(660,10));
 		  
+		  setIndeterminiteOn();
 		  
 		  headerLabel = new JLabel(guiModel.getHeaderLabel(),JLabel.CENTER );
 		  statusLabel = new JLabel(guiModel.getStatusLabel(),JLabel.CENTER);        
@@ -311,6 +312,20 @@ public class GUIView {
 
 	public void clearConsoleIn() {
 		commandLine.setText(null);
+	}
+	
+	public void setIndeterminiteOff() {
+		taskBar.setIndeterminate(false);
+		queueBar.setIndeterminate(false);
+	}
+	
+	public void setIndeterminiteOn() {
+		taskBar.setIndeterminate(true);
+		queueBar.setIndeterminate(true);
+	}
+	
+	public void setTaskBar(int value) {
+		taskBar.setValue(value);
 	}
 
 }

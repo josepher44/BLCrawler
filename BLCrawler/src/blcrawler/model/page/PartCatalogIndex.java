@@ -109,6 +109,8 @@ public class PartCatalogIndex implements Page {
 			new ConsoleOutput("Partcatalogindex", "Added URL "+linkList.get(i));
 		}
 	}
+	
+
 
 	@Override
 	public void parseFromWeb() {
