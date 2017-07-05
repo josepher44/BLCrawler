@@ -37,6 +37,11 @@ public class AddPart
 	static Label filterLabel;
 	static TextField filter;
 	static ChoiceBox<String> colorDisplayMode;
+	static TextField quantity;
+	static TextField price;
+	static TextField Comments;
+	static TextField Location;
+	static TextField RCodes;
 	
 	
 	
@@ -167,6 +172,19 @@ public class AddPart
 		colorList = new ListView<>();
 		//colorList.getItems().addAll(colors);
 		colorList.setPrefHeight(500);
+		
+		
+		//For quantity box, not yet created
+		
+//		// force the field to be numeric only
+//	    textField.textProperty().addListener(new ChangeListener<String>() {
+//	        @Override
+//	        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+//	            if (!newValue.matches("\\d*")) {
+//	                textField.setText(newValue.replaceAll("[^\\d]", ""));
+//	            }
+//	        }
+//	    });
 		
 		
 		

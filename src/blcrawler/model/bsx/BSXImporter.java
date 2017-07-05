@@ -168,7 +168,7 @@ public class BSXImporter
 					+"part_"+node.getChildText("ITEMID")+".xml");
 			if(f.exists())
 			{
-				System.out.println("file already exists for part "+node.getChildText("ITEMID"));
+				//System.out.println("file already exists for part "+node.getChildText("ITEMID"));
 			}
 			else
 			{
@@ -243,7 +243,7 @@ public class BSXImporter
 		try
 		{		
 			readDrawerDivisions();
-			//readBLCatalogSummary();
+			readBLCatalogSummary();
 		}
 		catch (Exception e1)
 		{

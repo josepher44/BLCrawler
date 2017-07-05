@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
@@ -37,6 +38,7 @@ public class DatabaseController
 	Document doc;
 	
 	ColorMap colormap;
+	Comparator<Element> elementComp;
 	
 	public DatabaseController()
 	{
@@ -47,9 +49,16 @@ public class DatabaseController
 		colormap = new ColorMap();
 		doc = null;
 		
-		ReadPartsFromXML command = new ReadPartsFromXML();
-		command.queue();
-		ConsoleGUIModel.getSelenium().addToInstant(command);
+
+		
+		elementComp = new Comparator<Element>() {
+		    @Override
+		    public int compare(Element left, Element right) {
+		        //System.out.println("comparing "+left.getChildText("partnumber")+" to "+right.getChildText("partnumber"));
+		    	return left.getChildText("partnumber").compareTo(right.getChildText("partnumber")); // use your logic
+		    }
+
+		};
 		
 		//readMasterXML();
 	}
@@ -77,7 +86,7 @@ public class DatabaseController
 		}
 		
 	}
-	
+
 	public void sortItemsForSale()
 	{
 		LinkedList<ObjectSpecificColorCount> itemsForSale = new LinkedList<>();
@@ -107,24 +116,63 @@ public class DatabaseController
 		try
 		{
 			doc = builder3.build(masterXML);
+			Element rootElement = doc.getRootElement();
+			//doc.getRootElement().sortChildren(elementComp);
+			System.out.println("Built master xml database "+rootElement.getChildren().size());
+
+			for (Element currentElement : rootElement.getChildren())
+			{
+				catalogParts.add(new CatalogPart(currentElement));
+			}
+			
 		}
 		catch (JDOMException | IOException e)
 		{
-			e.printStackTrace();
-		}
-		
-		
-		Element rootElement = doc.getRootElement();
-		System.out.println("Built master xml database "+rootElement.getChildren().size());
+			System.out.println("Master xml database does not exist, creating empty one");
 
-		for (Element currentElement : rootElement.getChildren())
-		{
-			catalogParts.add(new CatalogPart(currentElement));
+			Element PartsXML = new Element("partsxml");
+			doc = new Document();
+			doc.setRootElement(PartsXML);
+			
+			XMLOutputter xmlOutput = new XMLOutputter();
+
+			// display nice nice
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			try
+			{
+				xmlOutput.output(doc, new FileWriter
+						("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
+			}
+			catch (IOException en)
+			{
+				// TODO Auto-generated catch block
+				en.printStackTrace();
+			}
 		}
+		
+		
+
 		
 		
 	}
 	
+	public void appendToMasterXML(CatalogPart part)
+	{
+		doc.getRootElement().addContent(part.buildXML());
+		doc.getRootElement().sortChildren(elementComp);
+		
+		XMLOutputter xmlOutput = new XMLOutputter();
+		xmlOutput.setFormat(Format.getPrettyFormat());
+		try
+		{
+			xmlOutput.output(doc, new FileWriter
+					("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
 	public void buildMasterXML()
 	{
@@ -224,6 +272,7 @@ public class DatabaseController
 		String fileContents = "";
 		
 		String path = oldpath;
+		
 		File partFile = new File(path);
 		
 		try
@@ -257,7 +306,7 @@ public class DatabaseController
 		try {
 		    BufferedWriter out = new BufferedWriter(new FileWriter(HTMLpath));
 		    out.write(fileContents);  //Replace with the string 
-		                                             //you are trying to write  
+		                                            //you are trying to write  
 		    System.out.println("Successfully converted HTML file for path "+HTMLpath);
 		    
 		    out.close();
@@ -267,7 +316,16 @@ public class DatabaseController
 		    System.out.println("Exception ");
 
 		}
+		CatalogPart part = new CatalogPart(HTMLpath);
+		addCatalogPart(part);
+		appendToMasterXML(part);
 	}
+	
+
+	
+	
+	
+	
 	
 	public void fixHTMLs()
 	{
