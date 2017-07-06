@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import javax.swing.*;
 
 import blcrawler.api.APIModel;
+import blcrawler.commands.BuildPartsFromHTML;
 import blcrawler.commands.ReadPartsFromXML;
 import blcrawler.controller.ConsoleController;
 import blcrawler.controller.DatabaseController;
@@ -145,6 +146,9 @@ public class ConsoleGUIModel {
 		ReadPartsFromXML command = new ReadPartsFromXML();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
+		
+		
+		
 		 
 	      
 	      

@@ -2,10 +2,32 @@ package blcrawler.model.selenium;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.*;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.SocketAddress;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
+
+import org.apache.http.HttpHost;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.apache.commons.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
@@ -184,6 +206,172 @@ public class SeleniumModel {
 		return driver.getPageSource();
 	}
 	
+	public void saveImage()
+	{
+		
+	}
+	
+	public void httpProxyRequest(String url)
+	{	
+		InputStream in = null;
+    	FileOutputStream out = null;
+		SocketAddress addr = new InetSocketAddress("127.0.0.1", socksport);
+		Proxy proxy = new Proxy(Proxy.Type.SOCKS, addr);
+		try
+		{
+			URL myURL = new URL(url);
+			HttpsURLConnection conn = (HttpsURLConnection) myURL.openConnection(proxy);
+			
+			print_https_cert(conn);
+		    try 
+		    {
+		        in = conn.getInputStream();
+		        out = new FileOutputStream("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/TestFolder/2780.png");
+		        int c;
+		        byte[] b = new byte[1024];
+		        while ((c = in.read(b)) != -1)
+		            out.write(b, 0, c);
+		        System.out.println("file written");
+		    } 
+		    
+		    finally 
+		    {
+		        if (in != null)
+		            in.close();
+		        if (out != null)
+		            out.close();
+		    }
+			
+//	        BufferedReader in = new BufferedReader(new InputStreamReader(
+//                    conn.getInputStream()));
+//			String inputLine;
+//			while ((inputLine = in.readLine()) != null) 
+//			System.out.println(inputLine);
+//			in.close();
+		}
+		catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (FileNotFoundException e)
+		{
+			System.out.println("404: No file for url: "+url);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+
+
+     }
+
+	   private void print_https_cert(HttpsURLConnection con)
+	   {
+	
+		    if(con!=null){
+	
+		      try {
+	
+			System.out.println("Response Code : " + con.getResponseCode());
+			System.out.println("Cipher Suite : " + con.getCipherSuite());
+			System.out.println("\n");
+	
+			Certificate[] certs = con.getServerCertificates();
+			for(Certificate cert : certs){
+			   System.out.println("Cert Type : " + cert.getType());
+			   System.out.println("Cert Hash Code : " + cert.hashCode());
+			   System.out.println("Cert Public Key Algorithm : "
+		                                    + cert.getPublicKey().getAlgorithm());
+			   System.out.println("Cert Public Key Format : "
+		                                    + cert.getPublicKey().getFormat());
+			   System.out.println("\n");
+			}
+	
+			} catch (SSLPeerUnverifiedException e) {
+				e.printStackTrace();
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+	    }
+		
+//	    CloseableHttpClient httpclient = HttpClients.createDefault();
+//	    try {
+//	        HttpHost target = new HttpHost(url, 443, "https");
+//	        HttpHost proxy = new HttpHost("127.0.0.1", socksport, "socks");
+//
+//	        RequestConfig config = RequestConfig.custom()
+//	                .setProxy(proxy)
+//	                .build();
+//	        HttpGet request = new HttpGet("/");
+//	        request.setConfig(config);
+//
+//	        System.out.println("Executing request " + request.getRequestLine() + " to " + target + " via " + proxy);
+//
+//	        CloseableHttpResponse response = httpclient.execute(target, request);
+//	        try {
+//	            System.out.println("----------------------------------------");
+//	            System.out.println(response.getStatusLine());
+//	            EntityUtils.consume(response.getEntity());
+//	        }
+//			catch (IOException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} finally {
+//	            try
+//				{
+//					response.close();
+//				}
+//				catch (IOException e)
+//				{
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//	        }
+//	    }
+//		catch (ClientProtocolException e1)
+//		{
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		catch (IOException e1)
+//		{
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} finally {
+//	        try
+//			{
+//				httpclient.close();
+//			}
+//			catch (IOException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//	    }
+	}
+	
+	
+//	DefaultHttpClient httpclient = new DefaultHttpClient();
+//	try {
+//	    httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+//
+//	    HttpHost target = new HttpHost("www.google.com", 80, "http");
+//	    HttpGet req = new HttpGet("/");
+//
+//	    System.out.println("executing request to " + target + " via " + proxy);
+//	    HttpResponse rsp = httpclient.execute(target, req);
+//	    ...
+//	} finally {
+//	    // When HttpClient instance is no longer needed,
+//	    // shut down the connection manager to ensure
+//	    // immediate deallocation of all system resources
+//	    httpclient.getConnectionManager().shutdown();
+//	}
 	
 	
 	

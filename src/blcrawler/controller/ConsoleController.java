@@ -45,6 +45,9 @@ public class ConsoleController
 		commandLibrary.put("sortpriceguides", () -> {sortPriceGuides();});
 		commandLibrary.put("sortitemsforsale", () -> {sortItemsForSale();});
 		commandLibrary.put("testapi", () -> {testapi();});
+		commandLibrary.put("cancelscrape", () -> {cancelScrape();});
+		commandLibrary.put("httprequest", () -> {testhttprequest();});
+		
 		
 		//Depreciated Methods, Avoid using or investigate function
 		commandLibrary.put("timertest", () -> {createTimertest();});
@@ -97,6 +100,13 @@ public class ConsoleController
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
 	
+	public void cancelScrape()
+	{
+		CancelScrape command = new CancelScrape();
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
+	}
+	
 	public void readXMLParts()
 	{
 		ReadPartsFromXML command = new ReadPartsFromXML();
@@ -137,6 +147,13 @@ public class ConsoleController
 		Build3004 buildParts = new Build3004(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
+	}
+	
+	public void testhttprequest()
+	{
+		TestHTTPRequest command = new TestHTTPRequest(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
 	
 	public void testapi()

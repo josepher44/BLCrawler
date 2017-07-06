@@ -20,6 +20,7 @@ public class DelayQueue extends Queue
 	public int commandsExecuted;
 	public int limit;
 	public boolean execute;
+	public boolean clear;
 	
 	public Command currentCommand;
 	public boolean nextStepFlag;
@@ -35,6 +36,7 @@ public class DelayQueue extends Queue
 		currentCommand = new InitialCommand();
 		commandsExecuted = 0;
 		limit = ThreadLocalRandom.current().nextInt(40, 60);
+		clear = false;
 		
 
 		Thread thread = new Thread() {
@@ -69,6 +71,11 @@ public class DelayQueue extends Queue
 		queue.add(0,new QueueEntry(command));
 	}
 	
+	public void empty()
+	{
+		clear = true;
+	}
+	
 	public void executeQueue() {
 		double percentDone;
 		if ((currentCommand.equals(null)||currentCommand.isFinished())&&queue.size()!=0)
@@ -93,6 +100,12 @@ public class DelayQueue extends Queue
 				System.out.println("Current commands for module "+id+" is "+commandsExecuted+". Current limit is "+limit);
 				queue.remove(0);
 				nextStepFlag=false;
+				
+				if (clear)
+				{
+					queue.clear();
+					clear = false;
+				}
 				/*
 				 * totalCommands++;
 				 * if (totalCommands%75 == 0)

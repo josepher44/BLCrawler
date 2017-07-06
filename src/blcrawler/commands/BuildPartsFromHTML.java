@@ -42,6 +42,11 @@ public class BuildPartsFromHTML implements Command {
 				File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/");
 				partIDs = new ArrayList<>();
 				int i=0;
+				for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())
+				{
+					System.out.println("Part "+part.getPartNumber()+"exists");
+				}
+				System.out.println("Done with parts that exist, moving on");
 				for(File file: dir.listFiles()) 
 				{
 					
@@ -54,11 +59,13 @@ public class BuildPartsFromHTML implements Command {
 						{
 							ConsoleGUIModel.getDatabase().addCatalogPart(new CatalogPart(file.getAbsolutePath()));
 							i++;
-							if (i%100==0)
-							{
+
+							//if (i%100==0)
+							//{
 								System.out.println("Built part# "+partNumber+". "+i+" of "+dir.listFiles().length);
-							}
+							//}
 						}
+						
 						
 					}
 					catch (Exception e)
@@ -76,6 +83,7 @@ public class BuildPartsFromHTML implements Command {
 						
 					}
 				}
+				ConsoleGUIModel.getDatabase().buildMasterXML();
 				isFinished = true;
 //				String partNumber = "3004.html";
 //				ConsoleGUIModel.getDatabase().addCatalogPart(new CatalogPart(partNumber));

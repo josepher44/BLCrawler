@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
@@ -34,6 +35,7 @@ public class DatabaseController
 	ArrayList<String> relationshipBufferTriggers;
 	ArrayList<String> relationshipBufferItems;
 	long uniqueColoredParts;
+	int xmlAppendCounter;
 	
 	Document doc;
 	
@@ -48,6 +50,7 @@ public class DatabaseController
 		uniqueColoredParts=0;
 		colormap = new ColorMap();
 		doc = null;
+		xmlAppendCounter = 0;
 		
 
 		
@@ -107,6 +110,8 @@ public class DatabaseController
 		
 	}
 	
+	
+	
 	public void readMasterXML()
 	{
 		File masterXML = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml");
@@ -122,9 +127,11 @@ public class DatabaseController
 
 			for (Element currentElement : rootElement.getChildren())
 			{
-				catalogParts.add(new CatalogPart(currentElement));
+				CatalogPart part = new CatalogPart(currentElement);
+				catalogParts.add(part);
+				catalogPartsByID.put(part.getPartNumber(), part);
 			}
-			
+
 		}
 		catch (JDOMException | IOException e)
 		{
@@ -158,19 +165,29 @@ public class DatabaseController
 	
 	public void appendToMasterXML(CatalogPart part)
 	{
+
 		doc.getRootElement().addContent(part.buildXML());
-		doc.getRootElement().sortChildren(elementComp);
-		
-		XMLOutputter xmlOutput = new XMLOutputter();
-		xmlOutput.setFormat(Format.getPrettyFormat());
-		try
+		xmlAppendCounter++;
+		//doc.getRootElement().sortChildren(elementComp);
+		if(xmlAppendCounter>250||ConsoleGUIModel.getSelenium().getQueued()<=2)
 		{
-			xmlOutput.output(doc, new FileWriter
-					("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+			xmlAppendCounter = 0;
+			XMLOutputter xmlOutput = new XMLOutputter();
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			try
+			{
+				xmlOutput.output(doc, new FileWriter
+						("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (ConcurrentModificationException e)
+			{
+				System.out.println("WARNING: Concurrent modification exception thrown for part number "+part.getPartNumber()+". "
+						+ "Part likely not correctly written to XML, will try again on next append");
+			}
 		}
 	}
 	
@@ -180,16 +197,17 @@ public class DatabaseController
 			public void run() 
 			{
 				Element PartsXML = new Element("partsxml");
-				Document doc = new Document();
-				doc.setRootElement(PartsXML);
+				Document doclocal = new Document();
+				doclocal.setRootElement(PartsXML);
 				int i=0;
 				for(CatalogPart part : catalogParts)
 				{
-					
-					doc.getRootElement().addContent(part.buildXML());
-					System.out.println("XML appended for part "+part.getPartNumber()+", part "+i+" of "+catalogParts.size());
+					doclocal.getRootElement().addContent(part.buildXML());
+					//System.out.println("XML appended for part "+part.getPartNumber()+", part "+i+" of "+catalogParts.size());
 					i++;
 				}
+				
+				//doc = doclocal;
 				
 				XMLOutputter xmlOutput = new XMLOutputter();
 
@@ -197,7 +215,7 @@ public class DatabaseController
 				xmlOutput.setFormat(Format.getPrettyFormat());
 				try
 				{
-					xmlOutput.output(doc, new FileWriter
+					xmlOutput.output(doclocal, new FileWriter
 							("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
 				}
 				catch (IOException e)
@@ -206,7 +224,7 @@ public class DatabaseController
 					e.printStackTrace();
 				}
 
-				
+				System.out.println("Successfully wrote all parts in memory to XML");
 			}
 		};
 		thread.setDaemon(true);
@@ -307,7 +325,7 @@ public class DatabaseController
 		    BufferedWriter out = new BufferedWriter(new FileWriter(HTMLpath));
 		    out.write(fileContents);  //Replace with the string 
 		                                            //you are trying to write  
-		    System.out.println("Successfully converted HTML file for path "+HTMLpath);
+		    //System.out.println("Successfully converted HTML file for path "+HTMLpath);
 		    
 		    out.close();
 		}
@@ -374,7 +392,7 @@ public class DatabaseController
 					    BufferedWriter out = new BufferedWriter(new FileWriter(path));
 					    out.write(fileContents);  //Replace with the string 
 					                                             //you are trying to write  
-					    System.out.println("Successfully wrote file "+i+" of " +dir.listFiles().length);
+					    //System.out.println("Successfully wrote file "+i+" of " +dir.listFiles().length);
 					    
 					    out.close();
 					}

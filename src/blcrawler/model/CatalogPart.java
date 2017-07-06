@@ -1738,7 +1738,7 @@ public class CatalogPart
 			   {
 				   
 				   knownColorsBLMenu.add(color);
-				   System.out.println("Part "+partNumber+" has color "+color+" in the menu");
+				   //System.out.println("Part "+partNumber+" has color "+color+" in the menu");
 			   }
 			}
 		}

@@ -17,16 +17,17 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import blcrawler.commands.addpage.AddPart;
+import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
-public class AddAllParts implements Command {
+public class CancelScrape implements Command {
 
 	boolean isFinished;
 	String partID;
 	ArrayList<String> partIDs;
 	private int queueID;
-	public AddAllParts() {
+	public CancelScrape() {
 		
 		isFinished = false;
 
@@ -35,43 +36,7 @@ public class AddAllParts implements Command {
 	
 	@Override
 	public void execute() {
-		Thread thread = new Thread() {
-			public void run() 
-			{
-				File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/");
-				partIDs = new ArrayList<>();
-				for(File file: dir.listFiles()) 
-				{
-
-					if (file.length()<50000)
-					{
-						partID = file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"));
-						partIDs.add(partID);
-					}
-					else
-					{
-						System.out.println("part_"+file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"))+"already scraped");
-					}
-					
-					
-				}
-				
-				long seed = System.nanoTime();
-				Collections.shuffle(partIDs, new Random(seed));
-				for (int i=0; i<partIDs.size(); i++)
-				{
-					ConsoleGUIModel.getSelenium().addToInstant(new AddPart(partIDs.get(i)));
-					//System.out.println("Part of ID #"+partIDs.get(i)+" added to instantQueue");
-				}
-				
-				new ConsoleOutput("CommandResult", "Generated add part commands for all parts in catalog");
-				isFinished = true;
-				
-			}
-		};
-		
-		thread.setDaemon(true);
-		thread.start();
+		ConsoleGUIModel.getSelenium().clearAllQueues();
 		
 
 		

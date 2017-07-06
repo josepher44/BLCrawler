@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import blcrawler.commands.Command;
+import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.queue.DelayQueue;
 import blcrawler.model.queue.InstantQueue;
@@ -21,10 +22,11 @@ public class SeleniumDistributor
 	public int currentModuleCreationProcess;
 	public InstantQueue consoleQueue;
 	public int lastcount;
+	public int queued;
 	
 	public SeleniumDistributor()
 	{
-
+		queued = 0;
 		lastcount = 0;
 		processIDs = new LinkedList<Integer>();
 		processIDtoModule = new Hashtable<Integer, Integer>();
@@ -111,6 +113,17 @@ public class SeleniumDistributor
 	{
 		delayQueueMap.get(id).getSelenium().gotoURL(url);
 		return delayQueueMap.get(id).getSelenium().getHTML();
+	}
+	
+	public void getURLHTTP(String url, int id)
+	{
+		delayQueueMap.get(id).getSelenium().httpProxyRequest(url);
+	}
+	
+	public void saveImage(String url, int id)
+	{
+		delayQueueMap.get(id).getSelenium().gotoURL(url);
+		
 	}
 	
 	public void addToInstant(Command command)
@@ -224,7 +237,7 @@ public class SeleniumDistributor
 	public void executeAllQueues()
 	{
 		
-		int queued = 0;
+		queued = 0;
 		//new ConsoleOutput("SeleniumDistro", "Queue Step, executing Selenium Queues");
 		for (int i = 0; i<delayQueueList.size(); i++)
 		{
@@ -236,6 +249,17 @@ public class SeleniumDistributor
 			System.out.println(queued+" tasks remaining.");
 		}
 		lastcount = queued;
+	}
+	
+	public void clearAllQueues()
+	{
+		for (DelayQueue queue : delayQueueList)
+		{
+			queue.empty();
+		}
+		queued = 0;
+		ConsoleGUIModel.getDatabase().buildMasterXML();
+		System.out.println("All Queues cleared, XML up to date");
 	}
 	
 	public void scanProcesses()
@@ -273,6 +297,20 @@ public class SeleniumDistributor
 		} catch (Exception err) {
 		    err.printStackTrace();
 		}
+	}
+
+
+
+	public int getQueued()
+	{
+		return queued;
+	}
+
+
+
+	public void setQueued(int queued)
+	{
+		this.queued = queued;
 	}
 	
 	
