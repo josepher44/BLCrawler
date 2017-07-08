@@ -1,43 +1,45 @@
 package blcrawler.commands;
 
 import java.io.File;
-import java.util.concurrent.ThreadLocalRandom;
-
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Random;
+import java.util.Scanner;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import blcrawler.commands.addpage.AddPart;
+import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
-import blcrawler.model.page.Part;
 
-public class TestHTTPRequest implements Command {
+public class BuildMolds implements Command {
 
 	boolean isFinished;
-	String url;
 	private int queueID;
-	
-	private long delay;
-	private int timeout;
-	
-	public TestHTTPRequest(String URL) {
+	public BuildMolds() {
 		
-		int randomNum = ThreadLocalRandom.current().nextInt(0, 15);
-		timeout = 15+randomNum;
-		delay = 10+randomNum;
 		isFinished = false;
-		this.url = URL;
-		this.queueID = 9152;
+
 
 	}
 	
 	@Override
 	public void execute() {
+		ConsoleGUIModel.getDatabase().buildMoldXML();
+		
 
-		ConsoleGUIModel.getSelenium().getImage(url, queueID, "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/test.png");
-		//new ConsoleOutput("CommandResult", "Directed Selenium module to parse data for url "+url);
-		isFinished = true;
 		
 	}
 
@@ -56,19 +58,19 @@ public class TestHTTPRequest implements Command {
 	@Override
 	public long getDelay() {
 		// TODO Auto-generated method stub
-		return delay;
+		return 0;
 	}
 
 	@Override
 	public int getTimeout() {
 		// TODO Auto-generated method stub
-		return timeout;
+		return 0;
 	}
 
 	@Override
 	public boolean isFinished() {
 		// TODO Auto-generated method stub
-		return isFinished;
+		return true;
 	}
 
 	@Override

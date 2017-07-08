@@ -12,7 +12,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -124,13 +126,15 @@ public class DatabaseController
 			Element rootElement = doc.getRootElement();
 			//doc.getRootElement().sortChildren(elementComp);
 			System.out.println("Built master xml database "+rootElement.getChildren().size());
-
+			int i=0;
 			for (Element currentElement : rootElement.getChildren())
 			{
 				CatalogPart part = new CatalogPart(currentElement);
 				catalogParts.add(part);
 				catalogPartsByID.put(part.getPartNumber(), part);
+				i++;
 			}
+			System.out.println("total parts imported: "+i);
 
 		}
 		catch (JDOMException | IOException e)
@@ -169,7 +173,7 @@ public class DatabaseController
 		doc.getRootElement().addContent(part.buildXML());
 		xmlAppendCounter++;
 		//doc.getRootElement().sortChildren(elementComp);
-		if(xmlAppendCounter>250||ConsoleGUIModel.getSelenium().getQueued()<=2)
+		if(xmlAppendCounter>0||ConsoleGUIModel.getSelenium().getQueued()<=2)
 		{
 			xmlAppendCounter = 0;
 			XMLOutputter xmlOutput = new XMLOutputter();
@@ -189,6 +193,42 @@ public class DatabaseController
 						+ "Part likely not correctly written to XML, will try again on next append");
 			}
 		}
+	}
+	
+	public void removeFromMasterXML(CatalogPart part)
+	{
+		List<Element> children = doc.getRootElement().getChildren("part");
+		Iterator itr = children.iterator();
+		while (itr.hasNext()) {
+		  Element child = (Element) itr.next();
+		  String att = child.getAttributeValue("id"); 
+		  if( att.equals(part.getPartNumber())){
+		    itr.remove();
+		  }
+		}
+		
+	}
+	
+	public void buildMoldXML()
+	{
+		Document moldxml = new Document();
+		Element root = new Element("partmolds");
+		moldxml.setRootElement(root);
+		ArrayList<String> partsdone = new ArrayList<>();
+		int k = 0;
+		for(CatalogPart part : catalogParts)
+		{
+			Boolean str = part.getHasInventory();
+			if (str==true)
+			{
+				k++;
+				System.out.println(part.getPartNumber()+" has inventory, index "+k);
+			}
+			
+			//doclocal.getRootElement().addContent(part.buildXML());
+
+		}
+		
 	}
 	
 	public void buildMasterXML()

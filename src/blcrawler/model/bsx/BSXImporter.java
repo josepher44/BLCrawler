@@ -202,35 +202,35 @@ public class BSXImporter
 				}
 				
 			}
-/*			
-			if (node.getChildText("ITEMID").contains("p"))
-			{
-				if (partsDone.contains(node.getChildText("ITEMID").substring(0, node.getChildText("ITEMID").indexOf('p'))))
-				{
-					System.out.println("Patterned entry for part number "+node.getChildText("ITEMID").substring(0, node.getChildText("ITEMID").indexOf('p'))
-							+" added, pattern count at "+k);
-					k++;
-				}
-				else
-				{
-					partsDone.add(node.getChildText("ITEMID").substring(0, node.getChildText("ITEMID").indexOf('p')));
-				}
-			}
-			else
-			{
-				if (partsDone.contains(node.getChildText("ITEMID")))
-				{
-					System.out.println("Patterned entry for part number "+node.getChildText("ITEMID")
-							+" added, pattern count at "+k);
-					k++;
-				}
-				else
-				{
-					partsDone.add(node.getChildText("ITEMID"));
-				}
-				
-			}
-*/
+			
+//			if (node.getChildText("ITEMID").contains("p"))
+//			{
+//				if (partsDone.contains(node.getChildText("ITEMID").substring(0, node.getChildText("ITEMID").indexOf('p'))))
+//				{
+//					System.out.println("Patterned entry for part number "+node.getChildText("ITEMID").substring(0, node.getChildText("ITEMID").indexOf('p'))
+//							+" added, pattern count at "+k);
+//					k++;
+//				}
+//				else
+//				{
+//					partsDone.add(node.getChildText("ITEMID").substring(0, node.getChildText("ITEMID").indexOf('p')));
+//				}
+//			}
+//			else
+//			{
+//				if (partsDone.contains(node.getChildText("ITEMID")))
+//				{
+//					System.out.println("Patterned entry for part number "+node.getChildText("ITEMID")
+//							+" added, pattern count at "+k);
+//					k++;
+//				}
+//				else
+//				{
+//					partsDone.add(node.getChildText("ITEMID"));
+//				}
+//				
+//			}
+
 			//System.out.println("Slot: "+node.getChildText("slot"));
 			//System.out.println("Size: "+node.getChildText("size"));		
 		}
@@ -243,7 +243,7 @@ public class BSXImporter
 		try
 		{		
 			readDrawerDivisions();
-			readBLCatalogSummary();
+			//readBLCatalogSummary();
 		}
 		catch (Exception e1)
 		{

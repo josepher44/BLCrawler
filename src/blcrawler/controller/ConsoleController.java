@@ -47,6 +47,9 @@ public class ConsoleController
 		commandLibrary.put("testapi", () -> {testapi();});
 		commandLibrary.put("cancelscrape", () -> {cancelScrape();});
 		commandLibrary.put("httprequest", () -> {testhttprequest();});
+		commandLibrary.put("addallimages", () -> {addAllImages();});
+		commandLibrary.put("garbage", () -> {System.gc();});
+		commandLibrary.put("buildmolds", () -> {buildMolds();});
 		
 		
 		//Depreciated Methods, Avoid using or investigate function
@@ -93,6 +96,13 @@ public class ConsoleController
 		ConsoleGUIModel.getSelenium().addToInstant(addAllParts);
 	}
 	
+	public void addAllImages()
+	{
+		AddAllImages command = new AddAllImages();
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
+	}
+	
 	public void writeXMLParts()
 	{
 		WritePartsToXML command = new WritePartsToXML();
@@ -103,6 +113,13 @@ public class ConsoleController
 	public void cancelScrape()
 	{
 		CancelScrape command = new CancelScrape();
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
+	}
+	
+	public void buildMolds()
+	{
+		BuildMolds command = new BuildMolds();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}

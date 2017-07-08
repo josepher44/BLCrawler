@@ -80,8 +80,6 @@ public class SeleniumDistributor
 					currentModuleCreationProcess = 9152+i;
 					System.out.println("Created Selenium number "+(i+1));
 					
-					
-					
 					delayQueueMap.put(9152+i, new DelayQueue(9152+i));
 					delayQueueList.add(delayQueueMap.get(9152+i));
 					try
@@ -99,13 +97,7 @@ public class SeleniumDistributor
 		};
 		
 		thread.setDaemon(true);
-		thread.start();
-		
-		
-		
-		
-		
-		
+		thread.start();	
 	}
 	
 	//
@@ -115,15 +107,16 @@ public class SeleniumDistributor
 		return delayQueueMap.get(id).getSelenium().getHTML();
 	}
 	
-	public void getURLHTTP(String url, int id)
-	{
-		delayQueueMap.get(id).getSelenium().httpProxyRequest(url);
-	}
 	
-	public void saveImage(String url, int id)
+	
+//	public void getURLHTTP(String url, int id)
+//	{
+//		delayQueueMap.get(id).getSelenium().httpProxyRequest(url);
+//	}
+	
+	public void getImage(String url, int id, String path)
 	{
-		delayQueueMap.get(id).getSelenium().gotoURL(url);
-		
+		delayQueueMap.get(id).getSelenium().httpProxyImage(url, path);	
 	}
 	
 	public void addToInstant(Command command)
@@ -184,10 +177,10 @@ public class SeleniumDistributor
 		currentModuleCreationProcess = module;
 		for (int i=0; i<delayQueueList.size(); i++)
 		{
-			if (delayQueueList.get(i).getLimit()-delayQueueList.get(i).getCommandsExecuted()<10)
+			if (delayQueueList.get(i).getLimit()-delayQueueList.get(i).getCommandsExecuted()<20)//10 for part scraping
 			{
 				delayQueueList.get(i).setCommandsExecuted(delayQueueList.get(i).getCommandsExecuted()-
-					7-ThreadLocalRandom.current().nextInt(3, 7));
+					25-ThreadLocalRandom.current().nextInt(10, 30));	//7, 3-7 for part scraping
 			}
 			if (delayQueueList.get(i).getCommandsExecuted()<0)
 			{
@@ -260,6 +253,14 @@ public class SeleniumDistributor
 		queued = 0;
 		ConsoleGUIModel.getDatabase().buildMasterXML();
 		System.out.println("All Queues cleared, XML up to date");
+		killAllProcesses();
+		delayQueueMap.clear();
+		delayQueueList.clear();
+		processIDs.clear();
+		processIDtoModule.clear();
+		queued = 0;
+		lastcount = 0;
+		currentModuleCreationProcess = 0;
 	}
 	
 	public void scanProcesses()

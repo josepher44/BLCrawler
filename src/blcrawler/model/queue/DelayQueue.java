@@ -35,7 +35,7 @@ public class DelayQueue extends Queue
 		selenium = new SeleniumModel(String.valueOf(id));
 		currentCommand = new InitialCommand();
 		commandsExecuted = 0;
-		limit = ThreadLocalRandom.current().nextInt(40, 60);
+		limit = ThreadLocalRandom.current().nextInt(40, 150);
 		clear = false;
 		
 
@@ -126,7 +126,7 @@ public class DelayQueue extends Queue
 			{
 				System.out.println("Called exit tor, commandsExecuted = "+commandsExecuted+" limit= "+limit);
 				commandsExecuted = 0;
-				limit = ThreadLocalRandom.current().nextInt(40, 60);
+				limit = ThreadLocalRandom.current().nextInt(90, 150);//40-60 for part scraping
 				ConsoleGUIModel.getSelenium().relaunch(id);
 				addToBeginning(new Delay(125));
 				

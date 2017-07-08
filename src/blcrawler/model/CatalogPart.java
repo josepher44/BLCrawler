@@ -84,6 +84,8 @@ public class CatalogPart
 	
 	private ArrayList<String> knownColorsVerified;
 	
+	private Boolean hasInventory;
+	
 	String txtRep;
 	
 	private ArrayList<CatalogPartColored> coloredSubParts;
@@ -148,12 +150,63 @@ public class CatalogPart
 		heightMill = Integer.parseInt(e.getChildText("heightmill"));
 		notes = e.getChildText("notes");
 		
+		if (e.getChild("hasInventory")!=null)
+		{
+			if (e.getChildText("hasInventory").equals("true"))
+			{
+				hasInventory = true;
+			}
+			else
+			{
+				hasInventory = false;
+			}
+		}
+//		else
+//		{
+//			String path = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/part_"+partNumber+".html";
+//
+//			ConsoleGUIModel.getDatabase().removeFromMasterXML(this);
+//			try
+//			{
+//				byte[] encoded = Files.readAllBytes(Paths.get(path));
+//				txtRep = new String(encoded, "UTF-8");
+//			}
+//			catch (UnsupportedEncodingException e1)
+//			{
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			catch (IOException e1)
+//			{
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//			if (txtRep.contains("www.bricklink.com/catalogItemInv.asp?P"))
+//			{
+//				hasInventory = true;
+//				System.out.println("Part "+partNumber+" has an inventory");
+//				ConsoleGUIModel.getDatabase().appendToMasterXML(this);
+//			}
+//			else
+//			{
+//				hasInventory = false;
+//				System.out.println("No inventory for part "+partNumber);
+//			}
+//			txtRep = "";
+//			
+//			
+//			
+//			
+//			
+//		}
+		
 		if (e.getChild("similarmolds")!=null)
 		{
 			for(Element ele: e.getChild("similarmolds").getChildren())
 			{
 				similarMold.add(ele.getText());
-				System.out.println("Similar mold: "+ele.getText());
+				//System.out.println("Similar mold: "+ele.getText());
 			}
 		}
 		
@@ -162,7 +215,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("pairswiths").getChildren())
 			{
 				pairsWith.add(ele.getText());
-				System.out.println("Pairs with: "+ele.getText());
+				//System.out.println("Pairs with: "+ele.getText());
 			}
 		}
 		
@@ -171,7 +224,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("altnumbers").getChildren())
 			{
 				altNumbers.add(ele.getText());
-				System.out.println("Alt Number: "+ele.getText());
+				//System.out.println("Alt Number: "+ele.getText());
 			}
 		}
 		
@@ -180,7 +233,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("similarpatterns").getChildren())
 			{
 				similarPattern.add(ele.getText());
-				System.out.println("Similar Pattern: "+ele.getText());
+				//System.out.println("Similar Pattern: "+ele.getText());
 			}
 		}
 		
@@ -189,7 +242,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("doorframes").getChildren())
 			{
 				doorFrame.add(ele.getText());
-				System.out.println("Door Frame: "+ele.getText());
+				//System.out.println("Door Frame: "+ele.getText());
 			}
 		}
 		
@@ -198,7 +251,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("doors").getChildren())
 			{
 				door.add(ele.getText());
-				System.out.println("Door: "+ele.getText());
+				//System.out.println("Door: "+ele.getText());
 			}
 		}
 		
@@ -207,7 +260,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("wheels").getChildren())
 			{
 				wheel.add(ele.getText());
-				System.out.println("Wheel: "+ele.getText());
+				//System.out.println("Wheel: "+ele.getText());
 			}
 		}
 		
@@ -216,7 +269,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("tires").getChildren())
 			{
 				tire.add(ele.getText());
-				System.out.println("Tire: "+ele.getText());
+				//System.out.println("Tire: "+ele.getText());
 			}
 		}
 		
@@ -225,7 +278,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("samestickers").getChildren())
 			{
 				sameSticker.add(ele.getText());
-				System.out.println("Same Sticker: "+ele.getText());
+				//System.out.println("Same Sticker: "+ele.getText());
 			}
 		}
 		
@@ -234,7 +287,7 @@ public class CatalogPart
 			for(Element ele: e.getChild("duplicates").getChildren())
 			{
 				duplicate.add(ele.getText());
-				System.out.println("Duplicate: "+ele.getText());
+				//System.out.println("Duplicate: "+ele.getText());
 			}
 		}
 		
@@ -247,7 +300,7 @@ public class CatalogPart
 			}
 		}
 
-		if (e.getChild("wandedlists")!=null)
+		if (e.getChild("wantedlists")!=null)
 		{
 			for(Element ele: e.getChild("wantedlists").getChildren())
 			{
@@ -403,6 +456,7 @@ public class CatalogPart
 		generateCategoryID();
 		generateCategoryName();
 		generateName();
+		generateInventory();
 		generateAltIDs();
 		generateFirstYear();
 		generateLastYear();
@@ -521,6 +575,17 @@ public class CatalogPart
 		Element Notes = new Element("notes");
 		Notes.setText(notes);
 		part.addContent(Notes);
+		
+		Element Inventory = new Element("hasInventory");
+		if (hasInventory)
+		{
+			Inventory.setText("true");
+		}
+		else
+		{
+			Inventory.setText("false");
+		}
+		part.addContent(Inventory);
 		
 		if (similarMold.size()!=0)
 		{
@@ -741,6 +806,20 @@ public class CatalogPart
 			System.out.println("Parsing exception in part "+partNumber+"at category name.");
 		}
 		//System.out.println("Part number "+partNumber+" has a category of "+categoryName);
+	}
+	
+	public void generateInventory()
+	{
+		if (txtRep.indexOf("www.bricklink.com/catalogItemInv.asp?P")!=-1)
+		{
+			hasInventory = true;
+			System.out.println("Part "+partNumber+" has an inventory");
+		}
+		else
+		{
+			hasInventory = false;
+			System.out.println("No inventory for part "+partNumber);
+		}
 	}
 	
 	public void generateName()
@@ -1617,6 +1696,8 @@ public class CatalogPart
 					WantedSubstring = "";
 				}
 			}
+
+			//System.out.println(wantedLists);
 		}
 		catch (Exception e)
 		{
@@ -1848,6 +1929,16 @@ public class CatalogPart
 	public void setKnownColorsBLMenu(ArrayList<String> knownColorsBLMenu)
 	{
 		this.knownColorsBLMenu = knownColorsBLMenu;
+	}
+
+	public Boolean getHasInventory()
+	{
+		return hasInventory;
+	}
+
+	public void setHasInventory(Boolean hasInventory)
+	{
+		this.hasInventory = hasInventory;
 	}
 	
 	

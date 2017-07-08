@@ -49,6 +49,11 @@ public class SeleniumModel {
 	private int id;
 	private int socksport;
 	private int controlport;
+	private SocketAddress socket;
+	private Proxy proxy;
+	
+	FileWriter fw;
+	BufferedWriter bw;
 	
 	public SeleniumModel(String id) {
 		//bufferedFirefoxIDs = new ArrayList<>();
@@ -136,71 +141,7 @@ public class SeleniumModel {
 		thread.start();
 		System.gc();
 	}
-	/*
-	public void getProcessIDs() 
-	{
-		try {
-		    String line;
-		    String pid;
-		    CharSequence firefox = "firefox.exe";
-		    Process p = Runtime.getRuntime().exec
-		    	    (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
-		    BufferedReader input =
-		            new BufferedReader(new InputStreamReader(p.getInputStream()));
-		    while ((line = input.readLine()) != null) {
-		    	//System.out.println(line);
-		        if (line.contains(firefox))
-		        {
-		        	pid = line.substring(29,line.indexOf("Console", 0)-1);
-		        	pid = pid.replaceAll("\\s+","");
-					bufferedFirefoxIDs.add(Integer.valueOf(pid));
-					System.out.println("Added process ID "+ pid+ "to buffer for selenium module "+socksport);
-		        }
-		    }
-		    input.close();
-		} catch (Exception err) {
-		    err.printStackTrace();
-		}
-		
-		
-		
-	}
-	
-	
-	public void populateExistingProcesses()
-	{
-		getProcessIDs();
-		otherFirefoxIDs = bufferedFirefoxIDs;
-		for (int i=0; i<otherFirefoxIDs.size(); i++)
-		{
-			System.out.println(otherFirefoxIDs.get(i).toString());
-		}
-		bufferedFirefoxIDs.clear();
-	}
-	
-	public void identifyOwnProcesses()
-	{
-		getProcessIDs();
-		ownFirefoxIDs = bufferedFirefoxIDs;
-		for (int i=0; i<ownFirefoxIDs.size(); i++)
-		{
-			if (otherFirefoxIDs.contains(ownFirefoxIDs.get(i)))
-			{
-				ownFirefoxIDs.remove(i);
-				System.out.println("Process already running");
-			}
-			else
-			{
-				System.out.println("Added process id #"+String.valueOf(ownFirefoxIDs.get(i))+" as process of Selenium module" + socksport);
-			}
-			
-		}
-		System.out.println("Completed process ID for selenium module "+socksport);
-		bufferedFirefoxIDs.clear();
-	}
-	
-	
-	*/
+
 	
 	public String getHTML() {
 		return driver.getPageSource();
@@ -211,27 +152,31 @@ public class SeleniumModel {
 		
 	}
 	
-	public void httpProxyRequest(String url)
+	public void createProxy()
+	{
+		socket = new InetSocketAddress("127.0.0.1", socksport);
+		proxy = new Proxy(Proxy.Type.SOCKS, socket);
+	}
+	
+	public void httpProxyImage(String url, String path)
 	{	
 		InputStream in = null;
     	FileOutputStream out = null;
-		SocketAddress addr = new InetSocketAddress("127.0.0.1", socksport);
-		Proxy proxy = new Proxy(Proxy.Type.SOCKS, addr);
+    	createProxy();
 		try
 		{
 			URL myURL = new URL(url);
 			HttpsURLConnection conn = (HttpsURLConnection) myURL.openConnection(proxy);
-			
-			print_https_cert(conn);
+			//print_https_cert(conn);
 		    try 
 		    {
 		        in = conn.getInputStream();
-		        out = new FileOutputStream("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/TestFolder/2780.png");
+		        out = new FileOutputStream(path);
 		        int c;
 		        byte[] b = new byte[1024];
 		        while ((c = in.read(b)) != -1)
 		            out.write(b, 0, c);
-		        System.out.println("file written");
+		        System.out.println("file written from url "+url);
 		    } 
 		    
 		    finally 
@@ -257,6 +202,44 @@ public class SeleniumModel {
 		catch (FileNotFoundException e)
 		{
 			System.out.println("404: No file for url: "+url);
+
+			try
+			{
+				File file = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Images/notfound.txt");
+
+				// if file doesnt exists, then create it
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+
+				// true = append file
+				fw = new FileWriter(file.getAbsoluteFile(), true);
+				bw = new BufferedWriter(fw);
+
+				bw.write(System.lineSeparator()+url);
+			}
+			catch (IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			finally {
+
+				try {
+
+					if (bw != null)
+						bw.close();
+
+					if (fw != null)
+						fw.close();
+
+				} catch (IOException ex) {
+
+					ex.printStackTrace();
+
+				}
+			}
+			
 		}
 		catch (IOException e)
 		{
@@ -269,8 +252,8 @@ public class SeleniumModel {
 
      }
 
-	   private void print_https_cert(HttpsURLConnection con)
-	   {
+   private void print_https_cert(HttpsURLConnection con)
+   {
 	
 		    if(con!=null){
 	
@@ -297,84 +280,9 @@ public class SeleniumModel {
 				e.printStackTrace();
 			}
 	    }
+   }
 		
-//	    CloseableHttpClient httpclient = HttpClients.createDefault();
-//	    try {
-//	        HttpHost target = new HttpHost(url, 443, "https");
-//	        HttpHost proxy = new HttpHost("127.0.0.1", socksport, "socks");
-//
-//	        RequestConfig config = RequestConfig.custom()
-//	                .setProxy(proxy)
-//	                .build();
-//	        HttpGet request = new HttpGet("/");
-//	        request.setConfig(config);
-//
-//	        System.out.println("Executing request " + request.getRequestLine() + " to " + target + " via " + proxy);
-//
-//	        CloseableHttpResponse response = httpclient.execute(target, request);
-//	        try {
-//	            System.out.println("----------------------------------------");
-//	            System.out.println(response.getStatusLine());
-//	            EntityUtils.consume(response.getEntity());
-//	        }
-//			catch (IOException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} finally {
-//	            try
-//				{
-//					response.close();
-//				}
-//				catch (IOException e)
-//				{
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//	        }
-//	    }
-//		catch (ClientProtocolException e1)
-//		{
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		catch (IOException e1)
-//		{
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} finally {
-//	        try
-//			{
-//				httpclient.close();
-//			}
-//			catch (IOException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//	    }
-	}
-	
-	
-//	DefaultHttpClient httpclient = new DefaultHttpClient();
-//	try {
-//	    httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-//
-//	    HttpHost target = new HttpHost("www.google.com", 80, "http");
-//	    HttpGet req = new HttpGet("/");
-//
-//	    System.out.println("executing request to " + target + " via " + proxy);
-//	    HttpResponse rsp = httpclient.execute(target, req);
-//	    ...
-//	} finally {
-//	    // When HttpClient instance is no longer needed,
-//	    // shut down the connection manager to ensure
-//	    // immediate deallocation of all system resources
-//	    httpclient.getConnectionManager().shutdown();
-//	}
-	
-	
-	
+
 	
 	public void gotoURL(String url) {
 		driver.get(url);

@@ -12,7 +12,7 @@ import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.page.Part;
 
-public class TestHTTPRequest implements Command {
+public class AddImage implements Command {
 
 	boolean isFinished;
 	String url;
@@ -21,21 +21,21 @@ public class TestHTTPRequest implements Command {
 	private long delay;
 	private int timeout;
 	
-	public TestHTTPRequest(String URL) {
+	private String path;
+	public AddImage(String URL, String Path) {
 		
-		int randomNum = ThreadLocalRandom.current().nextInt(0, 15);
+		int randomNum = ThreadLocalRandom.current().nextInt(0, 8);
 		timeout = 15+randomNum;
-		delay = 10+randomNum;
+		delay = 0+randomNum;
 		isFinished = false;
 		this.url = URL;
-		this.queueID = 9152;
-
+		this.path = Path;
 	}
 	
 	@Override
 	public void execute() {
-
-		ConsoleGUIModel.getSelenium().getImage(url, queueID, "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/test.png");
+		
+		ConsoleGUIModel.getSelenium().getImage(url, queueID, path);
 		//new ConsoleOutput("CommandResult", "Directed Selenium module to parse data for url "+url);
 		isFinished = true;
 		
