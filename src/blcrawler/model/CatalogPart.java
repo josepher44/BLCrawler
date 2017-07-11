@@ -810,7 +810,7 @@ public class CatalogPart
 	
 	public void generateInventory()
 	{
-		if (txtRep.indexOf("www.bricklink.com/catalogItemInv.asp?P")!=-1)
+		if (txtRep.indexOf("_var_has_inventory		= \"Y\"")!=-1)
 		{
 			hasInventory = true;
 			System.out.println("Part "+partNumber+" has an inventory");
@@ -818,7 +818,7 @@ public class CatalogPart
 		else
 		{
 			hasInventory = false;
-			System.out.println("No inventory for part "+partNumber);
+			//System.out.println("No inventory for part "+partNumber);
 		}
 	}
 	
@@ -1939,6 +1939,16 @@ public class CatalogPart
 	public void setHasInventory(Boolean hasInventory)
 	{
 		this.hasInventory = hasInventory;
+	}
+
+	public ArrayList<ColorCount> getKnownColorsBL()
+	{
+		return knownColorsBL;
+	}
+
+	public void setKnownColorsBL(ArrayList<ColorCount> knownColorsBL)
+	{
+		this.knownColorsBL = knownColorsBL;
 	}
 	
 	

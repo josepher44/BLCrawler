@@ -15,6 +15,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -216,13 +218,50 @@ public class DatabaseController
 		moldxml.setRootElement(root);
 		ArrayList<String> partsdone = new ArrayList<>();
 		int k = 0;
+		int m = 0;
+		int n = 0;
+		Pattern p = Pattern.compile("(p|pb|px)0?0?0?([0-9])([0-9])?([0-9])?([0-9])?");
 		for(CatalogPart part : catalogParts)
 		{
-			Boolean str = part.getHasInventory();
-			if (str==true)
+			String str = part.getPartNumber();
+			if (str.matches(".*(p|pb|px)0?0?0?([0-9])([0-9])?([0-9])?([0-9])?.*"))
 			{
 				k++;
-				System.out.println(part.getPartNumber()+" has inventory, index "+k);
+				Matcher match = p.matcher(str);
+				String strnew = match.replaceAll("");
+				//System.out.println(part.getPartNumber()+" has p, index "+k+". New string is "+strnew);
+				if (partsdone.contains(strnew))
+				{
+					m++;
+					//System.out.println("Matching part already exists, consolidation count "+m);
+				}
+				else
+				{
+					partsdone.add(strnew);
+				}
+
+
+			
+			}
+			else
+			{
+				partsdone.add(str);
+			}
+			
+			if (part.getHasInventory())
+			{
+				
+				if (part.getKnownColorsBL().size()>1)
+				{
+					n=n+part.getKnownColorsBL().size();
+					System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n+", size is "+part.getKnownColorsBL().size());
+				}
+				else
+				{
+					n++;
+					System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n);
+				}
+				
 			}
 			
 			//doclocal.getRootElement().addContent(part.buildXML());

@@ -9,19 +9,85 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 public class APIModel
 {
+	BLAuthSigner signer;
+	String consumerKey;
+	String consumerSecret;
+	String tokenValue;
+	String tokenSecret;
+	String consumerSecretTwitter;
+	String tokenSecretTwitter;
+	
+	public APIModel(String partnumber) 
+	{
+		consumerKey = "16AB07C5220C43768822A29EB745FDC1";
+		consumerSecret = "F0FE04252666486CB1D954006CA580A3";
+		tokenValue = "0FD7279A6760427681A6C37E2AC89768";
+		tokenSecret = "986EE49534414CE684D53A59E07FDEEA";
+		
+		consumerSecretTwitter = "MCD8BKwGdgPHvAuvgvz4EQpqDAtx89grbuNMRd7Eh98";
+		tokenSecretTwitter = "J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA";
+		
 
-	public APIModel(String partnumber) {
-		String consumerKey = "16AB07C5220C43768822A29EB745FDC1";
-		String consumerSecret = "F0FE04252666486CB1D954006CA580A3";
-		String tokenValue = "0FD7279A6760427681A6C37E2AC89768";
-		String tokenSecret = "986EE49534414CE684D53A59E07FDEEA";
+
+
 		
-		String consumerSecretTwitter = "MCD8BKwGdgPHvAuvgvz4EQpqDAtx89grbuNMRd7Eh98";
-		String tokenSecretTwitter = "J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA";
+//		try
+//		{
+//			System.out.println(getHTML(fullURL));
+//		}
+//		catch (Exception e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
+		getPriceGuide(partnumber);
+
+	}
+	
+
+	
+	public void getPriceGuide(String partnumber)
+	{
+		buildSigner();
+		signer.setVerb( "GET" );
+		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/price?color_id=11&guide_type=sold";
+//		signer.addParameter("type", "part");
+//		signer.addParameter("no", partnumber);
+		signer.addParameter("color_id", "11");
+		signer.addParameter("guide_type", "sold");
+		
+//		String baseURL = "https://api.bricklink.com/api/store/v1/orders?direction=in";
+//		signer.addParameter("direction", "in");
+
+		signer.setURL( baseURL );
+		
+		callAPI(baseURL);
+	}
+	
+	public void getItemInventory(String partnumber)
+	{
+		buildSigner();
+		signer.setVerb( "GET" );
+		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?color_id=11&guide_type=sold";
+//		signer.addParameter("type", "part");
+//		signer.addParameter("no", partnumber);
+		signer.addParameter("color_id", "11");
+		signer.addParameter("guide_type", "sold");
+		
+//		String baseURL = "https://api.bricklink.com/api/store/v1/orders?direction=in";
+//		signer.addParameter("direction", "in");
+
+		signer.setURL( baseURL );
+		
+		callAPI(baseURL);
+	}
+	
+	public void buildSigner()
+	{
 		boolean twitter = false;
 		
-		BLAuthSigner signer = new BLAuthSigner( consumerKey, consumerSecret);
+		
 		if (twitter)
 		{
 			signer = new BLAuthSigner( consumerKey, consumerSecretTwitter );
@@ -32,20 +98,11 @@ public class APIModel
 			signer = new BLAuthSigner( consumerKey, consumerSecret );
 			signer.setToken( tokenValue, tokenSecret );
 		}
+	}
+	
+	public void callAPI(String baseURL)
+	{
 
-		signer.setVerb( "GET" );
-		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/price?color_id=11&guide_type=sold";
-//		signer.addParameter("type", "part");
-//		signer.addParameter("no", partnumber);
-		signer.addParameter("color_id", "11");
-		signer.addParameter("guide_type", "sold");
-		
-//		String baseURL = "https://api.bricklink.com/api/store/v1/orders?direction=in";
-//		signer.addParameter("direction", "in");
-//		
-		
-		
-		signer.setURL( baseURL );
 
 		
 		
@@ -106,24 +163,21 @@ public class APIModel
 		fullURL = fullURL.replace("%7B", "{");
 		fullURL = fullURL.replace("%7D", "}");				
 						
-							
+		try
+		{
+			System.out.println(getHTML(fullURL));
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}					
 		
-		JSONObject obj = new JSONObject();
-		obj.putAll( params );
+		//JSONObject obj = new JSONObject();
+		//obj.putAll( params );
 		
-		System.out.println( fullURL );
-		System.out.println( obj );
-		
-//		try
-//		{
-//			System.out.println(getHTML(fullURL));
-//		}
-//		catch (Exception e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
+		//System.out.println( fullURL );
+		//System.out.println( obj );
 	}
 	
 	public static String getHTML(String urlToRead) throws Exception {
