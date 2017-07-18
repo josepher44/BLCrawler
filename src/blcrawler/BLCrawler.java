@@ -25,15 +25,16 @@ public class BLCrawler extends Application {
 	private static JLabel emptyLabel;
 	private static PartDatabase partDatabase;
 	private static IMSGUIView imsgui;
-	
+
 	public static void main(String[] args) {
-		
+
 		guiModel = new ConsoleGUIModel("gui");
 		imsgui = new IMSGUIView();
-		
+		guiModel.setImsgui(imsgui);
+
 		launch(args);
 	}
-	
+
 	@Override
     public void start(Stage primaryStage) {
 		//imports extended inventory management system gui info from view class
@@ -41,7 +42,7 @@ public class BLCrawler extends Application {
         primaryStage.setTitle("BLCrawl Inventory Management System");
         primaryStage.setScene(imsgui.getScene());
         primaryStage.show();
-        
+
         //partDatabase = new PartDatabase();
 
 	}

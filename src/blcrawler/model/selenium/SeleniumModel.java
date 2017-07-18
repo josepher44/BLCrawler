@@ -1,6 +1,9 @@
 package blcrawler.model.selenium;
 
 import java.io.BufferedReader;
+import org.apache.commons.*;
+import org.apache.commons.io.FileUtils;
+
 import java.io.IOException;
 import java.io.*;
 import java.io.InputStreamReader;
@@ -157,6 +160,59 @@ public class SeleniumModel {
 		socket = new InetSocketAddress("127.0.0.1", socksport);
 		proxy = new Proxy(Proxy.Type.SOCKS, socket);
 	}
+	
+	public void httpProxyHTML(String url, String path)
+	{	
+		InputStream in = null;
+    	FileOutputStream out = null;
+    	createProxy();
+		try
+		{
+			StringBuilder result = new StringBuilder();
+			URL myURL = new URL(url);
+			HttpsURLConnection conn = (HttpsURLConnection) myURL.openConnection(proxy);
+			//print_https_cert(conn);
+		    try 
+		    {
+		        BufferedReader input = new BufferedReader(new InputStreamReader(
+	                    conn.getInputStream()));
+		        String line;
+			      while ((line = input.readLine()) != null) {
+			         result.append(line);
+			      }
+
+			      input.close();
+			      if(result.toString().contains("BAD_OAUTH_REQUEST"))
+			      {
+			    	  System.out.println("Bad Oauth request at url "+url+", will retry later");
+			    	  System.out.println(result.toString());
+			      }
+			      else
+			      {
+				      System.out.println("URL "+url+"generated successful response "+result.toString());
+				      FileUtils.writeStringToFile(new File(path), result.toString());
+			      }
+		        //System.out.println("file written from url "+url);
+		    } 
+		    
+		    finally 
+		    {
+		        if (in != null)
+		            in.close();
+		        if (out != null)
+		            out.close();
+		    }
+			
+
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	
 	
 	public void httpProxyImage(String url, String path)
 	{	

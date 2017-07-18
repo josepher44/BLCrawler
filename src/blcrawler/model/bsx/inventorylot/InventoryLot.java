@@ -22,8 +22,8 @@ public class InventoryLot
 	double Price;
 	char Condition;
 	String Comments;
-	
-	
+
+
 	String Remarks;
 	short Cabinet;
 	short Drawer;
@@ -33,12 +33,12 @@ public class InventoryLot
 	double weight;
 	boolean multiLocated;
 	int index;
-	
+
 	public InventoryLot()
 	{
-		
+
 	}
-	
+
 	public void deriveAllRemarks(String s)
 	{
 		Remarks = s;
@@ -64,16 +64,16 @@ public class InventoryLot
 			SectionID = 1;
 			//System.out.println("InventoryLot: Drawer " + s + " is undivided");
 		}
-		
-		
-		
-		
+
+
+
+
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public boolean getMultiLocated()
 	{
 		return multiLocated;
@@ -85,7 +85,7 @@ public class InventoryLot
 	}
 
 
-	
+
 	public short getCabinet()
 	{
 		return Cabinet;
@@ -290,8 +290,8 @@ public class InventoryLot
 	}
 
 
-	
-	
-	
-	
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package blcrawler.commands;
+package blcrawler.commands.api;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,48 +10,46 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 
+import blcrawler.api.APIModel;
+import blcrawler.commands.Command;
 import blcrawler.commands.addpage.AddPart;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
-public class BuildMolds implements Command {
+public class GetPartInventory implements Command {
 
 	boolean isFinished;
+	String partID;
+	ArrayList<String> partIDs;
 	private int queueID;
-	public BuildMolds() {
-		
+	String partNumber;
+	
+	private long delay;
+	private int timeout;
+	
+	public GetPartInventory(String partnumber) {
+		int randomNum = ThreadLocalRandom.current().nextInt(0, 1);
+		timeout = 1+randomNum;
+		delay = 0+randomNum;
 		isFinished = false;
+		partNumber = partnumber;
 
 
 	}
 	
 	@Override
 	public void execute() {
-		Thread thread = new Thread() {
-			public void run() 
-			{
-				ConsoleGUIModel.getDatabase().buildMoldXML();
-
-		
-			}
-		};
-		
-		thread.setDaemon(true);
-		thread.start();
-		
+		APIModel api = new APIModel(queueID);
+		api.getItemInventory(partNumber); 
 		isFinished = true;
-
-		
 	}
 
 	@Override
@@ -69,19 +67,19 @@ public class BuildMolds implements Command {
 	@Override
 	public long getDelay() {
 		// TODO Auto-generated method stub
-		return 0;
+		return delay;
 	}
 
 	@Override
 	public int getTimeout() {
 		// TODO Auto-generated method stub
-		return 0;
+		return timeout;
 	}
 
 	@Override
 	public boolean isFinished() {
 		// TODO Auto-generated method stub
-		return true;
+		return isFinished;
 	}
 
 	@Override
@@ -101,5 +99,4 @@ public class BuildMolds implements Command {
 		this.queueID=id;
 		
 	}
-
 }

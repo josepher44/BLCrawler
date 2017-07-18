@@ -9,24 +9,33 @@ import java.util.ArrayList;
  * for more complete mass update generation
  */
 
-public class InventoryLocation extends InventoryEntry
+public abstract class InventoryEntry
 {
-
-
-	//Right now, total quantity across all multis. Eventually under new datastructure, Quantity will be specific to each location
+	String ItemID;
+	char ItemTypeID;
+	short ColorID;
+	String ItemName;
+	String ItemType;
+	String ColorName;
+	Short CategoryID;
+	String CategoryName;
+	String Status;
 	int Qty;
-
-
-	//Information pulled from remarks is only used in inventoryLocation, not Lot
+	double Price;
+	char Condition;
+	String Comments;
+	String Remarks;
 	short Cabinet;
 	short Drawer;
 	short SectionID;
 	short[] divisions;
-
-
+	int lotID;
+	double weight;
+	boolean multiLocated;
+	int index;
+	boolean empty;
+	boolean divided;
 	String trimmedRemarks;
-
-	//R-codes will not be used soon, but are preserved to maintain backwards compatability at the moment.
 	String rawSizingIndicators;
 	String rcode;
 	String ecode;
@@ -36,12 +45,12 @@ public class InventoryLocation extends InventoryEntry
 
 
 
-	public InventoryLocation()
+	public InventoryEntry()
 	{
 
 	}
 
-	public InventoryLocation(InventoryLot lot)
+	public InventoryEntry(InventoryLot lot)
 	{
 		validCodes = new ArrayList<>();
 		for (Integer i=1;i<17;i++)
@@ -88,7 +97,7 @@ public class InventoryLocation extends InventoryEntry
 
 	}
 
-	public InventoryLocation(InventoryLot lot, String remarks)
+	public InventoryEntry(InventoryLot lot, String remarks)
 	{
 		ItemID = lot.getItemID();
 		ItemTypeID = lot.getItemTypeID();

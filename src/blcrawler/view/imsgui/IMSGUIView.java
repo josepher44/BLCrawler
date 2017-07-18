@@ -46,7 +46,7 @@ public class IMSGUIView
 		currentInventory = new Inventory();
 		Start();
 	}
-	
+
 	public Scene getScene()
 	{
 		return scene;
@@ -66,41 +66,41 @@ public class IMSGUIView
         lots = importer.getInventoryLocationList();
         currentInventory.setDivisionTable(importer.getDrawerDivisionTable());
         currentInventory.setDivisionList(importer.getDrawerDivisionList());
-        
-        
+
+
         //Set up Columns
         TableColumn<InventoryLocation,Short> IndexColumn = new TableColumn<>("Index");
         IndexColumn.setMinWidth(50);
         IndexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
-        
+
         TableColumn<InventoryLocation,String> ItemIDColumn = new TableColumn<>("ItemID");
         ItemIDColumn.setMinWidth(50);
         ItemIDColumn.setCellValueFactory(new PropertyValueFactory<>("ItemID"));
-        
+
         TableColumn<InventoryLocation,String> NameColumn = new TableColumn<>("Name");
         NameColumn.setMinWidth(100);
        	NameColumn.setCellValueFactory(new PropertyValueFactory<>("ItemName"));
-        
+
         TableColumn<InventoryLocation,Short> CabinetColumn = new TableColumn<>("Cabinet");
         CabinetColumn.setMinWidth(50);
         CabinetColumn.setCellValueFactory(new PropertyValueFactory<>("Cabinet"));
- 
+
         TableColumn<InventoryLocation,String> CategoryNameColumn = new TableColumn<>("CategoryName");
         CategoryNameColumn.setMinWidth(150);
         CategoryNameColumn.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
-        
+
         TableColumn<InventoryLocation,Short> CategoryIDColumn = new TableColumn<>("CategoryID");
         CategoryIDColumn.setMinWidth(50);
         CategoryIDColumn.setCellValueFactory(new PropertyValueFactory<>("CategoryID"));
-        
+
         TableColumn<InventoryLocation,Boolean> MultiColumn = new TableColumn<>("Multi?");
         MultiColumn.setMinWidth(50);
         MultiColumn.setCellValueFactory(new PropertyValueFactory<>("multiLocated"));
-        
+
         TableColumn<InventoryLocation,String> RawRemarksColumn = new TableColumn<>("Raw Remarks");
         RawRemarksColumn.setMinWidth(50);
         RawRemarksColumn.setCellValueFactory(new PropertyValueFactory<>("Remarks"));
-        
+
         inventoryView = new TableView<>();
         inventoryView.setItems(lots);
         inventoryView.getColumns().add(IndexColumn);
@@ -108,39 +108,40 @@ public class IMSGUIView
         inventoryView.getColumns().add(NameColumn);
         inventoryView.getColumns().add(CabinetColumn);
         inventoryView.getColumns().add(CategoryIDColumn);
-        inventoryView.getColumns().add(CategoryNameColumn);        
+        inventoryView.getColumns().add(CategoryNameColumn);
         inventoryView.getColumns().add(MultiColumn);
         inventoryView.getColumns().add(RawRemarksColumn);
-        
-        
+
+
         Button ShowCompartments = new Button();
         ShowCompartments.setText("Show Compartments");
-        
+        ShowCompartments.setOnAction(e -> invertDisplay());
+
         VBox root = new VBox();
         BorderPane mainScene = new BorderPane();
         mainScene.setTop(root);
-        
+
         VBox leftBar = new VBox();
         mainScene.setLeft(leftBar);
         leftBar.getChildren().add(ShowCompartments);
-        
+
         VBox table = new VBox();
         mainScene.setCenter(table);
         table.getChildren().add(inventoryView);
-        
-        
-        
-        
-        
+
+
+
+
+
         MenuBar menuBar = new MenuBar();
-        
+
         // --- Menu File
         Menu menuFile = new Menu("File");
         MenuItem aye = new MenuItem("aye                                   Ctrl-P");
         MenuItem bae = new MenuItem("bae");
-        
+
         aye.setOnAction(e->AddPart.display());
-        
+
         FadeTransition ft = new FadeTransition(Duration.millis(3000), menuFile.getGraphic());
 
         ft.setFromValue(0.05);
@@ -149,45 +150,51 @@ public class IMSGUIView
         ft.setAutoReverse(true);
 
 
-        
-        menuFile.getItems().addAll(aye, bae);
-        
-        
- 
-        
-        
- 
 
-        
-        
+        menuFile.getItems().addAll(aye, bae);
+
+
+
+
+
+
+
+
+
         // --- Menu Edit
         Menu menuEdit = new Menu("Edit");
-        
+
         MenuItem see = new MenuItem("see");
-        
+
         menuEdit.getItems().addAll(see);
- 
+
         // --- Menu View
         Menu menuView = new Menu("View");
-        
+
         Menu menuConfig = new Menu("Configuration");
-        
-        
- 
+
+
+
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView, menuConfig);
 
         root.getChildren().add(menuBar);
         root.getChildren().add(btn);
-        
-        scene = new Scene(mainScene, 1024, 768);
-        
 
-        
+        scene = new Scene(mainScene, 1024, 768);
+
+
+
         //root.addAll(menuBar);
 
         currentInventory.mapLocationsToDivisions();
         //currentInventory.identifyEmptyUndividedDrawers();
 
+	}
+
+	private void invertDisplay()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	public static Inventory getCurrentInventory()
@@ -200,9 +207,14 @@ public class IMSGUIView
 		IMSGUIView.currentInventory = currentInventory;
 	}
 
+	public void addPart()
+	{
+		
+	}
 
-	
-	
-	
-	
+
+
+
+
+
 }

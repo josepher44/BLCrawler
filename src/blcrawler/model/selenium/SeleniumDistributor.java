@@ -109,15 +109,16 @@ public class SeleniumDistributor
 	
 	
 	
-//	public void getURLHTTP(String url, int id)
-//	{
-//		delayQueueMap.get(id).getSelenium().httpProxyRequest(url);
-//	}
+	public void getURLHTTP(String url, int id, String path)
+	{
+		delayQueueMap.get(id).getSelenium().httpProxyHTML(url, path);
+	}
 	
 	public void getImage(String url, int id, String path)
 	{
 		delayQueueMap.get(id).getSelenium().httpProxyImage(url, path);	
 	}
+	
 	
 	public void addToInstant(Command command)
 	{

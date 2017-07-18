@@ -14,21 +14,21 @@ import java.util.Scanner;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 
 import blcrawler.commands.addpage.AddPart;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
-public class BuildMolds implements Command {
+public class BuildInventories implements Command {
 
 	boolean isFinished;
+	String partID;
+	ArrayList<String> partIDs;
 	private int queueID;
-	public BuildMolds() {
+	String partNumber;
+	public BuildInventories() {
 		
 		isFinished = false;
 
@@ -37,12 +37,13 @@ public class BuildMolds implements Command {
 	
 	@Override
 	public void execute() {
+		System.out.println("reached execute");
 		Thread thread = new Thread() {
 			public void run() 
 			{
-				ConsoleGUIModel.getDatabase().buildMoldXML();
+				ConsoleGUIModel.getDatabase().buildInventories();
 
-		
+				
 			}
 		};
 		
@@ -50,7 +51,6 @@ public class BuildMolds implements Command {
 		thread.start();
 		
 		isFinished = true;
-
 		
 	}
 

@@ -28,6 +28,8 @@ import org.jdom2.output.XMLOutputter;
 import blcrawler.commands.ReadPartsFromXML;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
+import blcrawler.model.MoldMaster;
+import blcrawler.model.PartInventory;
 import blcrawler.primatives.ColorCount;
 import blcrawler.primatives.ColorMap;
 import blcrawler.primatives.ObjectSpecificColorCount;
@@ -36,12 +38,16 @@ public class DatabaseController
 {
 	LinkedList<CatalogPart> catalogParts;
 	Hashtable<String, CatalogPart>catalogPartsByID;
+	ArrayList<MoldMaster> masterMolds;
+	Hashtable<String, MoldMaster>masterMoldsByID;
+	Hashtable<String, String> childToMasterMold;
 	ArrayList<String> relationshipBufferTriggers;
 	ArrayList<String> relationshipBufferItems;
+	ArrayList<PartInventory> partInventories;
 	long uniqueColoredParts;
 	int xmlAppendCounter;
 	
-	Document doc;
+	Document partsDoc;
 	
 	ColorMap colormap;
 	Comparator<Element> elementComp;
@@ -49,12 +55,16 @@ public class DatabaseController
 	public DatabaseController()
 	{
 		catalogParts = new LinkedList<>();
+		masterMolds = new ArrayList<>();
 		catalogPartsByID = new Hashtable<>();
+		masterMoldsByID = new Hashtable<>();
+		childToMasterMold = new Hashtable<>();
 		relationshipBufferTriggers = new ArrayList<>();
 		uniqueColoredParts=0;
 		colormap = new ColorMap();
-		doc = null;
+		partsDoc = null;
 		xmlAppendCounter = 0;
+		partInventories = new ArrayList<>();
 		
 
 		
@@ -121,11 +131,11 @@ public class DatabaseController
 		File masterXML = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml");
 		
 		SAXBuilder builder3 = new SAXBuilder();
-		doc = null;
+		partsDoc = null;
 		try
 		{
-			doc = builder3.build(masterXML);
-			Element rootElement = doc.getRootElement();
+			partsDoc = builder3.build(masterXML);
+			Element rootElement = partsDoc.getRootElement();
 			//doc.getRootElement().sortChildren(elementComp);
 			System.out.println("Built master xml database "+rootElement.getChildren().size());
 			int i=0;
@@ -144,8 +154,8 @@ public class DatabaseController
 			System.out.println("Master xml database does not exist, creating empty one");
 
 			Element PartsXML = new Element("partsxml");
-			doc = new Document();
-			doc.setRootElement(PartsXML);
+			partsDoc = new Document();
+			partsDoc.setRootElement(PartsXML);
 			
 			XMLOutputter xmlOutput = new XMLOutputter();
 
@@ -153,7 +163,7 @@ public class DatabaseController
 			xmlOutput.setFormat(Format.getPrettyFormat());
 			try
 			{
-				xmlOutput.output(doc, new FileWriter
+				xmlOutput.output(partsDoc, new FileWriter
 						("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
 			}
 			catch (IOException en)
@@ -172,7 +182,7 @@ public class DatabaseController
 	public void appendToMasterXML(CatalogPart part)
 	{
 
-		doc.getRootElement().addContent(part.buildXML());
+		partsDoc.getRootElement().addContent(part.buildXML());
 		xmlAppendCounter++;
 		//doc.getRootElement().sortChildren(elementComp);
 		if(xmlAppendCounter>0||ConsoleGUIModel.getSelenium().getQueued()<=2)
@@ -182,7 +192,7 @@ public class DatabaseController
 			xmlOutput.setFormat(Format.getPrettyFormat());
 			try
 			{
-				xmlOutput.output(doc, new FileWriter
+				xmlOutput.output(partsDoc, new FileWriter
 						("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml"));
 			}
 			catch (IOException e)
@@ -199,7 +209,7 @@ public class DatabaseController
 	
 	public void removeFromMasterXML(CatalogPart part)
 	{
-		List<Element> children = doc.getRootElement().getChildren("part");
+		List<Element> children = partsDoc.getRootElement().getChildren("part");
 		Iterator itr = children.iterator();
 		while (itr.hasNext()) {
 		  Element child = (Element) itr.next();
@@ -211,42 +221,23 @@ public class DatabaseController
 		
 	}
 	
+
+	
 	public void buildMoldXML()
 	{
 		Document moldxml = new Document();
 		Element root = new Element("partmolds");
 		moldxml.setRootElement(root);
-		ArrayList<String> partsdone = new ArrayList<>();
+		Hashtable<String, String> partsdone = new Hashtable<>();
 		int k = 0;
 		int m = 0;
 		int n = 0;
 		Pattern p = Pattern.compile("(p|pb|px)0?0?0?([0-9])([0-9])?([0-9])?([0-9])?");
 		for(CatalogPart part : catalogParts)
 		{
-			String str = part.getPartNumber();
-			if (str.matches(".*(p|pb|px)0?0?0?([0-9])([0-9])?([0-9])?([0-9])?.*"))
-			{
-				k++;
-				Matcher match = p.matcher(str);
-				String strnew = match.replaceAll("");
-				//System.out.println(part.getPartNumber()+" has p, index "+k+". New string is "+strnew);
-				if (partsdone.contains(strnew))
-				{
-					m++;
-					//System.out.println("Matching part already exists, consolidation count "+m);
-				}
-				else
-				{
-					partsdone.add(strnew);
-				}
-
-
+		String str = part.getPartNumber();
 			
-			}
-			else
-			{
-				partsdone.add(str);
-			}
+			
 			
 			if (part.getHasInventory())
 			{
@@ -254,20 +245,201 @@ public class DatabaseController
 				if (part.getKnownColorsBL().size()>1)
 				{
 					n=n+part.getKnownColorsBL().size();
-					System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n+", size is "+part.getKnownColorsBL().size());
+					//System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n+", size is "+part.getKnownColorsBL().size());
 				}
 				else
 				{
 					n++;
-					System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n);
+					//System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n);
 				}
 				
 			}
 			
+			else if (str.matches("(973p).*"))
+			{
+				k++;
+				String strnew = "973";
+				System.out.println(part.getPartNumber()+" has p, index "+k+". New string is "+strnew);
+				if (partsdone.containsKey(strnew))
+				{
+					m++;
+					System.out.println("Added "+str+" to already existing part "+partsdone.get(strnew)+", consolidation count "+m);
+					addToMold(partsdone.get(strnew), str);
+				}
+				else
+				{
+					partsdone.put(strnew, str);
+					addMasterMold(new MoldMaster(str));
+					//System.out.println("Part "+str+" does not exist, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
+				}
+			}
+
+			else if (str.matches(".*(p|pb|px)0?0?0?([0-9])([0-9])?([0-9])?([0-9])?.*"))
+			{
+				k++;
+				Matcher match = p.matcher(str);
+				String strnew = match.replaceAll("");
+				//System.out.println(part.getPartNumber()+" has p, index "+k+". New string is "+strnew);
+				if (partsdone.containsKey(strnew))
+				{
+					m++;
+					//System.out.println("Added "+str+" to already existing part "+partsdone.get(strnew)+", consolidation count "+m);
+					addToMold(partsdone.get(strnew), str);
+				}
+				else
+				{
+					partsdone.put(strnew, str);
+					addMasterMold(new MoldMaster(str));
+					//System.out.println("Part "+str+" does not exist, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
+				}
+
+
+			
+			}
+			
+
+			else
+			{
+				partsdone.put(str, str);
+				addMasterMold(new MoldMaster(str));
+				//System.out.println("Part "+str+" does not exist, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
+			}
+			
+
+			
 			//doclocal.getRootElement().addContent(part.buildXML());
 
 		}
+		System.out.println("Mold count is "+masterMolds.size());
+		buildInventories();
+		ArrayList<PartInventory> masterInventories = new ArrayList<>();
+		masterInventories.addAll(partInventories);
 		
+		System.out.println(masterInventories.size()+"Size of master inventories");
+		
+		Boolean foundamatch = false;
+		for (int i=0; i<masterInventories.size(); i++)
+		{
+			String partA = masterInventories.get(i).moldNormalizedInventory().toString();
+			if (masterInventories.get(i).getPartNumber().contains("973"))
+			{
+				System.out.println("Comparisons begin for "+masterInventories.get(i).getPartNumber()+" , "+partA);
+			}
+			foundamatch = false;
+			for (int p1=i+1; p1<masterInventories.size(); )
+			{
+				String partB = masterInventories.get(p1).moldNormalizedInventory().toString();
+				
+				if (partA.equals(partB))
+				{
+					System.out.println("Part # "+masterInventories.get(i).getPartNumber()+"has an identical inventory to part"
+							+masterInventories.get(p1).getPartNumber()+", merging now");
+		
+					
+					if (partsdone.containsKey(masterInventories.get(i).getPartNumber()))
+					{
+						addToMold(partsdone.get(masterInventories.get(i).getPartNumber()), masterInventories.get(p1).getPartNumber());
+						System.out.println("Did the positive if, added part number "+masterInventories.get(p1).getPartNumber()+" to part number "+masterInventories.get(i).getPartNumber());
+						foundamatch = true;
+					}
+					else
+					{
+						String str = masterInventories.get(i).getPartNumber();
+						partsdone.put(str, str);
+						MoldMaster mold = new MoldMaster(masterInventories.get(i).getPartNumber());
+						addMasterMold(mold);
+						addToMold(partsdone.get(masterInventories.get(i).getPartNumber()), masterInventories.get(p1).getPartNumber());
+						System.out.println("Part "+str+" does not exist, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
+						foundamatch = true;
+					}
+					
+					masterInventories.remove(masterInventories.get(p1));
+					
+				}
+				else
+				{
+					p1++;
+					
+				}
+			}
+			if (!foundamatch)
+			{
+				String str = masterInventories.get(i).getPartNumber();
+				partsdone.put(str, str);
+				addMasterMold(new MoldMaster(masterInventories.get(i).getPartNumber()));
+				System.out.println("Part "+str+" has no matching assemblies, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
+			}
+		}
+		
+		System.out.println("Reduced down to "+masterInventories.size()+" inventory parts from "+partInventories.size());
+		
+		//Mold masters all built, now write to xml
+		for(MoldMaster mold : masterMolds)
+		{
+			Element e_mold = new Element("mold");
+
+			Element master = new Element("masterpart");
+			master.setText(mold.getMasterPartNumber());
+			e_mold.addContent(master);
+			
+			Element submolds = new Element("subparts");
+			for (String sub : mold.getSubPartNumbers())
+			{
+				Element s = new Element("part");
+				s.setText(sub);
+				submolds.addContent(s);
+			}
+			e_mold.addContent(submolds);
+			
+			Element verified = new Element("verified");
+			verified.setText("false");
+			e_mold.addContent(verified);
+			
+			Element smallDrawerEmpirical = new Element("smalldrawerempirical");
+			e_mold.addContent(smallDrawerEmpirical);
+			
+			Element dimSlaves = new Element("dimslaves");
+			e_mold.addContent(dimSlaves);
+			
+			Element dimMaster = new Element("dimmaster");
+			dimMaster.setText("false");
+			e_mold.addContent(dimMaster);
+			
+			moldxml.getRootElement().addContent(e_mold);
+		}
+		
+		
+		XMLOutputter xmlOutput = new XMLOutputter();
+
+		// display nice nice
+		xmlOutput.setFormat(Format.getPrettyFormat());
+		try
+		{
+			xmlOutput.output(moldxml, new FileWriter
+					("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/mold_database.xml"));
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Successfully wrote all mold data to xml");
+		
+	}
+	
+	public void buildInventories()
+	{
+		String basepath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts";
+		File dir = new File(basepath);
+		
+		for(File file : dir.listFiles())
+		{
+			//System.out.println("Building part from file "+file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_")));
+			partInventories.add(new PartInventory(file.getAbsolutePath()));
+			
+		}
+		System.out.println("Files done: "+dir.listFiles().length);
 	}
 	
 	public void buildMasterXML()
@@ -524,6 +696,35 @@ public class DatabaseController
 	{
 		this.catalogParts = catalogParts;
 	}
+	
+	public void addMasterMold(MoldMaster mold)
+	{
+		masterMolds.add(mold);
+		masterMoldsByID.put(mold.getMasterPartNumber(), mold);
+	}
+	
+	public void addToMold(String master, String child)
+	{
+		MoldMaster Moldmaster = masterMoldsByID.get(master);
+		Moldmaster.addSubPartNumber(child);
+		childToMasterMold.put(child, master);
+	}
+	
+	public String getMasterPartNumber(String child)
+	{
+		return childToMasterMold.get(child);
+	}
+
+	public Hashtable<String, String> getChildToMasterMold()
+	{
+		return childToMasterMold;
+	}
+
+	public void setChildToMasterMold(Hashtable<String, String> childToMasterMold)
+	{
+		this.childToMasterMold = childToMasterMold;
+	}
+
 	
 	
 }

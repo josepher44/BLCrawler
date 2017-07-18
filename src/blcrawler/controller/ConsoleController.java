@@ -19,6 +19,7 @@ import blcrawler.commands.addpage.AddAllPartCatalogs;
 import blcrawler.commands.addpage.AddPart;
 import blcrawler.commands.addpage.AddPartBrowse;
 import blcrawler.commands.addpage.AddPartCatalog;
+import blcrawler.commands.api.GetAllPartInventories;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
@@ -50,6 +51,8 @@ public class ConsoleController
 		commandLibrary.put("addallimages", () -> {addAllImages();});
 		commandLibrary.put("garbage", () -> {System.gc();});
 		commandLibrary.put("buildmolds", () -> {buildMolds();});
+		commandLibrary.put("addallinventories", () -> {addAllInventories();});
+		commandLibrary.put("buildinventories", () -> {buildInventories();});
 		
 		
 		//Depreciated Methods, Avoid using or investigate function
@@ -99,6 +102,20 @@ public class ConsoleController
 	public void addAllImages()
 	{
 		AddAllImages command = new AddAllImages();
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
+	}
+	
+	public void addAllInventories()
+	{
+		GetAllPartInventories command = new GetAllPartInventories();
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
+	}
+	
+	public void buildInventories()
+	{
+		BuildInventories command = new BuildInventories();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}

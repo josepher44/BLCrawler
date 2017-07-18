@@ -34,5 +34,7 @@
 	<classpathentry kind="lib" path="C:/Users/Joseph/Downloads/commons-lang3-3.5-bin/commons-lang3-3.5/commons-lang3-3.5-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Joseph/Downloads/commons-lang3-3.5-bin/commons-lang3-3.5/commons-lang3-3.5-tests.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Joseph/Downloads/commons-lang3-3.5-bin/commons-lang3-3.5/commons-lang3-3.5-test-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Joseph/Documents/External Jars/commons-io-2.5-bin/commons-io-2.5/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Joseph/Documents/External Jars/commons-io-2.5-bin/commons-io-2.5/commons-io-2.5-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

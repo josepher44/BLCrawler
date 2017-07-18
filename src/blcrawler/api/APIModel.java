@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+
+import blcrawler.model.ConsoleGUIModel;
 public class APIModel
 {
 	BLAuthSigner signer;
@@ -16,8 +18,9 @@ public class APIModel
 	String tokenSecret;
 	String consumerSecretTwitter;
 	String tokenSecretTwitter;
+	int queueID;
 	
-	public APIModel(String partnumber) 
+	public APIModel(int QueueID) 
 	{
 		consumerKey = "16AB07C5220C43768822A29EB745FDC1";
 		consumerSecret = "F0FE04252666486CB1D954006CA580A3";
@@ -27,7 +30,7 @@ public class APIModel
 		consumerSecretTwitter = "MCD8BKwGdgPHvAuvgvz4EQpqDAtx89grbuNMRd7Eh98";
 		tokenSecretTwitter = "J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA";
 		
-
+		this.queueID = QueueID;
 
 
 		
@@ -41,7 +44,6 @@ public class APIModel
 //			e.printStackTrace();
 //		}
 		
-		getPriceGuide(partnumber);
 
 	}
 	
@@ -62,25 +64,29 @@ public class APIModel
 
 		signer.setURL( baseURL );
 		
-		callAPI(baseURL);
+		//callAPI(baseURL);
+	}
+	
+	public void getColoredItemInventory(String partnumber, int colorid)
+	{
+		buildSigner();
+		signer.setVerb( "GET" );
+		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?color_id="+colorid;
+		signer.addParameter("color_id", Integer.toString(colorid));
+		signer.setURL( baseURL );
+		String writePath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts/part_"+partnumber+".txt";
+		callAPI(baseURL, writePath);
 	}
 	
 	public void getItemInventory(String partnumber)
 	{
 		buildSigner();
 		signer.setVerb( "GET" );
-		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?color_id=11&guide_type=sold";
-//		signer.addParameter("type", "part");
-//		signer.addParameter("no", partnumber);
-		signer.addParameter("color_id", "11");
-		signer.addParameter("guide_type", "sold");
-		
-//		String baseURL = "https://api.bricklink.com/api/store/v1/orders?direction=in";
-//		signer.addParameter("direction", "in");
-
+		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?break_minifigs=Y";
+		signer.addParameter("break_minifigs", "Y");
 		signer.setURL( baseURL );
-		
-		callAPI(baseURL);
+		String writePath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts/part_"+partnumber+".txt";
+		callAPI(baseURL, writePath);
 	}
 	
 	public void buildSigner()
@@ -100,7 +106,7 @@ public class APIModel
 		}
 	}
 	
-	public void callAPI(String baseURL)
+	public void callAPI(String baseURL, String path)
 	{
 
 
@@ -113,17 +119,6 @@ public class APIModel
 		} catch( Exception e ) {
 			e.printStackTrace();
 		}
-
-
-		try
-		{
-			System.out.println(signer.getBaseString());
-		}
-		catch (Exception e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		String Signature = params.get("oauth_signature");
 		String Nonce = params.get("oauth_nonce");
@@ -132,52 +127,47 @@ public class APIModel
 		String SigMethod = params.get("oauth_signature_method");
 		String Token = params.get("oauth_token");
 		String Timestamp = params.get("oauth_timestamp");
-		System.out.println(Signature);
-		System.out.println(Nonce);
-		System.out.println("Version: "+Version);
-		System.out.println(ConsumerKey);
-		System.out.println(SigMethod);
-		System.out.println(Token);
-		System.out.println(Timestamp);
+//		System.out.println(Signature);
+//		System.out.println(Nonce);
+//		System.out.println("Version: "+Version);
+//		System.out.println(ConsumerKey);
+//		System.out.println(SigMethod);
+//		System.out.println(Token);
+//		System.out.println(Timestamp);
 		
-		String fullURL = baseURL+
-						"&Authorization=%7B%22oauth_signature%22%3A%22"+
-						Signature+
-						"%22%2C%22oauth_nonce%22%3A%22"+
-						Nonce+
-						"%22%2C%22oauth_version%22%3A%22"+
-						Version+
-						"%22%2C%22oauth_consumer_key%22%3A%22"+
-						ConsumerKey+
-						"%22%2C%22oauth_signature_method%22%3A%22"+
-						SigMethod+
-						"%22%2C%22oauth_token%22%3A%22"+
-						Token+
-						"%22%2C%22oauth_timestamp%22%3A%22"+
-						Timestamp+
-						"%22%7D";
-		
-		fullURL = fullURL.replace("%22", "\"");
-		fullURL = fullURL.replace("%2C", ",");
-		fullURL = fullURL.replace("%3A", ":");
-		fullURL = fullURL.replace("%7B", "{");
-		fullURL = fullURL.replace("%7D", "}");				
-						
-		try
+		if(Signature.contains("+"))
 		{
-			System.out.println(getHTML(fullURL));
+			System.out.println("Suspected bad signature, "+Signature+", regen attempt");
+			callAPI(baseURL, path);
 		}
-		catch (Exception e)
+		else
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}					
-		
-		//JSONObject obj = new JSONObject();
-		//obj.putAll( params );
-		
-		//System.out.println( fullURL );
-		//System.out.println( obj );
+			
+			String fullURL = baseURL+
+							"&Authorization=%7B%22oauth_signature%22%3A%22"+
+							Signature+
+							"%22%2C%22oauth_nonce%22%3A%22"+
+							Nonce+
+							"%22%2C%22oauth_version%22%3A%22"+
+							Version+
+							"%22%2C%22oauth_consumer_key%22%3A%22"+
+							ConsumerKey+
+							"%22%2C%22oauth_signature_method%22%3A%22"+
+							SigMethod+
+							"%22%2C%22oauth_token%22%3A%22"+
+							Token+
+							"%22%2C%22oauth_timestamp%22%3A%22"+
+							Timestamp+
+							"%22%7D";
+			
+			fullURL = fullURL.replace("%22", "\"");
+			fullURL = fullURL.replace("%2C", ",");
+			fullURL = fullURL.replace("%3A", ":");
+			fullURL = fullURL.replace("%7B", "{");
+			fullURL = fullURL.replace("%7D", "}");				
+				
+			ConsoleGUIModel.getSelenium().getURLHTTP(fullURL, queueID, path);
+		}
 	}
 	
 	public static String getHTML(String urlToRead) throws Exception {

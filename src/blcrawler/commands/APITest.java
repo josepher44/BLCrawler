@@ -39,7 +39,8 @@ public class APITest implements Command {
 	
 	@Override
 	public void execute() {
-		APIModel api = new APIModel(partNumber);
+		APIModel api = new APIModel(queueID);
+		api.getItemInventory(partNumber); 
 		
 
 		

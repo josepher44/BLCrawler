@@ -21,9 +21,10 @@ import blcrawler.model.queue.TaskTimer;
 import blcrawler.model.selenium.SeleniumDistributor;
 import blcrawler.model.selenium.SeleniumModel;
 import blcrawler.view.ConsoleGUIView;
+import blcrawler.view.imsgui.IMSGUIView;
 
 public class ConsoleGUIModel {
-	
+
 	//private static GUIModel instance = new GUIModel("gui");
 	private static GUIMainController guiController;
 	private static ConsoleGUIView guiView;
@@ -34,10 +35,11 @@ public class ConsoleGUIModel {
 	private static SeleniumDistributor selenium;
 	private static APIModel apitest;
 	private static DatabaseController database;
+	private static IMSGUIView imsgui;
 	//private static BSXImporter bsxImporter;
 	private static MasterClock masterClock;
-	
-	
+
+
 	/**
 	 * @return the consoleController
 	 */
@@ -58,7 +60,7 @@ public class ConsoleGUIModel {
 	public static GUIMainController getGuiController() {
 		return guiController;
 	}
-	
+
 	/**
 	 * @return the guiView
 	 */
@@ -66,15 +68,23 @@ public class ConsoleGUIModel {
 		return guiView;
 	}
 
-	
 
 
-	
-	
+
+
+
+	public static IMSGUIView getImsgui()
+	{
+		return imsgui;
+	}
+	public static void setImsgui(IMSGUIView imsgui)
+	{
+		ConsoleGUIModel.imsgui = imsgui;
+	}
 	public static PageManager getPageManager() {
 		return pageManager;
 	}
-	
+
 	public static SeleniumModel getSeleniumModel() {
 		return Subselenium;
 	}
@@ -90,7 +100,7 @@ public class ConsoleGUIModel {
 	public static TaskTimer getTaskTimer() {
 		return taskTimer;
 	}
-	
+
 	/**
 	 * @param taskTimer the taskTimer to set
 	 */
@@ -126,7 +136,7 @@ public class ConsoleGUIModel {
 		{
 			System.err.println("Caught CommandErr exception: " + e.getMessage());
 		}
-		
+
 		headerLabel = "Test for region that's having some issues displaying text, it looks all funny";
 		statusLabel = "status";
 
@@ -146,12 +156,12 @@ public class ConsoleGUIModel {
 		ReadPartsFromXML command = new ReadPartsFromXML();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
-		
-		
-		
-		 
-	      
-	      
+
+
+
+
+
+
 	}
 
 	public static DatabaseController getDatabase()
