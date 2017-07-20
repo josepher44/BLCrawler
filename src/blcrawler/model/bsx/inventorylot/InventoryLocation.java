@@ -1,6 +1,17 @@
 package blcrawler.model.bsx.inventorylot;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /*Class representing a single lot of a bsx file
  * Contains all fields stored in the bsx, and methods to convert
@@ -33,6 +44,8 @@ public class InventoryLocation extends InventoryEntry
 	String mcode;
 	int normalizedDrawerNumber;
 	ArrayList<String> validCodes;
+
+	ImageView imageview;
 
 
 
@@ -82,6 +95,7 @@ public class InventoryLocation extends InventoryEntry
 
 		Remarks = Remarks.replaceAll("\\s+","~");
 		deriveTrimmedRemarks();
+		generateImageLocation();
 		//System.out.println(trimmedRemarks);
 
 
@@ -118,6 +132,7 @@ public class InventoryLocation extends InventoryEntry
 		Remarks = Remarks.replaceAll("\\s+","~");
 		deriveTrimmedRemarks();
 		//System.out.println(trimmedRemarks);
+		generateImageLocation();
 
 
 
@@ -508,8 +523,77 @@ public class InventoryLocation extends InventoryEntry
 		this.mcode = mcode;
 	}
 
+	public void generateImageLocation()
+	{
+		imageLocation = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Images/"+ItemID+"_"+ColorName+".png";
+		File file = new File(imageLocation);
+		Image image = null;
+		try
+		{
+			image = SwingFXUtils.toFXImage(crop(ImageIO.read(file)), null);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    imageview = new ImageView(image);
+	    imageview.setPreserveRatio(true);
+	    imageview.setFitHeight(45);
+	    imageview.setFitWidth(45);
+
+	    System.out.println("Built image for part "+ItemID+"_"+ColorName+ "Using Inventory Location method");
+
+	}
+
+	public ImageView getImageview()
+	{
+		return imageview;
+	}
+
+	public void setImageview(ImageView imageview)
+	{
+		this.imageview = imageview;
+	}
 
 
+	public BufferedImage crop(BufferedImage image_param) {
+	    int minY = 0, maxY = 0, minX = Integer.MAX_VALUE, maxX = 0;
+	    boolean isBlank, minYIsDefined = false;
+	    Raster raster = image_param.getRaster();
+
+	    for (int y = 0; y < image_param.getHeight(); y++) {
+	        isBlank = true;
+
+	        for (int x = 0; x < image_param.getWidth(); x++) {
+	            //Change condition to (raster.getSample(x, y, 3) != 0)
+	            //for better performance
+	        	if(x==0&&y==0)
+	        	{
+
+		        	System.out.println("Part number is "+ItemID+", color code in corner is : "+image_param.getRGB(x, y));
+	        	}
+	            if (image_param.getRGB(x, y)!= -1) {
+	                isBlank = false;
+
+	                if (x < minX) minX = x;
+	                if (x > maxX) maxX = x;
+	            }
+	        }
+
+	        if (!isBlank) {
+	            if (!minYIsDefined) {
+	                minY = y;
+	                minYIsDefined = true;
+	            } else {
+	                if (y > maxY) maxY = y;
+	            }
+	        }
+	    }
+
+	    return image_param.getSubimage(minX, minY, maxX - minX + 1, maxY - minY + 1);
+	}
 
 
 

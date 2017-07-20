@@ -1,5 +1,7 @@
 package blcrawler.model.bsx.inventorylot;
 
+import java.util.ArrayList;
+
 /*Class representing a single lot of a bsx file
  * Contains all fields stored in the bsx, and methods to convert
  * to and from bsx and xml formats
@@ -7,8 +9,18 @@ package blcrawler.model.bsx.inventorylot;
  * for more complete mass update generation
  */
 
-public class InventoryLot
+public class InventoryLot extends InventoryEntry
 {
+
+
+
+
+
+
+
+
+
+
 	String ItemID;
 	char ItemTypeID;
 	short ColorID;

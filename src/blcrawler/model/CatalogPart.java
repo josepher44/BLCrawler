@@ -51,7 +51,7 @@ public class CatalogPart
 	private ArrayList<CatalogGear> gearInventories;
 	private ArrayList<CatalogBook> bookInventories;
 	private String notes;
-	
+
 	private ArrayList<String> similarMold;
 	private ArrayList<String> pairsWith;
 	private ArrayList<String> similarPattern;
@@ -63,7 +63,7 @@ public class CatalogPart
 	private ArrayList<String> duplicate;
 	private ArrayList<String> window;
 	private ArrayList<String> windowFrame;
-	
+
 	private ArrayList<CatalogPart> similarMoldParts;
 	private ArrayList<CatalogPart> pairsWithParts;
 	private ArrayList<CatalogPart> similarPatternParts;
@@ -75,23 +75,23 @@ public class CatalogPart
 	private ArrayList<CatalogPart> duplicateParts;
 	private ArrayList<CatalogPart> windowParts;
 	private ArrayList<CatalogPart> windowFrameParts;
-	
+
 	private ArrayList<ColorCount> itemsForSale;
 	private ArrayList<ColorCount> wantedLists;
 	private ArrayList<ColorCount> priceGuides;
 	private ArrayList<ColorCount> knownColorsBL;
 	private ArrayList<String> knownColorsBLMenu;
-	
+
 	private ArrayList<String> knownColorsVerified;
-	
+
 	private Boolean hasInventory;
-	
+
 	String txtRep;
-	
+
 	private ArrayList<CatalogPartColored> coloredSubParts;
-	
-	
-	
+
+
+
 	public CatalogPart(Element e)
 	{
 		partNumber = e.getChildText("partnumber");
@@ -105,7 +105,7 @@ public class CatalogPart
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		altNumbers = new ArrayList<>();
 		similarMold = new ArrayList<>();
 		similarMoldParts = new ArrayList<>();
@@ -134,8 +134,8 @@ public class CatalogPart
 		priceGuides = new ArrayList<>();
 		knownColorsBL = new ArrayList<>();
 		knownColorsBLMenu = new ArrayList<>();
-		
-		
+
+
 		categoryID = Integer.parseInt(e.getChildText("categoryid"));
 		categoryName = e.getChildText("categoryname");
 		name = e.getChildText("name");
@@ -149,7 +149,7 @@ public class CatalogPart
 		widthMill= Integer.parseInt(e.getChildText("widthmill"));
 		heightMill = Integer.parseInt(e.getChildText("heightmill"));
 		notes = e.getChildText("notes");
-		
+
 		if (e.getChild("hasInventory")!=null)
 		{
 			if (e.getChildText("hasInventory").equals("true"))
@@ -181,7 +181,7 @@ public class CatalogPart
 //				// TODO Auto-generated catch block
 //				e1.printStackTrace();
 //			}
-//			
+//
 //			if (txtRep.contains("www.bricklink.com/catalogItemInv.asp?P"))
 //			{
 //				hasInventory = true;
@@ -194,13 +194,13 @@ public class CatalogPart
 //				System.out.println("No inventory for part "+partNumber);
 //			}
 //			txtRep = "";
-//			
-//			
-//			
-//			
-//			
+//
+//
+//
+//
+//
 //		}
-		
+
 		if (e.getChild("similarmolds")!=null)
 		{
 			for(Element ele: e.getChild("similarmolds").getChildren())
@@ -209,7 +209,7 @@ public class CatalogPart
 				//System.out.println("Similar mold: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("pairswiths")!=null)
 		{
 			for(Element ele: e.getChild("pairswiths").getChildren())
@@ -218,7 +218,7 @@ public class CatalogPart
 				//System.out.println("Pairs with: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("altnumbers")!=null)
 		{
 			for(Element ele: e.getChild("altnumbers").getChildren())
@@ -227,7 +227,7 @@ public class CatalogPart
 				//System.out.println("Alt Number: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("similarpatterns")!=null)
 		{
 			for(Element ele: e.getChild("similarpatterns").getChildren())
@@ -236,7 +236,7 @@ public class CatalogPart
 				//System.out.println("Similar Pattern: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("doorframes")!=null)
 		{
 			for(Element ele: e.getChild("doorframes").getChildren())
@@ -245,7 +245,7 @@ public class CatalogPart
 				//System.out.println("Door Frame: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("doors")!=null)
 		{
 			for(Element ele: e.getChild("doors").getChildren())
@@ -254,7 +254,7 @@ public class CatalogPart
 				//System.out.println("Door: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("wheels")!=null)
 		{
 			for(Element ele: e.getChild("wheels").getChildren())
@@ -263,7 +263,7 @@ public class CatalogPart
 				//System.out.println("Wheel: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("tires")!=null)
 		{
 			for(Element ele: e.getChild("tires").getChildren())
@@ -272,7 +272,7 @@ public class CatalogPart
 				//System.out.println("Tire: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("samestickers")!=null)
 		{
 			for(Element ele: e.getChild("samestickers").getChildren())
@@ -281,7 +281,7 @@ public class CatalogPart
 				//System.out.println("Same Sticker: "+ele.getText());
 			}
 		}
-		
+
 		if (e.getChild("duplicates")!=null)
 		{
 			for(Element ele: e.getChild("duplicates").getChildren())
@@ -290,8 +290,8 @@ public class CatalogPart
 				//System.out.println("Duplicate: "+ele.getText());
 			}
 		}
-		
-		
+
+
 		if (e.getChild("itemsforsale")!=null)
 		{
 			for(Element ele: e.getChild("itemsforsale").getChildren())
@@ -307,7 +307,7 @@ public class CatalogPart
 				wantedLists.add(new ColorCount(Integer.valueOf(ele.getChildText("count")), ele.getChildText("color")));
 			}
 		}
-		
+
 		if (e.getChild("priceguides")!=null)
 		{
 			for(Element ele: e.getChild("priceguides").getChildren())
@@ -316,7 +316,7 @@ public class CatalogPart
 				//System.out.println("Price guide with Color "+ele.getChildText("color")+" , count "+Integer.valueOf(ele.getChildText("count")));
 			}
 		}
-		
+
 		if (e.getChild("knowncolorsbl")!=null)
 		{
 			for(Element ele: e.getChild("knowncolorsbl").getChildren())
@@ -325,7 +325,7 @@ public class CatalogPart
 
 			}
 		}
-		
+
 		if (e.getChild("knowncolorsblmenu")!=null)
 		{
 			for(Element ele: e.getChild("knowncolorsblmenu").getChildren())
@@ -335,12 +335,12 @@ public class CatalogPart
 			}
 		}
 
-		
+
 		//System.out.println(knownColorsBLMenu);
-		
-		
+
+
 	}
-	
+
 	public CatalogPart(String id)
 	{
 		String htmlpath;
@@ -354,10 +354,10 @@ public class CatalogPart
 			partNumber = id;
 			htmlpath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/part_"+id+".html";
 		}
-		
-		
+
+
 		dateAdded = new Date();
-		
+
 		categoryID = 0;
 		categoryName = "";
 		name = "";
@@ -371,9 +371,9 @@ public class CatalogPart
 		widthMill = 0;
 		heightMill = 0;
 		notes = "";
-		
-		
-		
+
+
+
 		txtRep = "";
 		altNumbers = new ArrayList<>();
 		similarMold = new ArrayList<>();
@@ -403,7 +403,7 @@ public class CatalogPart
 		priceGuides = new ArrayList<>();
 		knownColorsBL = new ArrayList<>();
 		knownColorsBLMenu = new ArrayList<>();
-		
+
 		if (id.contains(".html"))
 		{
 			buildFromFile(htmlpath);
@@ -412,13 +412,13 @@ public class CatalogPart
 		{
 			buildFromFile("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml");
 		}
-		
+
 	}
-	
+
 	public void buildFromHtml(String path)
 	{
 		txtRep = "";
-		
+
 		try
 		{
 			byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -434,14 +434,14 @@ public class CatalogPart
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-			
+
+
 		if (txtRep.contains(" data-ce-key"))
 		{
 			System.out.println("data-ce count: "+StringUtils.countMatches(txtRep, " data-ce-key"));
 
 		}
-		
+
 		//Clear the seemingly random/useless data ce keys that appear in tags and screw up parses
 		while (txtRep.contains(" data-ce-key"))
 		{
@@ -449,10 +449,10 @@ public class CatalogPart
 			subRep = subRep.substring(0,ordinalIndexOf(subRep, 2)+1);
 			//System.out.println(subRep);
 			txtRep = txtRep.replace(subRep, "");
-			
+
 			//System.out.println("cleared "+subRep+" from part "+partNumber);
 		}
-		
+
 		generateCategoryID();
 		generateCategoryName();
 		generateName();
@@ -479,15 +479,15 @@ public class CatalogPart
 		generatePriceGuideColors();
 		generateKnownColors();
 		generateMenuColors();
-		
+
 		txtRep = "";
 	}
-	
+
 	public void buildFromXml(String path)
 	{
-		
+
 	}
-	
+
 	public void buildFromFile(String path)
 	{
 		if (path.contains(".html"))
@@ -499,32 +499,32 @@ public class CatalogPart
 			buildFromXml(path);
 		}
 	}
-	
+
 	public Element buildXML()
 	{
 		Element part = new Element("part");
 		part.setAttribute("id", partNumber);
-		
+
 		Element PartNumber = new Element("partnumber");
 		PartNumber.setText(partNumber);
 		part.addContent(PartNumber);
-		
+
 		Element Date = new Element("date");
 		Date.setText(dateAdded.toString());
 		part.addContent(Date);
-		
+
 		Element CategoryID = new Element("categoryid");
 		CategoryID.setText(String.valueOf(categoryID));
 		part.addContent(CategoryID);
-		
+
 		Element CategoryName = new Element("categoryname");
 		CategoryName.setText(categoryName);
 		part.addContent(CategoryName);
-		
+
 		Element Name = new Element("name");
 		Name.setText(name);
 		part.addContent(Name);
-		
+
 		if (altNumbers.size()!=0)
 		{
 			Element AltNumbers = new Element("altnumbers");
@@ -534,48 +534,48 @@ public class CatalogPart
 			}
 			part.addContent(AltNumbers);
 		}
-		
+
 		Element FirstYear = new Element("firstyear");
 		FirstYear.setText(String.valueOf(firstYear));
 		part.addContent(FirstYear);
-		
-		
+
+
 		Element LastYear = new Element("lastyear");
 		LastYear.setText(String.valueOf(lastYear));
 		part.addContent(LastYear);
-		
+
 		Element Weight = new Element("weight");
 		Weight.setText(String.valueOf(weight));
 		part.addContent(Weight);
-		
+
 		Element LengthStuds = new Element("lengthstuds");
 		LengthStuds.setText(String.valueOf(lengthStuds));
 		part.addContent(LengthStuds);
-		
+
 		Element WidthStuds = new Element("widthstuds");
 		WidthStuds.setText(String.valueOf(widthStuds));
 		part.addContent(WidthStuds);
-		
+
 		Element HeightStuds = new Element("heightstuds");
 		HeightStuds.setText(String.valueOf(heightStuds));
 		part.addContent(HeightStuds);
-		
+
 		Element LengthMill = new Element("lengthmill");
 		LengthMill.setText(String.valueOf(lengthMill));
 		part.addContent(LengthMill);
-		
+
 		Element WidthMill = new Element("widthmill");
 		WidthMill.setText(String.valueOf(widthMill));
 		part.addContent(WidthMill);
-		
+
 		Element HeightMill = new Element("heightmill");
 		HeightMill.setText(String.valueOf(heightMill));
 		part.addContent(HeightMill);
-		
+
 		Element Notes = new Element("notes");
 		Notes.setText(notes);
 		part.addContent(Notes);
-		
+
 		Element Inventory = new Element("hasInventory");
 		if (hasInventory)
 		{
@@ -586,7 +586,7 @@ public class CatalogPart
 			Inventory.setText("false");
 		}
 		part.addContent(Inventory);
-		
+
 		if (similarMold.size()!=0)
 		{
 			Element SimilarMolds = new Element("similarmolds");
@@ -596,7 +596,7 @@ public class CatalogPart
 			}
 			part.addContent(SimilarMolds);
 		}
-		
+
 		if (pairsWith.size()!=0)
 		{
 			Element PairsWiths = new Element("pairswiths");
@@ -606,7 +606,7 @@ public class CatalogPart
 			}
 			part.addContent(PairsWiths);
 		}
-		
+
 		if (similarPattern.size()!=0)
 		{
 			Element SimilarPatterns = new Element("similarpatterns");
@@ -616,7 +616,7 @@ public class CatalogPart
 			}
 			part.addContent(SimilarPatterns);
 		}
-		
+
 		if (doorFrame.size()!=0)
 		{
 			Element DoorFrames = new Element("doorframes");
@@ -626,7 +626,7 @@ public class CatalogPart
 			}
 			part.addContent(DoorFrames);
 		}
-		
+
 		if (door.size()!=0)
 		{
 			Element Doors = new Element("doors");
@@ -636,7 +636,7 @@ public class CatalogPart
 			}
 			part.addContent(Doors);
 		}
-		
+
 		if (windowFrame.size()!=0)
 		{
 			Element WindowFrames = new Element("windowframes");
@@ -646,7 +646,7 @@ public class CatalogPart
 			}
 			part.addContent(WindowFrames);
 		}
-		
+
 		if (window.size()!=0)
 		{
 			Element Windows = new Element("windows");
@@ -656,7 +656,7 @@ public class CatalogPart
 			}
 			part.addContent(Windows);
 		}
-		
+
 		if (wheel.size()!=0)
 		{
 			Element Wheels = new Element("wheels");
@@ -666,7 +666,7 @@ public class CatalogPart
 			}
 			part.addContent(Wheels);
 		}
-		
+
 		if (tire.size()!=0)
 		{
 			Element Tires = new Element("tires");
@@ -676,7 +676,7 @@ public class CatalogPart
 			}
 			part.addContent(Tires);
 		}
-		
+
 		if (sameSticker.size()!=0)
 		{
 			Element SameStickers = new Element("samestickers");
@@ -686,7 +686,7 @@ public class CatalogPart
 			}
 			part.addContent(SameStickers);
 		}
-		
+
 		if (duplicate.size()!=0)
 		{
 			Element Duplicates = new Element("duplicates");
@@ -696,7 +696,7 @@ public class CatalogPart
 			}
 			part.addContent(Duplicates);
 		}
-		
+
 		if (itemsForSale.size()!=0)
 		{
 			Element ItemsForSale = new Element("itemsforsale");
@@ -705,12 +705,12 @@ public class CatalogPart
 				Element Color = new Element("colorforsale");
 				Color.addContent(new Element("color").setText(number.getColor()));
 				Color.addContent(new Element("count").setText(String.valueOf(number.getCount())));
-				
+
 				ItemsForSale.addContent(Color);
 			}
 			part.addContent(ItemsForSale);
 		}
-		
+
 		if (wantedLists.size()!=0)
 		{
 			Element WantedLists = new Element("wantedlists");
@@ -719,12 +719,12 @@ public class CatalogPart
 				Element Color = new Element("colorwanted");
 				Color.addContent(new Element("color").setText(number.getColor()));
 				Color.addContent(new Element("count").setText(String.valueOf(number.getCount())));
-				
+
 				WantedLists.addContent(Color);
 			}
 			part.addContent(WantedLists);
 		}
-		
+
 		if (priceGuides.size()!=0)
 		{
 			Element PriceGuides = new Element("priceguides");
@@ -733,12 +733,12 @@ public class CatalogPart
 				Element Color = new Element("colorpriceguide");
 				Color.addContent(new Element("color").setText(number.getColor()));
 				Color.addContent(new Element("count").setText(String.valueOf(number.getCount())));
-				
+
 				PriceGuides.addContent(Color);
 			}
 			part.addContent(PriceGuides);
 		}
-		
+
 		if (knownColorsBL.size()!=0)
 		{
 			Element KnownColors = new Element("knowncolorsbl");
@@ -747,12 +747,12 @@ public class CatalogPart
 				Element Color = new Element("knowncolorbl");
 				Color.addContent(new Element("color").setText(number.getColor()));
 				Color.addContent(new Element("count").setText(String.valueOf(number.getCount())));
-				
+
 				KnownColors.addContent(Color);
 			}
 			part.addContent(KnownColors);
 		}
-		
+
 		if (knownColorsBLMenu.size()!=0)
 		{
 			Element KnownColors = new Element("knowncolorsblmenu");
@@ -762,24 +762,24 @@ public class CatalogPart
 			}
 			part.addContent(KnownColors);
 		}
-		
-		
-	
-		
-		
-		
-		
+
+
+
+
+
+
+
 		//System.out.println(part.getChildren());
-		
 
-		
 
-		
+
+
+
 		return part;
-	
-		
+
+
 	}
-	
+
 	public void generateCategoryID()
 	{
 		try
@@ -791,7 +791,7 @@ public class CatalogPart
 		{
 			System.out.println("Parsing exception in part "+partNumber+"at categoryID.");
 		}
-		
+
 		//System.out.println("Part number "+partNumber+" has a category ID of "+categoryID);
 	}
 	public void generateCategoryName()
@@ -807,7 +807,7 @@ public class CatalogPart
 		}
 		//System.out.println("Part number "+partNumber+" has a category of "+categoryName);
 	}
-	
+
 	public void generateInventory()
 	{
 		if (txtRep.indexOf("_var_has_inventory		= \"Y\"")!=-1)
@@ -821,7 +821,7 @@ public class CatalogPart
 			//System.out.println("No inventory for part "+partNumber);
 		}
 	}
-	
+
 	public void generateName()
 	{
 		try
@@ -836,10 +836,10 @@ public class CatalogPart
 			System.out.println("Parsing exception in part "+partNumber+"at name. Name substring is "+
 					txtRep.substring(txtRep.indexOf("<title"), txtRep.indexOf("</title>")));
 		}
-		
+
 		//System.out.println("Part number "+partNumber+" has a name of "+name);
 	}
-	
+
 	public void generateAltIDs()
 	{
 		if (txtRep.contains("Alternate Item No:"))
@@ -852,26 +852,26 @@ public class CatalogPart
 				if (altIDSubstring.contains(","))
 				{
 					altNumbers.add(altIDSubstring.substring(0,altIDSubstring.indexOf(',')));
-					
+
 					//System.out.println("Part number "+partNumber+" has an alternative ID of of "+
 					//		altIDSubstring.substring(0,altIDSubstring.indexOf(',')));
-					
+
 					altIDSubstring = altIDSubstring.substring(0,altIDSubstring.indexOf(','));
 
 				}
 				else
 				{
 					altNumbers.add(altIDSubstring);
-					
+
 					//System.out.println("Part number "+partNumber+" has an alternative ID of of "+
 					//		altIDSubstring);
 					altIDSubstring = "";
 				}
 			}
-		
+
 		}
 	}
-	
+
 	public void generateFirstYear()
 	{
 		try
@@ -881,7 +881,7 @@ public class CatalogPart
 				String FirstSubstring = txtRep.substring(txtRep.indexOf("Years Released:"));
 				FirstSubstring = FirstSubstring.substring(0, FirstSubstring.indexOf("</span>"));
 				FirstSubstring = FirstSubstring.substring(FirstSubstring.length()-4,FirstSubstring.length());
-				
+
 				if (!FirstSubstring.contains("?"))
 				{
 					firstYear = Integer.valueOf(FirstSubstring);
@@ -896,7 +896,7 @@ public class CatalogPart
 				String FirstSubstring = txtRep.substring(txtRep.indexOf("Year Released:"));
 				FirstSubstring = FirstSubstring.substring(0, FirstSubstring.indexOf("</span>"));
 				FirstSubstring = FirstSubstring.substring(FirstSubstring.length()-4,FirstSubstring.length());
-				
+
 				if (!FirstSubstring.contains("?"))
 				{
 					firstYear = Integer.valueOf(FirstSubstring);
@@ -910,8 +910,8 @@ public class CatalogPart
 			{
 				firstYear = 0;
 			}
-			
-			
+
+
 		}
 		catch (Exception e)
 		{
@@ -919,10 +919,10 @@ public class CatalogPart
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at First Year.");
 		}
-		
+
 		//System.out.println("Part number "+partNumber+" has a first year of "+firstYear);
 	}
-	
+
 	public void generateLastYear()
 	{
 		try
@@ -932,7 +932,7 @@ public class CatalogPart
 				String LastSubstring = txtRep.substring(txtRep.indexOf("Years Released:"));
 				LastSubstring = LastSubstring.substring(0, LastSubstring.indexOf("<br"));
 				LastSubstring = LastSubstring.substring(LastSubstring.length()-4,LastSubstring.length());
-				
+
 				if (!LastSubstring.contains("?"))
 				{
 					lastYear = Integer.valueOf(LastSubstring);
@@ -950,8 +950,8 @@ public class CatalogPart
 			{
 				lastYear = 0;
 			}
-			
-			
+
+
 		}
 		catch (Exception e)
 		{
@@ -959,10 +959,10 @@ public class CatalogPart
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Last Year.");
 		}
-		
+
 		//System.out.println("Part number "+partNumber+" has date range of "+firstYear+" to "+lastYear);
 	}
-	
+
 	public void generateWeight()
 	{
 		try
@@ -972,7 +972,7 @@ public class CatalogPart
 				String WeightSubstring = txtRep.substring(txtRep.indexOf("Weight:"));
 				WeightSubstring = WeightSubstring.substring(0, WeightSubstring.indexOf("</span>"));
 				WeightSubstring = WeightSubstring.substring(WeightSubstring.indexOf('>')+1,WeightSubstring.length());
-				
+
 				if (!WeightSubstring.contains("?"))
 				{
 					weight = Double.valueOf(WeightSubstring.substring(0, WeightSubstring.indexOf('g')));
@@ -995,9 +995,9 @@ public class CatalogPart
 			System.out.println("Parsing exception in part "+partNumber+"at weight.");
 		}
 		//System.out.println("Part number "+partNumber+" has weight of "+weight);
-		 
+
 	}
-	
+
 	public void generateDimensions()
 	{
 		String lengthSubstring = "0";
@@ -1009,15 +1009,15 @@ public class CatalogPart
 			{
 				if (txtRep.contains("Size: ?"))
 				{
-					
+
 				}
 				else
 				{
-				
+
 					String SizeSubstring = txtRep.substring(txtRep.indexOf("Size:"));
 					SizeSubstring = SizeSubstring.substring(0, SizeSubstring.indexOf("</span>"));
 					SizeSubstring = SizeSubstring.substring(SizeSubstring.indexOf('>')+1,SizeSubstring.length());
-					
+
 					if (!SizeSubstring.contains("?"))
 					{
 						if (SizeSubstring.contains("in studs"))
@@ -1035,13 +1035,13 @@ public class CatalogPart
 							{
 								widthSubstring = SizeSubstring.substring(SizeSubstring.indexOf('x')+1, SizeSubstring.length());
 							}
-							
-								
+
+
 						}
 						else
 						{
 							System.out.println("Unknown size formatting for part "+partNumber);
-						}	
+						}
 					}
 					else
 					{
@@ -1053,42 +1053,42 @@ public class CatalogPart
 			{
 				System.out.println("Unable to ID size for part "+partNumber);
 			}
-			
+
 			lengthStuds = Double.valueOf(lengthSubstring);
 			widthStuds = Double.valueOf(widthSubstring);
 			heightStuds = Double.valueOf(heightSubstring);
-			
+
 			if (widthStuds==0&&lengthStuds!=0)
 			{
 				widthStuds = 0.33;
 			}
-			
+
 			if (heightStuds == 0 && (lengthStuds!=0&&widthStuds!=0))
 			{
 				heightStuds = 0.33;
 			}
-			
+
 			lengthMill = (int)(lengthStuds*8);
 			widthMill = (int)(widthStuds*8);
 			heightMill = (int)(heightStuds*9.6);
-			
+
 			if (lengthStuds!=0)
 			{
 				//System.out.println("part "+partNumber+" has dimensions of "
 				//		+lengthStuds+" x "+widthStuds+" x "+heightStuds);
 			}
-			
-			
+
+
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at size.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateNotes()
 	{
 		try
@@ -1099,11 +1099,11 @@ public class CatalogPart
 				NotesSubstring = NotesSubstring.substring(NotesSubstring.indexOf("</strong>")+10, NotesSubstring.indexOf("</span>"));
 				NotesSubstring = NotesSubstring.substring(NotesSubstring.indexOf(">")+1, NotesSubstring.length());
 				notes = NotesSubstring;
-				
+
 			}
 			else
 			{
-				
+
 				notes = "";
 			}
 			if (!notes.equals(""))
@@ -1118,17 +1118,17 @@ public class CatalogPart
 			{
 				//System.out.println("Part "+partNumber+" does not have additional notes");
 			}
-			
+
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at notes.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateSimilarMolds()
 	{
 		try
@@ -1144,7 +1144,7 @@ public class CatalogPart
 					{
 						String partID = MoldsSubstring.substring(MoldsSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							similarMoldParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1154,7 +1154,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						similarMold.add(partID);
 						//System.out.println("Part ID "+partID+" added as similar mold for part "+partNumber);
 						MoldsSubstring = MoldsSubstring.substring(MoldsSubstring.indexOf("P=")+2);
@@ -1163,18 +1163,18 @@ public class CatalogPart
 					{
 						MoldsSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at notes.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateSimilarPatterns()
 	{
 		try
@@ -1190,7 +1190,7 @@ public class CatalogPart
 					{
 						String partID = PatternsSubstring.substring(PatternsSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							similarPatternParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1200,7 +1200,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						similarPattern.add(partID);
 						//System.out.println("Part ID "+partID+" added as similar pattern for part "+partNumber);
 						PatternsSubstring = PatternsSubstring.substring(PatternsSubstring.indexOf("P=")+2);
@@ -1209,18 +1209,18 @@ public class CatalogPart
 					{
 						PatternsSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at similarmold.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateSameStickers()
 	{
 		try
@@ -1236,7 +1236,7 @@ public class CatalogPart
 					{
 						String partID = SameStickerSubstring.substring(SameStickerSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							sameStickerParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1246,7 +1246,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						sameSticker.add(partID);
 						//System.out.println("Part ID "+partID+" added as same sticker for part "+partNumber);
 						SameStickerSubstring = SameStickerSubstring.substring(SameStickerSubstring.indexOf("P=")+2);
@@ -1255,18 +1255,18 @@ public class CatalogPart
 					{
 						SameStickerSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at samesticker.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateDuplicates()
 	{
 		try
@@ -1282,7 +1282,7 @@ public class CatalogPart
 					{
 						String partID = DuplicateSubstring.substring(DuplicateSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							duplicateParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1292,7 +1292,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						duplicate.add(partID);
 						//System.out.println("Part ID "+partID+" added as duplicate for part "+partNumber);
 						DuplicateSubstring = DuplicateSubstring.substring(DuplicateSubstring.indexOf("P=")+2);
@@ -1301,18 +1301,18 @@ public class CatalogPart
 					{
 						DuplicateSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at duplicate.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateDoors()
 	{
 		try
@@ -1328,7 +1328,7 @@ public class CatalogPart
 					{
 						String partID = DoorSubstring.substring(DoorSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							doorParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1338,7 +1338,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						door.add(partID);
 						//System.out.println("Part ID "+partID+" added as Door for part "+partNumber);
 						DoorSubstring = DoorSubstring.substring(DoorSubstring.indexOf("P=")+2);
@@ -1347,18 +1347,18 @@ public class CatalogPart
 					{
 						DoorSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Door.");
 		}
-		
-		 
+
+
 	}
-	
+
 	public void generateDoorFrames()
 	{
 		try
@@ -1374,7 +1374,7 @@ public class CatalogPart
 					{
 						String partID = DoorSubstring.substring(DoorSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							doorFrameParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1384,7 +1384,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						doorFrame.add(partID);
 						//System.out.println("Part ID "+partID+" added as Door Frame for part "+partNumber);
 						DoorSubstring = DoorSubstring.substring(DoorSubstring.indexOf("P=")+2);
@@ -1393,16 +1393,16 @@ public class CatalogPart
 					{
 						DoorSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Door Frame.");
-		}	 
+		}
 	}
-	
+
 	public void generateWindows()
 	{
 		try
@@ -1418,7 +1418,7 @@ public class CatalogPart
 					{
 						String partID = WindowSubstring.substring(WindowSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							windowParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1428,7 +1428,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						window.add(partID);
 						//System.out.println("Part ID "+partID+" added as Window Frame for part "+partNumber);
 						WindowSubstring = WindowSubstring.substring(WindowSubstring.indexOf("P=")+2);
@@ -1437,16 +1437,16 @@ public class CatalogPart
 					{
 						WindowSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Window Frame.");
-		}	 
+		}
 	}
-	
+
 	public void generateWindowFrames()
 	{
 		try
@@ -1462,7 +1462,7 @@ public class CatalogPart
 					{
 						String partID = WindowSubstring.substring(WindowSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							windowFrameParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1472,7 +1472,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						windowFrame.add(partID);
 						//System.out.println("Part ID "+partID+" added as Window Frame for part "+partNumber);
 						WindowSubstring = WindowSubstring.substring(WindowSubstring.indexOf("P=")+2);
@@ -1481,18 +1481,18 @@ public class CatalogPart
 					{
 						WindowSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Window Frame.");
-		}	 
+		}
 	}
-	
-	
-	
+
+
+
 	public void generateTires()
 	{
 		try
@@ -1508,7 +1508,7 @@ public class CatalogPart
 					{
 						String partID = TireSubstring.substring(TireSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							tireParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1518,7 +1518,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						tire.add(partID);
 						//System.out.println("Part ID "+partID+" added as Tire for part "+partNumber);
 						TireSubstring = TireSubstring.substring(TireSubstring.indexOf("P=")+2);
@@ -1527,16 +1527,16 @@ public class CatalogPart
 					{
 						TireSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Tire.");
-		}	 
+		}
 	}
-	
+
 	public void generateWheels()
 	{
 		try
@@ -1552,7 +1552,7 @@ public class CatalogPart
 					{
 						String partID = WheelSubstring.substring(WheelSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							wheelParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1562,7 +1562,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						wheel.add(partID);
 						//System.out.println("Part ID "+partID+" added as Wheel for part "+partNumber);
 						WheelSubstring = WheelSubstring.substring(WheelSubstring.indexOf("P=")+2);
@@ -1571,16 +1571,16 @@ public class CatalogPart
 					{
 						WheelSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Wheel.");
-		}	 
+		}
 	}
-	
+
 	public void generatePairedParts()
 	{
 		try
@@ -1596,7 +1596,7 @@ public class CatalogPart
 					{
 						String partID = PairSubstring.substring(PairSubstring.indexOf("P=")+2);
 						partID = partID.substring(0,partID.indexOf('"'));
-						
+
 						if (ConsoleGUIModel.getDatabase().partExists(partID+".html"))
 						{
 							pairsWithParts.add(ConsoleGUIModel.getDatabase().getPart(partID+".html"));
@@ -1606,7 +1606,7 @@ public class CatalogPart
 						{
 							//System.out.println("Part ID "+partID+" does not exist, standby for correction");
 						}
-						
+
 						pairsWith.add(partID);
 						//System.out.println("Part ID "+partID+" added as Pair for part "+partNumber);
 						PairSubstring = PairSubstring.substring(PairSubstring.indexOf("P=")+2);
@@ -1615,23 +1615,23 @@ public class CatalogPart
 					{
 						PairSubstring = "";
 					}
-				}	
-			}			
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Pair.");
-		}	 
+		}
 	}
-	
+
 	public void generateItemsForSale()
 	{
 		try
 		{
 			String ForSaleSubstring = txtRep.substring(txtRep.indexOf("Lots For Sale:"));
 			ForSaleSubstring = ForSaleSubstring.substring(ForSaleSubstring.indexOf("Lots For Sale:"), ForSaleSubstring.indexOf("</td>"));
-			
+
 			while (!ForSaleSubstring.equals(""))
 			{
 				if (ForSaleSubstring.contains("span"))
@@ -1641,38 +1641,38 @@ public class CatalogPart
 					String Count = Color;
 					//System.out.println(Color);
 					Color = Color.substring(Color.indexOf("showInventoryWithColor( ")+24,Color.indexOf("); return")-1);
-					
+
 					Count = Count.substring(Count.indexOf("</a>")+6, Count.indexOf("</span><br")-1);
-					
+
 					int colorID = Integer.valueOf(Color);
 					int colorCount = Integer.valueOf(Count);
 					ColorCount colorObj=new ColorCount(colorCount, colorID);
 					itemsForSale.add(colorObj);
-					
+
 					//System.out.println("Part "+partNumber+" has "+colorCount+" items for sale in "+colorObj.getColor());
 				}
 				else
 				{
 					ForSaleSubstring = "";
 				}
-			
+
 			}
-			
+
 		}
 		catch (Exception e)
 		{
 			//e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Items For Sale.");
-		}	 
+		}
 	}
-	
+
 	public void generateWantedListColors()
 	{
 		try
 		{
 			String WantedSubstring = txtRep.substring(txtRep.indexOf("On Wanted List:"));
 			WantedSubstring = WantedSubstring.substring(WantedSubstring.indexOf("On Wanted List:")+15, WantedSubstring.indexOf("</td>"));
-			
+
 			while (!WantedSubstring.equals(""))
 			{
 				if (WantedSubstring.substring(0,50).contains("span"))
@@ -1682,13 +1682,13 @@ public class CatalogPart
 					String Count = Color;
 					//System.out.println(Color);
 					Color = Color.substring(Color.indexOf("blue;")+7,Color.indexOf("</span> "));
-					
+
 					Count = Count.substring(Count.indexOf("</span> (")+9, Count.indexOf(")</span><br"));
-					
+
 					int colorCount = Integer.valueOf(Count);
 					ColorCount colorObj=new ColorCount(colorCount, Color);
 					wantedLists.add(colorObj);
-					
+
 					//System.out.println("Part "+partNumber+" has "+colorCount+" items on wanted lists in "+Color);
 				}
 				else
@@ -1703,16 +1703,16 @@ public class CatalogPart
 		{
 			//e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Wanted Lists.");
-		}	 
+		}
 	}
-	
+
 	public void generatePriceGuideColors()
 	{
 		try
 		{
 			String PriceGuideSubstring = txtRep.substring(txtRep.indexOf("Price Guide Info:"));
 			PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("Price Guide Info:")+15, PriceGuideSubstring.indexOf("</td>"));
-			
+
 			while (!PriceGuideSubstring.equals(""))
 			{
 				if (PriceGuideSubstring.contains("http://www.bricklink.com/catalogPG"))
@@ -1723,42 +1723,42 @@ public class CatalogPart
 					{
 						PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("http://www.bricklink.com/catalogPG"));
 					}
-					
+
 					String Count = Color;
 					//System.out.println(Color);
 					Color = Color.substring(8,Color.indexOf('"'));
-					
+
 					Count = Count.substring(Count.indexOf("</a>")+6, Count.indexOf(")</span><br"));
-					
+
 					int colorCount = Integer.valueOf(Count);
 					int colorID = Integer.valueOf(Color);
 					ColorCount colorObj=new ColorCount(colorCount, colorID);
 					priceGuides.add(colorObj);
-					
+
 					//System.out.println("Part "+partNumber+" has "+colorCount+" sales on price guide in "+colorObj.getColor());
 				}
 				else
 				{
 					PriceGuideSubstring = "";
 				}
-			
+
 			}
-			
+
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Price Guide.");
-		}	 
+		}
 	}
-	
+
 	public void generateKnownColors()
 	{
 		try
 		{
 			String KnownSubstring = txtRep.substring(txtRep.indexOf("Known Colors:"));
 			KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("Known Colors:")+15, KnownSubstring.indexOf("</td>"));
-			
+
 			while (!KnownSubstring.equals(""))
 			{
 				if (KnownSubstring.contains("http://www.bricklink.com/catalogItemIn"))
@@ -1769,31 +1769,31 @@ public class CatalogPart
 					{
 						KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("http://www.bricklink.com/catalogItemIn"));
 					}
-					
+
 					String Count = Color;
 					//System.out.println(Color);
 					Color = Color.substring(8,Color.indexOf('&'));
-					
+
 					Count = Count.substring(Count.indexOf("</a>")+6, Count.indexOf(")</span><br"));
-					
+
 					int colorCount = Integer.valueOf(Count);
 					int colorID = Integer.valueOf(Color);
 					ColorCount colorObj=new ColorCount(colorCount, colorID);
 					knownColorsBL.add(colorObj);
-					
+
 					//System.out.println("Part "+partNumber+" is known to exist in "+colorCount+" sets in color "+colorObj.getColor());
 				}
 				else
 				{
 					KnownSubstring = "";
 				}
-			}	
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Known Colors.");
-		}	
+		}
 //		if (knownColorsBL.size()!=0)
 //		{
 //			ConsoleGUIModel.getDatabase().incrementColoredParts(knownColorsBL.size());
@@ -1802,9 +1802,9 @@ public class CatalogPart
 //		{
 //			System.out.println("No known colors for part "+partNumber);
 //		}
-		
+
 	}
-	
+
 	public void generateMenuColors()
 	{
 		try
@@ -1814,10 +1814,10 @@ public class CatalogPart
 			//System.out.println(MenuSubstring);
 			for(String color: ConsoleGUIModel.getDatabase().getColormap().getColorNames())
 			{
-				//System.out.println(color);   
+				//System.out.println(color);
 				if(MenuSubstring.contains("data-name=\""+color))
 			   {
-				   
+
 				   knownColorsBLMenu.add(color);
 				   //System.out.println("Part "+partNumber+" has color "+color+" in the menu");
 			   }
@@ -1828,7 +1828,7 @@ public class CatalogPart
 			e.printStackTrace();
 			System.out.println("Parsing exception in part "+partNumber+"at Menu Colors.");
 		}
-		
+
 		ArrayList<String> i = new ArrayList<>();
 		i.addAll(knownColorsBLMenu);
 		for (ColorCount color: knownColorsBL)
@@ -1854,13 +1854,13 @@ public class CatalogPart
 		{
 			System.out.println("No known colors for part "+partNumber);
 		}
-		
 
-		
+
+
 	}
-	
 
-	
+
+
 	public String getPartNumber()
 	{
 		return partNumber;
@@ -1870,10 +1870,10 @@ public class CatalogPart
 	{
 		this.partNumber = partNumber;
 	}
-	
-	
-	
-	
+
+
+
+
 	public ArrayList<ColorCount> getItemsForSale()
 	{
 		return itemsForSale;
@@ -1950,7 +1950,232 @@ public class CatalogPart
 	{
 		this.knownColorsBL = knownColorsBL;
 	}
-	
-	
-	
+
+	public Date getDateAdded()
+	{
+		return dateAdded;
+	}
+
+	public int getCategoryID()
+	{
+		return categoryID;
+	}
+
+	public ArrayList<String> getAltNumbers()
+	{
+		return altNumbers;
+	}
+
+	public int getFirstYear()
+	{
+		return firstYear;
+	}
+
+	public int getLastYear()
+	{
+		return lastYear;
+	}
+
+	public double getWeight()
+	{
+		return weight;
+	}
+
+	public double getLengthStuds()
+	{
+		return lengthStuds;
+	}
+
+	public double getWidthStuds()
+	{
+		return widthStuds;
+	}
+
+	public double getHeightStuds()
+	{
+		return heightStuds;
+	}
+
+	public int getLengthMill()
+	{
+		return lengthMill;
+	}
+
+	public int getWidthMill()
+	{
+		return widthMill;
+	}
+
+	public int getHeightMill()
+	{
+		return heightMill;
+	}
+
+	public ArrayList<CatalogPart> getConsistsOfParts()
+	{
+		return consistsOfParts;
+	}
+
+	public ArrayList<CatalogSet> getSetInventories()
+	{
+		return setInventories;
+	}
+
+	public ArrayList<CatalogPart> getPartInventories()
+	{
+		return partInventories;
+	}
+
+	public ArrayList<CatalogMinifig> getMinifigInventories()
+	{
+		return minifigInventories;
+	}
+
+	public ArrayList<CatalogGear> getGearInventories()
+	{
+		return gearInventories;
+	}
+
+	public ArrayList<CatalogBook> getBookInventories()
+	{
+		return bookInventories;
+	}
+
+	public String getNotes()
+	{
+		return notes;
+	}
+
+	public ArrayList<String> getSimilarMold()
+	{
+		return similarMold;
+	}
+
+	public ArrayList<String> getPairsWith()
+	{
+		return pairsWith;
+	}
+
+	public ArrayList<String> getSimilarPattern()
+	{
+		return similarPattern;
+	}
+
+	public ArrayList<String> getDoorFrame()
+	{
+		return doorFrame;
+	}
+
+	public ArrayList<String> getDoor()
+	{
+		return door;
+	}
+
+	public ArrayList<String> getWheel()
+	{
+		return wheel;
+	}
+
+	public ArrayList<String> getTire()
+	{
+		return tire;
+	}
+
+	public ArrayList<String> getSameSticker()
+	{
+		return sameSticker;
+	}
+
+	public ArrayList<String> getDuplicate()
+	{
+		return duplicate;
+	}
+
+	public ArrayList<String> getWindow()
+	{
+		return window;
+	}
+
+	public ArrayList<String> getWindowFrame()
+	{
+		return windowFrame;
+	}
+
+	public ArrayList<CatalogPart> getSimilarMoldParts()
+	{
+		return similarMoldParts;
+	}
+
+	public ArrayList<CatalogPart> getPairsWithParts()
+	{
+		return pairsWithParts;
+	}
+
+	public ArrayList<CatalogPart> getSimilarPatternParts()
+	{
+		return similarPatternParts;
+	}
+
+	public ArrayList<CatalogPart> getDoorFrameParts()
+	{
+		return doorFrameParts;
+	}
+
+	public ArrayList<CatalogPart> getDoorParts()
+	{
+		return doorParts;
+	}
+
+	public ArrayList<CatalogPart> getWheelParts()
+	{
+		return wheelParts;
+	}
+
+	public ArrayList<CatalogPart> getTireParts()
+	{
+		return tireParts;
+	}
+
+	public ArrayList<CatalogPart> getSameStickerParts()
+	{
+		return sameStickerParts;
+	}
+
+	public ArrayList<CatalogPart> getDuplicateParts()
+	{
+		return duplicateParts;
+	}
+
+	public ArrayList<CatalogPart> getWindowParts()
+	{
+		return windowParts;
+	}
+
+	public ArrayList<CatalogPart> getWindowFrameParts()
+	{
+		return windowFrameParts;
+	}
+
+	public ArrayList<ColorCount> getWantedLists()
+	{
+		return wantedLists;
+	}
+
+	public ArrayList<String> getKnownColorsVerified()
+	{
+		return knownColorsVerified;
+	}
+
+	public String getTxtRep()
+	{
+		return txtRep;
+	}
+
+	public ArrayList<CatalogPartColored> getColoredSubParts()
+	{
+		return coloredSubParts;
+	}
+
+
+
 }

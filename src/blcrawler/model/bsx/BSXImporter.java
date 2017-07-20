@@ -109,7 +109,7 @@ public class BSXImporter
 			//System.out.println("Drawer: "+node.getChildText("drawer"));
 			//System.out.println("Slot: "+node.getChildText("slot"));
 			//System.out.println("Size: "+node.getChildText("size"));
-			System.out.println("Created drawer ID "+i);
+			//System.out.println("Created drawer ID "+i);
 
 			DrawerDivision division = new DrawerDivision(	node.getChildText("drawer"),
 					node.getChildText("slot"),
@@ -121,7 +121,7 @@ public class BSXImporter
 			drawerDivisionTable.put(division.getRawRemarks(),division);
 			drawerDivisionList.add(division);
 
-			System.out.println(division.getRawRemarks());
+			//System.out.println(division.getRawRemarks());
 
 		}
 
@@ -294,7 +294,7 @@ public class BSXImporter
 				lot.setRemarks(currentElement.getChildText("Remarks"));
 				lot.deriveAllRemarks(currentElement.getChildText("Remarks"));
 				lot.setLotID(Integer.parseInt(currentElement.getChildText("LotID")));
-
+				//lot.generateImageLocation();
 
 
 

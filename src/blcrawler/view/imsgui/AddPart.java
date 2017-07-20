@@ -1,6 +1,10 @@
 package blcrawler.view.imsgui;
 
 import java.util.Collections;
+import java.util.IllegalFormatException;
+
+import org.apache.commons.lang3.StringUtils;
+
 import blcrawler.view.css.*;
 
 import blcrawler.model.CatalogPart;
@@ -16,9 +20,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -47,7 +53,9 @@ public class AddPart
 	static Label priceLabel;
 	static Label commentsLabel;
 	static Label locationLabel;
-
+	static RadioButton conditionNew;
+	static RadioButton conditionUsed;
+	static ToggleGroup condition;
 
 
 	public static void display()
@@ -206,8 +214,9 @@ public class AddPart
 	    price.textProperty().addListener(new ChangeListener<String>() {
 	        @Override
 	        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-	            if (!newValue.matches("\\d*")) {
-	                price.setText(newValue.replaceAll("[^\\d]", ""));
+	            if (!newValue.matches("(\\d*\\.?\\d*)"))
+	            {
+	                price.setText(oldValue);
 	            }
 	        }
 	    });
@@ -224,6 +233,17 @@ public class AddPart
 		location = new TextField();
 		location.setMinWidth(500);
 
+		condition = new ToggleGroup();
+
+		conditionNew = new RadioButton("New");
+		conditionNew.setToggleGroup(condition);
+		conditionNew.setPadding(new Insets(0,20,0,20));
+
+		conditionUsed = new RadioButton("Used");
+		conditionUsed.setToggleGroup(condition);
+		conditionUsed.setSelected(true);
+		conditionUsed.setPadding(new Insets(0,20,0,20));
+
 
 		BorderPane mainLayout = new BorderPane();
 		GridPane dataBoxes = new GridPane();
@@ -235,9 +255,12 @@ public class AddPart
 		mainLayout.setPadding(new Insets(20,20,20,20));
 		VBox bottomMaster = new VBox();
 		HBox bottomMain = new HBox();
+		HBox bottomButtons = new HBox();
 
 		dataBoxes.add(quantityLabel, 0, 0);
 		dataBoxes.add(quantity, 1, 0);
+		dataBoxes.add(conditionNew, 2, 0);
+		dataBoxes.add(conditionUsed, 3, 0);
 		dataBoxes.add(priceLabel, 0, 1);
 		dataBoxes.add(price, 1, 1);
 		dataBoxes.add(commentsLabel, 0, 2);
@@ -250,7 +273,10 @@ public class AddPart
 
 		bottomMain.getChildren().add(dataBoxes);
 		bottomMaster.getChildren().add(bottomMain);
-		bottomMaster.getChildren().add(closeButton);
+		bottomButtons.getChildren().add(addButton);
+		bottomButtons.getChildren().add(closeButton);
+		bottomMaster.getChildren().add(bottomButtons);
+
 
 
 
@@ -272,5 +298,69 @@ public class AddPart
 		scene.getStylesheets().add("test.css");
 		window.setScene(scene);
 		window.show();
+	}
+
+	public static CatalogPart getPart()
+	{
+		CatalogPart part = partTable.getSelectionModel().getSelectedItem();
+
+		return part;
+	}
+
+	public static String getLocationString() throws IllegalArgumentException
+	{
+
+		String s = location.getText();
+
+		if(!s.matches("([0-9]){3}-([0-9]){2}-([0-9]){2}"))
+		{
+			throw new IllegalArgumentException();
+		}
+
+		return s;
+
+	}
+
+	public static String getQuantityString()
+	{
+
+		String s = quantity.getText();
+
+		return s;
+
+	}
+
+	public static String getPriceString() throws IllegalArgumentException
+	{
+		String s = price.getText();
+		if(!s.matches("(([0-9])+)|(([0-9])*\\.([0-9]){1,3})")&&!s.equals(""))
+		{
+			throw new IllegalArgumentException();
+		}
+		return s;
+	}
+
+	public static String getColor()
+	{
+		String s = colorList.getSelectionModel().getSelectedItem();
+		return s;
+	}
+
+	public static String getComments()
+	{
+		String s = comments.getText();
+		return s;
+	}
+
+	public static char getCondition()
+	{
+		if (conditionUsed.isSelected())
+		{
+			return 'U';
+		}
+		else
+		{
+			return 'N';
+		}
 	}
 }

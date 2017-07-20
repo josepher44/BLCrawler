@@ -1,6 +1,13 @@
 package blcrawler.model.bsx.inventorylot;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
+
+import blcrawler.view.imsgui.javafx.CustomImage;
+import java.awt.image.*;
+import java.awt.Image;
+import javafx.scene.image.ImageView;
 
 /*Class representing a single lot of a bsx file
  * Contains all fields stored in the bsx, and methods to convert
@@ -42,6 +49,11 @@ public abstract class InventoryEntry
 	String mcode;
 	int normalizedDrawerNumber;
 	ArrayList<String> validCodes;
+
+	String imageLocation;
+
+	ImageView imageview;
+	CustomImage tableImage;
 
 
 
@@ -516,6 +528,31 @@ public abstract class InventoryEntry
 	{
 		this.mcode = mcode;
 	}
+
+	public String getImageLocation()
+	{
+		return imageLocation;
+	}
+
+
+	public void setImageLocation(String imageLocation)
+	{
+		this.imageLocation = imageLocation;
+	}
+
+
+
+	public CustomImage getTableImage()
+	{
+		return tableImage;
+	}
+
+	public void setTableImage(CustomImage tableImage)
+	{
+		this.tableImage = tableImage;
+	}
+
+
 
 
 

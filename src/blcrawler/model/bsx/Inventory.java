@@ -19,7 +19,7 @@ public class Inventory
 	ArrayList<Integer> filledUndividedDrawers;
 	ArrayList<Integer> emptyUndividedDrawers;
 	ArrayList<DrawerDivision> divisionList;
-	
+
 	ArrayList<DrawerDivision> div1;
 	ArrayList<DrawerDivision> div2;
 	ArrayList<DrawerDivision> div3;
@@ -40,7 +40,7 @@ public class Inventory
 	ArrayList<DrawerDivision> div6x;
 	ArrayList<DrawerDivision> div8x;
 	ArrayList<DrawerDivision> div10x;
-	
+
 	ArrayList<InventoryLocation> undiv1;
 	ArrayList<InventoryLocation> undiv2;
 	ArrayList<InventoryLocation> undiv3;
@@ -62,7 +62,7 @@ public class Inventory
 	ArrayList<InventoryLocation> undiv6x;
 	ArrayList<InventoryLocation> undiv8x;
 	ArrayList<InventoryLocation> undiv10x;
-	
+
 	int tobe1;
 	int tobe2;
 	int tobe3;
@@ -83,7 +83,7 @@ public class Inventory
 	int tobe6x;
 	int tobe8x;
 	int tobe10x;
-	
+
 	int tomake1;
 	int tomake2;
 	int tomake3;
@@ -104,8 +104,8 @@ public class Inventory
 	int tomake6x;
 	int tomake8x;
 	int tomake10x;
-	
-	
+
+
 	public Inventory()
 	{
 		filledUndividedDrawers = new ArrayList<>();
@@ -113,7 +113,7 @@ public class Inventory
 		locationsBySequential = new Hashtable<>();
 		divisionTable = new Hashtable<>();
 		divisionList = new ArrayList<>();
-		
+
 		div1 = new ArrayList<>();
 		div2 = new ArrayList<>();
 		div3 = new ArrayList<>();
@@ -134,7 +134,7 @@ public class Inventory
 		div6x = new ArrayList<>();
 		div8x = new ArrayList<>();
 		div10x = new ArrayList<>();
-		
+
 		undiv1 = new ArrayList<>();
 		undiv2 = new ArrayList<>();
 		undiv3 = new ArrayList<>();
@@ -156,9 +156,9 @@ public class Inventory
 		undiv6x = new ArrayList<>();
 		undiv8x = new ArrayList<>();
 		undiv10x = new ArrayList<>();
-		
+
 	}
-	
+
 	public void mapLocationsToDivisions()
 	{
 		for (int i=0; i<inventoryLocationList.size(); i++)
@@ -182,14 +182,14 @@ public class Inventory
 					System.out.println("ERROR: No drawer found for "+inventoryLocationList.get(i).getTrimmedRemarks());
 				}
 			}
-			
+
 			inventoryLocationList.get(i).linkToDrawerDivision();
 		}
 		identifyEmptyDivisions();
 		generateELists();
 		drawersToMake();
 	}
-	
+
 	public void identifyEmptyDivisions()
 	{
 		for (int i=0; i<divisionList.size(); i++)
@@ -198,8 +198,8 @@ public class Inventory
 			String currentSize = divisionList.get(i).getSize();
 			if( current.getItems() == null)
 			{
-				System.out.println("Drawer number " + current.getRawRemarks()+" is empty, size "+current.getSize());
-				switch (currentSize) 
+				//System.out.println("Drawer number " + current.getRawRemarks()+" is empty, size "+current.getSize());
+				switch (currentSize)
 				{
 			        case "1":  		div1.add(current);
 			        break;
@@ -242,13 +242,13 @@ public class Inventory
 			        case "10x":  	div10x.add(current);
 					break;
 				}
-			
+
 			}
-			
-	        	
-		
+
+
+
 		}
-		
+
 		System.out.println("Empty 1: "+div1.size());
 		System.out.println("Empty 2: "+div2.size());
 		System.out.println("Empty 3: "+div3.size());
@@ -269,12 +269,12 @@ public class Inventory
 		System.out.println("Empty 6x: "+div6x.size());
 		System.out.println("Empty 8x: "+div8x.size());
 		System.out.println("Empty 10x: "+div10x.size());
-		
 
-		
-		
+
+
+
 	}
-	
+
 	public void subtractToBe(int size, int value)
 	{
 		//System.out.println("SubtractToBe called for size "+size);
@@ -312,7 +312,7 @@ public class Inventory
 		//default: return 0;
 		}
 	}
-	
+
 	public int toBe(int size)
 	{
 		switch(size)
@@ -335,7 +335,7 @@ public class Inventory
 		default: return 0;
 		}
 	}
-	
+
 	public void drawersToMake()
 	{
 		tobe1=undiv1.size()-div1.size();
@@ -358,13 +358,13 @@ public class Inventory
 		tobe6x=undiv6x.size()-div6x.size();
 		tobe8x=undiv8x.size()-div8x.size();
 		tobe10x=undiv10x.size()-div10x.size();
-		
+
 		tomake2x = tobe2x/2;
 		tomake4x = tobe4x/4;
 		tomake6x = tobe6x/6;
 		tomake8x = tobe8x/8;
 		tomake10x = tobe10x/10;
-		
+
 		if (tobe2x%2!=0&&tobe2x>0)
 			tomake2x++;
 		if (tobe4x%4!=0&&tobe4x>0)
@@ -375,22 +375,22 @@ public class Inventory
 			tomake8x++;
 		if (tobe10x%10!=0&&tobe10x>0)
 			tomake10x++;
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
 		System.out.println("2x: "+tomake2x);
 		System.out.println("4x: "+tomake4x);
 		System.out.println("6x: "+tomake6x);
 		System.out.println("8x: "+tomake8x);
 		System.out.println("10x: "+tomake10x);
-		
+
 		ArrayList<ArrayList<Integer>> drawersToBeMade = new ArrayList<>();
-		
+
 		for (int i=16;i>0;i--)
 		{
 			System.out.println("Working on drawers of size "+i+", count of "+toBe(i));
@@ -415,10 +415,10 @@ public class Inventory
 				drawersToBeMade.add(divisions);
 			}
 		}
-		
+
 		System.out.println("Total drawers to be glued: "+(drawersToBeMade.size()+tomake2x+tomake4x+tomake6x+tomake8x+tomake10x));
 	}
-	
+
 	public ArrayList<Integer> combinatorics(int sizeToFill)
 	{
 		//System.out.println("Started a new combinatorics instance for size "+sizeToFill);
@@ -435,7 +435,7 @@ public class Inventory
 					//System.out.println("Subtracted a drawer of size "+i+ " in combinatorics path A. "+toBe(i)+
 					//		" remaining.");
 					return returnValue;
-					
+
 				}
 				else
 				{
@@ -458,13 +458,13 @@ public class Inventory
 		//		" remaining.");
 		//System.out.println("Creating an extra compartment of size "+sizeToFill);
 		return returnValue;
-		
-		
+
+
 	}
-	
-	
-	
-	
+
+
+
+
 	public void generateELists()
 	{
 		for (int i=0; i<inventoryLocationList.size(); i++)
@@ -476,10 +476,10 @@ public class Inventory
 				{
 					if (current.getEcode()!=null&&current.getCabinet()<25)
 					{
-					
-						
+
+
 						String ecode = current.getEcode();
-						switch (ecode) 
+						switch (ecode)
 						{
 					        case "1":  		undiv1.add(current);
 					        break;
@@ -539,7 +539,7 @@ public class Inventory
 				System.out.println("Error at drawer "+inventoryLocationList.get(i).getRemarks());
 			}
 		}
-		
+
 		System.out.println("Expected 1: "+undiv1.size());
 		System.out.println("Expected 2: "+undiv2.size());
 		System.out.println("Expected 3: "+undiv3.size());
@@ -560,7 +560,7 @@ public class Inventory
 		System.out.println("Expected 6x: "+undiv6x.size());
 		System.out.println("Expected 8x: "+undiv8x.size());
 		System.out.println("Expected 10x: "+undiv10x.size());
-		
+
 		System.out.println("To be made 1: "+(undiv1.size()-div1.size()));
 		System.out.println("To be made 2: "+(undiv2.size()-div2.size()));
 		System.out.println("To be made 3: "+(undiv3.size()-div3.size()));
@@ -581,18 +581,18 @@ public class Inventory
 		System.out.println("To be made 6x: "+(undiv6x.size()-div6x.size()));
 		System.out.println("To be made 8x: "+(undiv8x.size()-div8x.size()));
 		System.out.println("To be made 10x: "+(undiv10x.size()-div10x.size()));
-		
-		System.out.println("Full drawers: "+undiv16.size());
-		
 
-		
-		
-		
-		
+		System.out.println("Full drawers: "+undiv16.size());
+
+
+
+
+
+
 	}
-	
-	
-	
+
+
+
 	public ArrayList<DrawerDivision> getDivisionList()
 	{
 		return divisionList;
@@ -640,7 +640,7 @@ public class Inventory
 						}
 						filledUndividedDrawers.add(sequentialFromLabeled(rawRemarks));
 					}
-				
+
 
 				inventoryLocationList.get(i).setTrimmedRemarks(rawRemarks);
 				try
@@ -651,7 +651,7 @@ public class Inventory
 				{
 				}
 				System.out.println ("Undivided: "+rawRemarks);
-				
+
 			}
 			else
 			{
@@ -673,19 +673,19 @@ public class Inventory
 		*/
 		identifyEmptyFullSizeDrawers(449, sequentialFromLabeled("020-39"));
 		identifyLastFull();
-		
-		
 
-		
-		
+
+
+
+
 		//clearEmptiesFromRight();
-		
 
-		
-		
-		
+
+
+
+
 	}
-	
+
 	public void identifyEmptyFullSizeDrawers(int divisionStart, int end)
 	{
 		Collections.sort(filledUndividedDrawers);
@@ -699,7 +699,7 @@ public class Inventory
 			}
 		}
 	}
-	
+
 	public int identifyLastFull()
 	{
 		for (int i=1440; i>1; i--)
@@ -712,7 +712,7 @@ public class Inventory
 		}
 		return 1;
 	}
-	
+
 	public void clearEmptiesFromRight()
 	{
 		Collections.sort(emptyUndividedDrawers);
@@ -736,28 +736,28 @@ public class Inventory
 			}
 			System.out.println("Set drawer" + oldRemarks + " to " + labeledFromSequential(emptyUndividedDrawers.get(i)));
 		}
-		
+
 
 	}
-	
+
 	public void identifyDuplicates()
 	{
-		
+
 		for (int i=0; i<filledUndividedDrawers.size(); i++)
 		{
-			
+
 		}
 	}
-	
+
 	public int sequentialFromLabeled(String labeled)
 	{
-		
+
 		try
 		{
 			String cabinet = labeled.substring(0, 3);
 			String drawer = labeled.substring(4,6);
 			int output = Integer.parseInt(cabinet)*60+Integer.parseInt(drawer);
-			
+
 			System.out.println("Drawer #" + labeled + "Converted to Drawer #" + output);
 			return output;
 		}
@@ -767,7 +767,7 @@ public class Inventory
 		}
 		return 0;
 	}
-	
+
 	public String labeledFromSequential(int labeled)
 	{
 		String outputCabinet;
@@ -796,26 +796,26 @@ public class Inventory
 		}
 		return outputCabinet+"-"+outputDrawer;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public ObservableList<InventoryLot> getInventoryLotList()
 	{
@@ -837,6 +837,6 @@ public class Inventory
 		this.inventoryLocationList = inventoryLocationList;
 
 	}
-	
-	
+
+
 }
