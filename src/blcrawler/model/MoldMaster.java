@@ -1,15 +1,26 @@
 package blcrawler.model;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class MoldMaster
 {
 	String masterPartNumber;
 	ArrayList<String> subPartNumbers;
+	Hashtable<String, Integer> rcodes;
+
 	public MoldMaster(String pid)
 	{
 		masterPartNumber = pid;
 		subPartNumbers = new ArrayList<>();
+	}
+	public void addRCode(String size, Integer count)
+	{
+		rcodes.put(size, count);
+	}
+	public Integer getRCode(String size)
+	{
+		return rcodes.get(size);
 	}
 	public String getMasterPartNumber()
 	{
@@ -31,6 +42,14 @@ public class MoldMaster
 	{
 		subPartNumbers.add(number);
 	}
-	
-	
+	public Hashtable<String, Integer> getRcodes()
+	{
+		return rcodes;
+	}
+	public void setRcodes(Hashtable<String, Integer> rcodes)
+	{
+		this.rcodes = rcodes;
+	}
+
+
 }

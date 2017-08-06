@@ -23,13 +23,13 @@ import blcrawler.commands.api.GetAllPartInventories;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
-public class ConsoleController 
+public class ConsoleController
 {
 	private List<String> validBaseCommands;
 	private HashMap<String, Runnable> commandLibrary;
 	private String commandBuffer;
-	
-	public ConsoleController() throws Exception 
+
+	public ConsoleController() throws Exception
 	{
 		validBaseCommands = new ArrayList<String>();
 		commandLibrary = new HashMap<String, Runnable>();
@@ -53,8 +53,8 @@ public class ConsoleController
 		commandLibrary.put("buildmolds", () -> {buildMolds();});
 		commandLibrary.put("addallinventories", () -> {addAllInventories();});
 		commandLibrary.put("buildinventories", () -> {buildInventories();});
-		
-		
+		commandLibrary.put("startgui", () -> {startGUI();});
+
 		//Depreciated Methods, Avoid using or investigate function
 		commandLibrary.put("timertest", () -> {createTimertest();});
 		commandLibrary.put("invalid", () -> {createInvalid();});
@@ -75,141 +75,148 @@ public class ConsoleController
 		validBaseCommands.add("GetDate");
 		redirectSystemStreams();
 
-		
-		
-		
+
+
+
 	}
-	
+
 	public void createSelenium() {
 		CreateSelenium createSelenium = new CreateSelenium(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		createSelenium.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(createSelenium);
-	
+
 	}
-	
-	public void createInvalid() 
+
+	public void createInvalid()
 	{
 		new InvalidCommand();
 	}
-	
+
 	public void addAllParts()
 	{
 		AddAllParts addAllParts = new AddAllParts();
 		addAllParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(addAllParts);
 	}
-	
+
 	public void addAllImages()
 	{
 		AddAllImages command = new AddAllImages();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
+	public void startGUI()
+	{
+		StartGUI command = new StartGUI();
+		command.queue();
+		ConsoleGUIModel.getSelenium().addToInstant(command);
+	}
+
 	public void addAllInventories()
 	{
 		GetAllPartInventories command = new GetAllPartInventories();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void buildInventories()
 	{
 		BuildInventories command = new BuildInventories();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void writeXMLParts()
 	{
 		WritePartsToXML command = new WritePartsToXML();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void cancelScrape()
 	{
 		CancelScrape command = new CancelScrape();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void buildMolds()
 	{
 		BuildMolds command = new BuildMolds();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void readXMLParts()
 	{
 		ReadPartsFromXML command = new ReadPartsFromXML();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void sortPriceGuides()
 	{
 		SortPriceGuides command = new SortPriceGuides();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void sortItemsForSale()
 	{
 		SortItemsForSale command = new SortItemsForSale();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void fixHTMLs()
 	{
 		FixHTML fixhtml = new FixHTML();
 		fixhtml.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(fixhtml);
 	}
-	
+
 	public void buildParts()
 	{
 		BuildPartsFromHTML buildParts = new BuildPartsFromHTML();
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}
-	
+
 	public void build3004()
 	{
 		Build3004 buildParts = new Build3004(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}
-	
+
 	public void testhttprequest()
 	{
 		TestHTTPRequest command = new TestHTTPRequest(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
-	
+
 	public void testapi()
 	{
 		APITest test = new APITest(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		test.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(test);
 	}
-	
+
 	public void buildpartxml()
 	{
 		BuildAPartXML buildParts = new BuildAPartXML(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}
-	
-	public void addPartIndex() 
+
+	public void addPartIndex()
 	{
 		ConsoleGUIModel.getPageManager().buildPartIndex();
 	}
-	
-	public void initializeCommand() 
+
+	public void initializeCommand()
 	{
 		ConsoleGUIModel.getGuiController().sendInToOut(ConsoleGUIModel.getGuiView().getCLText());
 		InterpretText(ConsoleGUIModel.getGuiView().getCLText());
@@ -218,86 +225,86 @@ public class ConsoleController
 	public void clearAllParts()
 	{
 		File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/");
-		for(File file: dir.listFiles()) 
-		    if (!file.isDirectory()) 
+		for(File file: dir.listFiles())
+		    if (!file.isDirectory())
 		        file.delete();
-		
+
 		new ConsoleOutput("Command Result", "parts directory successfully emptied.");
 	}
-	
+
 	//Depreciated commands. Do not use without investigation
 	public void createAddPage() {
 		ConsoleGUIModel.getTaskTimer().addToQueue(new AddUrl(commandBuffer.substring(commandBuffer.indexOf(' ')+1)));
 	}
-	
+
 	public void createPart() {
 		AddPart addPart = new AddPart(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		addPart.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPart);
-	
+
 	}
-	
+
 	public void createPart(String string) {
 		AddPart addPart = new AddPart(string);
 		addPart.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPart);
-	
+
 	}
-	
+
 	public void createPartBrowse() {
 		AddPartBrowse addPartBrowse = new AddPartBrowse(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		addPartBrowse.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPartBrowse);
-	
+
 	}
-	
+
 	public void createPartBrowse(String string) {
 		AddPartBrowse addPartBrowse = new AddPartBrowse(string);
 		addPartBrowse.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPartBrowse);
-	
+
 	}
-	
+
 	public void createPartBrowseIndex() {
 		AddAllPartBrowses index = new AddAllPartBrowses();
 		ConsoleGUIModel.getTaskTimer().addToQueue(index);
 	}
-	
+
 	public void createPartCatalog() {
 		AddPartCatalog addPartCatalog = new AddPartCatalog(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		addPartCatalog.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPartCatalog);
-	
+
 	}
-	
+
 	public void createPartCatalog(String string) {
 		AddPartCatalog addPartCatalog = new AddPartCatalog(string);
 		addPartCatalog.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPartCatalog);
-	
+
 	}
-	
+
 	public void createPartCatalogIndex() {
 		AddAllPartCatalogs index = new AddAllPartCatalogs();
 		ConsoleGUIModel.getTaskTimer().addToQueue(index);
 	}
-	
+
 	public void createTimertest() {
 		TimerTest timertest=new TimerTest();
 		timertest.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(timertest);
 	}
-	
+
 	public void createTimestamp() {
 		ConsoleGUIModel.getSelenium().addToInstant(new Timestamp());
-		
+
 	}
-	
+
 	public void expandPartCatalog() {
 		ConsoleGUIModel.getPageManager().expandPartCatalog();
-	
+
 	}
-	
+
 	public void killFirefox() {
 		Runtime rt = Runtime.getRuntime();
 
@@ -308,7 +315,7 @@ public class ConsoleController
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void killTor() {
 		try {
 			ConsoleGUIModel.getSeleniumModel().relaunchTor();
@@ -320,15 +327,15 @@ public class ConsoleController
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void scrapeAllParts() {
 		ConsoleGUIModel.getPageManager().scrapeRemainingParts();
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public void InterpretText(String textInput) {
 		String command;
 		int i = textInput.indexOf(' ');
@@ -341,63 +348,63 @@ public class ConsoleController
 			command = textInput;
 		}
 
-		
+
 		if (commandLibrary.containsKey(command))
 		{
 			commandBuffer = textInput;
 			commandLibrary.get(command).run();
 		}
-			
-	
-		
+
+
+
 		else
 		{
 			commandLibrary.get("invalid").run();
 		}
-		
-		
+
+
 	}
 
-	
+
 	public void outputConsole(ConsoleOutput output)
 	{
 		ConsoleGUIModel.getGuiView().getConsoleOut().append(output.getCombined());
 	}
-	
+
 	public Method packForHash(String s) throws Exception
 	{
 		return ConsoleController.class.getMethod(s);
 	}
-	
+
 	private void redirectSystemStreams() {
-		 
-		
+
+
 		OutputStream out = new OutputStream() {
 		    @Override
 		    public void write(byte[] b) throws IOException {
 		      write(b, 0, b.length);
 		    }
-		 
+
 		    @Override
 		    public void write(byte[] b, int off, int len) throws IOException {
 
 		      updateTextAreaFromSystem(new String(b, off, len));
 		    }
-		 
+
 		    @Override
 		    public void write(int b) throws IOException {
 		      updateTextAreaFromSystem(String.valueOf((char) b));
 		    }
 		  };
-		 
+
 		  System.setOut(new PrintStream(out, true));
 		  System.setErr(new PrintStream(out, true));
-	
+
 	}
-	
-	
-	
-	
+
+
+
+
 	//Read system text (exceptions, println, etc), and redirect to console out
 	private void updateTextAreaFromSystem(final String text) {
 		  SwingUtilities.invokeLater(new Runnable() {

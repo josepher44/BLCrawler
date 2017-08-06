@@ -46,12 +46,13 @@ public class DatabaseController
 	ArrayList<PartInventory> partInventories;
 	long uniqueColoredParts;
 	int xmlAppendCounter;
-	
+
 	Document partsDoc;
-	
+	Document moldsDoc;
+
 	ColorMap colormap;
 	Comparator<Element> elementComp;
-	
+
 	public DatabaseController()
 	{
 		catalogParts = new LinkedList<>();
@@ -65,9 +66,9 @@ public class DatabaseController
 		partsDoc = null;
 		xmlAppendCounter = 0;
 		partInventories = new ArrayList<>();
-		
 
-		
+
+
 		elementComp = new Comparator<Element>() {
 		    @Override
 		    public int compare(Element left, Element right) {
@@ -76,10 +77,10 @@ public class DatabaseController
 		    }
 
 		};
-		
+
 		//readMasterXML();
 	}
-	
+
 	public void sortPriceGuides()
 	{
 		LinkedList<ObjectSpecificColorCount> priceGuides = new LinkedList<>();
@@ -91,17 +92,17 @@ public class DatabaseController
 			}
 		}
 		Collections.sort(priceGuides);
-		
+
 		for (ObjectSpecificColorCount o: priceGuides)
 		{
 			System.out.println(o.getCc().getCount()+" Part Number: "+o.getPartNumber()+", Color: "+o.getCc().getColor()+", Quantity "+o.getCc().getCount());
 		}
-		
+
 		for (ObjectSpecificColorCount o: priceGuides)
 		{
 			System.out.println(o.getCc().getCount());
 		}
-		
+
 	}
 
 	public void sortItemsForSale()
@@ -115,21 +116,21 @@ public class DatabaseController
 			}
 		}
 		Collections.sort(itemsForSale);
-		
+
 		for (ObjectSpecificColorCount o: itemsForSale)
 		{
 			System.out.println(o.getCc().getCount()+" Part Number: "+o.getPartNumber()+", Color: "+o.getCc().getColor()+", Quantity "+o.getCc().getCount());
 		}
-		
-		
+
+
 	}
-	
-	
-	
+
+
+
 	public void readMasterXML()
 	{
 		File masterXML = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml");
-		
+
 		SAXBuilder builder3 = new SAXBuilder();
 		partsDoc = null;
 		try
@@ -156,7 +157,7 @@ public class DatabaseController
 			Element PartsXML = new Element("partsxml");
 			partsDoc = new Document();
 			partsDoc.setRootElement(PartsXML);
-			
+
 			XMLOutputter xmlOutput = new XMLOutputter();
 
 			// display nice nice
@@ -172,13 +173,13 @@ public class DatabaseController
 				en.printStackTrace();
 			}
 		}
-		
-		
 
-		
-		
+
+
+
+
 	}
-	
+
 	public void appendToMasterXML(CatalogPart part)
 	{
 
@@ -206,23 +207,28 @@ public class DatabaseController
 			}
 		}
 	}
-	
+
 	public void removeFromMasterXML(CatalogPart part)
 	{
 		List<Element> children = partsDoc.getRootElement().getChildren("part");
 		Iterator itr = children.iterator();
 		while (itr.hasNext()) {
 		  Element child = (Element) itr.next();
-		  String att = child.getAttributeValue("id"); 
+		  String att = child.getAttributeValue("id");
 		  if( att.equals(part.getPartNumber())){
 		    itr.remove();
 		  }
 		}
-		
-	}
-	
 
-	
+	}
+
+	public void readMoldXML()
+	{
+
+	}
+
+
+
 	public void buildMoldXML()
 	{
 		Document moldxml = new Document();
@@ -236,12 +242,12 @@ public class DatabaseController
 		for(CatalogPart part : catalogParts)
 		{
 		String str = part.getPartNumber();
-			
-			
-			
+
+
+
 			if (part.getHasInventory())
 			{
-				
+
 				if (part.getKnownColorsBL().size()>1)
 				{
 					n=n+part.getKnownColorsBL().size();
@@ -252,9 +258,9 @@ public class DatabaseController
 					n++;
 					//System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n);
 				}
-				
+
 			}
-			
+
 			else if (str.matches("(973p).*"))
 			{
 				k++;
@@ -294,9 +300,9 @@ public class DatabaseController
 				}
 
 
-			
+
 			}
-			
+
 
 			else
 			{
@@ -304,9 +310,9 @@ public class DatabaseController
 				addMasterMold(new MoldMaster(str));
 				//System.out.println("Part "+str+" does not exist, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
 			}
-			
 
-			
+
+
 			//doclocal.getRootElement().addContent(part.buildXML());
 
 		}
@@ -314,9 +320,9 @@ public class DatabaseController
 		buildInventories();
 		ArrayList<PartInventory> masterInventories = new ArrayList<>();
 		masterInventories.addAll(partInventories);
-		
+
 		System.out.println(masterInventories.size()+"Size of master inventories");
-		
+
 		Boolean foundamatch = false;
 		for (int i=0; i<masterInventories.size(); i++)
 		{
@@ -329,13 +335,13 @@ public class DatabaseController
 			for (int p1=i+1; p1<masterInventories.size(); )
 			{
 				String partB = masterInventories.get(p1).moldNormalizedInventory().toString();
-				
+
 				if (partA.equals(partB))
 				{
 					System.out.println("Part # "+masterInventories.get(i).getPartNumber()+"has an identical inventory to part"
 							+masterInventories.get(p1).getPartNumber()+", merging now");
-		
-					
+
+
 					if (partsdone.containsKey(masterInventories.get(i).getPartNumber()))
 					{
 						addToMold(partsdone.get(masterInventories.get(i).getPartNumber()), masterInventories.get(p1).getPartNumber());
@@ -352,14 +358,14 @@ public class DatabaseController
 						System.out.println("Part "+str+" does not exist, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
 						foundamatch = true;
 					}
-					
+
 					masterInventories.remove(masterInventories.get(p1));
-					
+
 				}
 				else
 				{
 					p1++;
-					
+
 				}
 			}
 			if (!foundamatch)
@@ -370,9 +376,9 @@ public class DatabaseController
 				System.out.println("Part "+str+" has no matching assemblies, creating new mold master of value "+str+". Mold count is "+masterMolds.size());
 			}
 		}
-		
+
 		System.out.println("Reduced down to "+masterInventories.size()+" inventory parts from "+partInventories.size());
-		
+
 		//Mold masters all built, now write to xml
 		for(MoldMaster mold : masterMolds)
 		{
@@ -381,7 +387,7 @@ public class DatabaseController
 			Element master = new Element("masterpart");
 			master.setText(mold.getMasterPartNumber());
 			e_mold.addContent(master);
-			
+
 			Element submolds = new Element("subparts");
 			for (String sub : mold.getSubPartNumbers())
 			{
@@ -390,25 +396,25 @@ public class DatabaseController
 				submolds.addContent(s);
 			}
 			e_mold.addContent(submolds);
-			
+
 			Element verified = new Element("verified");
 			verified.setText("false");
 			e_mold.addContent(verified);
-			
+
 			Element smallDrawerEmpirical = new Element("smalldrawerempirical");
 			e_mold.addContent(smallDrawerEmpirical);
-			
+
 			Element dimSlaves = new Element("dimslaves");
 			e_mold.addContent(dimSlaves);
-			
+
 			Element dimMaster = new Element("dimmaster");
 			dimMaster.setText("false");
 			e_mold.addContent(dimMaster);
-			
+
 			moldxml.getRootElement().addContent(e_mold);
 		}
-		
-		
+
+
 		XMLOutputter xmlOutput = new XMLOutputter();
 
 		// display nice nice
@@ -423,29 +429,29 @@ public class DatabaseController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("Successfully wrote all mold data to xml");
-		
+
 	}
-	
+
 	public void buildInventories()
 	{
 		String basepath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts";
 		File dir = new File(basepath);
-		
+
 		for(File file : dir.listFiles())
 		{
 			//System.out.println("Building part from file "+file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_")));
 			partInventories.add(new PartInventory(file.getAbsolutePath()));
-			
+
 		}
 		System.out.println("Files done: "+dir.listFiles().length);
 	}
-	
+
 	public void buildMasterXML()
 	{
 		Thread thread = new Thread() {
-			public void run() 
+			public void run()
 			{
 				Element PartsXML = new Element("partsxml");
 				Document doclocal = new Document();
@@ -457,9 +463,9 @@ public class DatabaseController
 					//System.out.println("XML appended for part "+part.getPartNumber()+", part "+i+" of "+catalogParts.size());
 					i++;
 				}
-				
+
 				//doc = doclocal;
-				
+
 				XMLOutputter xmlOutput = new XMLOutputter();
 
 				// display nice nice
@@ -480,48 +486,48 @@ public class DatabaseController
 		};
 		thread.setDaemon(true);
 		thread.start();
-		
-			
-		
-		
+
+
+
+
 	}
-	
+
 	public void incrementColoredParts(int value)
 	{
 		uniqueColoredParts = uniqueColoredParts+value;
 		if (value!=0)
 		{
-			//System.out.println("Unique colored parts so far: "+uniqueColoredParts);	
+			//System.out.println("Unique colored parts so far: "+uniqueColoredParts);
 		}
-		
+
 	}
-	
+
 	public void addRelationshipBufferTrigger(String partID)
 	{
 		relationshipBufferTriggers.add(partID);
 	}
-	
+
 	public void addRelationshipBufferItem(String partID)
 	{
 		relationshipBufferItems.add(partID);
 	}
-	
+
 	public void updateFileLists()
 	{
-		
+
 	}
-	
+
 	public void addCatalogPart(CatalogPart part)
 	{
 		catalogParts.add(part);
 		catalogPartsByID.put(part.getPartNumber(), part);
 	}
-	
+
 	public CatalogPart getPart(String partNumber)
 	{
 		return catalogPartsByID.get(partNumber);
 	}
-	
+
 	public boolean partExists(String partNumber)
 	{
 		if (catalogPartsByID.containsKey(partNumber))
@@ -534,16 +540,16 @@ public class DatabaseController
 		}
 	}
 
-	
+
 	public void fixHTML(String oldpath)
 	{
 		byte[] encoded;
 		String fileContents = "";
-		
+
 		String path = oldpath;
-		
+
 		File partFile = new File(path);
-		
+
 		try
 		{
 			encoded = Files.readAllBytes(Paths.get(partFile.getAbsolutePath()));
@@ -554,7 +560,7 @@ public class DatabaseController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		try
 		{
 			fileContents = fileContents.substring(fileContents.indexOf("<HTML>")+6, fileContents.indexOf("</HTML>"));
@@ -569,15 +575,15 @@ public class DatabaseController
 		String HTMLpath = partFile.getAbsolutePath();
 		HTMLpath = HTMLpath.replace("Parts", "HTML");
 		HTMLpath = HTMLpath.replace(".xml", ".html");
-		
+
 		System.out.println(HTMLpath);
-		
+
 		try {
 		    BufferedWriter out = new BufferedWriter(new FileWriter(HTMLpath));
-		    out.write(fileContents);  //Replace with the string 
-		                                            //you are trying to write  
+		    out.write(fileContents);  //Replace with the string
+		                                            //you are trying to write
 		    //System.out.println("Successfully converted HTML file for path "+HTMLpath);
-		    
+
 		    out.close();
 		}
 		catch (IOException e)
@@ -589,24 +595,24 @@ public class DatabaseController
 		addCatalogPart(part);
 		appendToMasterXML(part);
 	}
-	
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public void fixHTMLs()
 	{
 
-		Thread thread = new Thread() 
+		Thread thread = new Thread()
 		{
-			public void run() 
+			public void run()
 			{
 				int i=0;
 				File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/");
 				ArrayList partIDs = new ArrayList<>();
-				for(File file: dir.listFiles()) 
+				for(File file: dir.listFiles())
 				{
 					i++;
 					byte[] encoded;
@@ -621,7 +627,7 @@ public class DatabaseController
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 					try
 					{
 						fileContents = fileContents.substring(fileContents.indexOf("<HTML>")+6, fileContents.indexOf("</HTML>"));
@@ -636,25 +642,25 @@ public class DatabaseController
 					String path = file.getAbsolutePath();
 					path = path.replace("Parts", "HTML");
 					path = path.replace(".xml", ".html");
-					
+
 					System.out.println(path);
-					
+
 					try {
 					    BufferedWriter out = new BufferedWriter(new FileWriter(path));
-					    out.write(fileContents);  //Replace with the string 
-					                                             //you are trying to write  
+					    out.write(fileContents);  //Replace with the string
+					                                             //you are trying to write
 					    //System.out.println("Successfully wrote file "+i+" of " +dir.listFiles().length);
-					    
+
 					    out.close();
 					}
 					catch (IOException e)
 					{
 					    System.out.println("Exception ");
-		
+
 					}
 				}
 			}
-			
+
 		};
 		thread.setDaemon(true);
 		thread.start();
@@ -667,21 +673,21 @@ public class DatabaseController
 
 	public void setColormap(ColorMap colormap)
 	{
-		
+
 		this.colormap = colormap;
 	}
-	
+
 	public ArrayList<String> getPartCategories()
 	{
-		ArrayList<String> out = new ArrayList<>(); 
+		ArrayList<String> out = new ArrayList<>();
 		for (CatalogPart part : catalogParts)
 		{
-			
+
 			if (!out.contains(part.getCategoryName()))
 			{
 				out.add(part.getCategoryName());
 			}
-			
+
 		}
 		out.sort(String::compareToIgnoreCase);
 		return out;
@@ -696,20 +702,20 @@ public class DatabaseController
 	{
 		this.catalogParts = catalogParts;
 	}
-	
+
 	public void addMasterMold(MoldMaster mold)
 	{
 		masterMolds.add(mold);
 		masterMoldsByID.put(mold.getMasterPartNumber(), mold);
 	}
-	
+
 	public void addToMold(String master, String child)
 	{
 		MoldMaster Moldmaster = masterMoldsByID.get(master);
 		Moldmaster.addSubPartNumber(child);
 		childToMasterMold.put(child, master);
 	}
-	
+
 	public String getMasterPartNumber(String child)
 	{
 		return childToMasterMold.get(child);
@@ -725,7 +731,19 @@ public class DatabaseController
 		this.childToMasterMold = childToMasterMold;
 	}
 
-	
-	
+	public MoldMaster getMold(String pn)
+	{
+		if (masterMoldsByID.containsKey(pn))
+		{
+			return masterMoldsByID.get(pn);
+		}
+		else
+		{
+			return (masterMoldsByID.get(childToMasterMold.get(pn)));
+		}
+	}
+
+
+
 }
 

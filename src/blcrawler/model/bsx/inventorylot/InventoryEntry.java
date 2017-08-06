@@ -4,9 +4,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
+import blcrawler.model.ConsoleGUIModel;
+import blcrawler.model.MoldMaster;
 import blcrawler.view.imsgui.javafx.CustomImage;
 import java.awt.image.*;
 import java.awt.Image;
+
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.ImageView;
 
 /*Class representing a single lot of a bsx file
@@ -27,8 +34,9 @@ public abstract class InventoryEntry
 	Short CategoryID;
 	String CategoryName;
 	String Status;
-	int Qty;
-	double Price;
+	Integer Qty;
+	DoubleProperty Price;
+	String PriceString;
 	char Condition;
 	String Comments;
 	String Remarks;
@@ -50,16 +58,19 @@ public abstract class InventoryEntry
 	int normalizedDrawerNumber;
 	ArrayList<String> validCodes;
 
+
 	String imageLocation;
 
 	ImageView imageview;
 	CustomImage tableImage;
 
+	Boolean hasRData;
+
 
 
 	public InventoryEntry()
 	{
-
+		Price = new SimpleDoubleProperty();
 	}
 
 	public InventoryEntry(InventoryLot lot)
@@ -86,7 +97,7 @@ public abstract class InventoryEntry
 		CategoryName = lot.getCategoryName();
 		Status = lot.getStatus();
 		Qty = lot.getQty();
-		Price = lot.getPrice();
+		Price = lot.priceProperty();
 		Condition = lot.getCondition();
 		Comments = lot.getComments();
 
@@ -121,7 +132,7 @@ public abstract class InventoryEntry
 		CategoryName = lot.getCategoryName();
 		Status = lot.getStatus();
 		Qty = lot.getQty();
-		Price = lot.getPrice();
+		Price = lot.priceProperty();
 		Condition = lot.getCondition();
 		Comments = lot.getComments();
 
@@ -353,10 +364,9 @@ public abstract class InventoryEntry
 		return lotID;
 	}
 
-	public double getPrice()
-	{
-		return Price;
-	}
+    public double getPrice() {
+        return this.priceProperty().get();
+    }
 
 	public int getQty()
 	{
@@ -453,10 +463,9 @@ public abstract class InventoryEntry
 		this.lotID = lotID;
 	}
 
-	public void setPrice(double price)
-	{
-		Price = price;
-	}
+    public void setPrice(Double price) {
+        this.priceProperty().set(price);
+    }
 
 	public void setQty(int qty)
 	{
@@ -552,9 +561,20 @@ public abstract class InventoryEntry
 		this.tableImage = tableImage;
 	}
 
+	public final DoubleProperty priceProperty() {
+        return this.Price;
+    }
+
+	public MoldMaster getMold()
+	{
+		return ConsoleGUIModel.getDatabase().getMold(ItemID);
+	}
 
 
+	public void checkRData()
+	{
 
+	}
 
 
 

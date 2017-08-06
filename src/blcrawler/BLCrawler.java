@@ -41,6 +41,7 @@ public class BLCrawler extends Application {
 		//imsgui = new IMSGUIView();
         primaryStage.setTitle("BLCrawl Inventory Management System");
         primaryStage.setScene(imsgui.getScene());
+        ConsoleGUIModel.getImsgui().setWindow(primaryStage);
         primaryStage.show();
 
         //partDatabase = new PartDatabase();

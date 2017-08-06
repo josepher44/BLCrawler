@@ -261,11 +261,6 @@ public class InventoryLot extends InventoryEntry
 		this.lotID = lotID;
 	}
 
-	public void setPrice(double price)
-	{
-		Price = price;
-	}
-
 	public void setQty(int qty)
 	{
 		Qty = qty;

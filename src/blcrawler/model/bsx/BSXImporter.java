@@ -288,6 +288,8 @@ public class BSXImporter
 				lot.setColorName(currentElement.getChildText("ColorName"));
 				lot.setComments(currentElement.getChildText("Comments"));
 				lot.setCondition(currentElement.getChildText("Condition").charAt(0));
+				lot.setQty(Integer.parseInt(currentElement.getChildText("Qty")));
+				lot.setPrice(Double.parseDouble(currentElement.getChildText("Price")));
 				lot.setItemID(currentElement.getChildText("ItemID"));
 				lot.setItemName(currentElement.getChildText("ItemName"));
 				lot.setItemType(currentElement.getChildText("ItemType"));

@@ -35,6 +35,7 @@ public class InventoryLocation extends InventoryEntry
 	short[] divisions;
 
 
+
 	String trimmedRemarks;
 
 	//R-codes will not be used soon, but are preserved to maintain backwards compatability at the moment.
@@ -78,7 +79,7 @@ public class InventoryLocation extends InventoryEntry
 		CategoryName = lot.getCategoryName();
 		Status = lot.getStatus();
 		Qty = lot.getQty();
-		Price = lot.getPrice();
+		Price = lot.priceProperty();
 		Condition = lot.getCondition();
 		Comments = lot.getComments();
 
@@ -114,7 +115,7 @@ public class InventoryLocation extends InventoryEntry
 		CategoryName = lot.getCategoryName();
 		Status = lot.getStatus();
 		Qty = lot.getQty();
-		Price = lot.getPrice();
+		Price = lot.priceProperty();
 		Condition = lot.getCondition();
 		Comments = lot.getComments();
 
@@ -347,10 +348,7 @@ public class InventoryLocation extends InventoryEntry
 		return lotID;
 	}
 
-	public double getPrice()
-	{
-		return Price;
-	}
+
 
 	public int getQty()
 	{
@@ -447,10 +445,6 @@ public class InventoryLocation extends InventoryEntry
 		this.lotID = lotID;
 	}
 
-	public void setPrice(double price)
-	{
-		Price = price;
-	}
 
 	public void setQty(int qty)
 	{

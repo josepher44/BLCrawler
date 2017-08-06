@@ -1,8 +1,12 @@
 package blcrawler.view.imsgui;
 
+
+import java.util.function.Function;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+
+import javafx.beans.property.Property;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -51,6 +55,7 @@ import blcrawler.view.imsgui.javafx.*;
 public class IMSGUIView
 {
 	Scene scene;
+	Stage window;
 	TableView<InventoryLocation> inventoryView;
 	ObservableList<InventoryLocation> lots;
 	BSXImporter importer;
@@ -70,16 +75,31 @@ public class IMSGUIView
 		this.scene = scene;
 	}
 
+	public void setWindow(Stage w)
+	{
+		this.window = w;
+	}
+
+	public void importBSX()
+	{
+		importer = new BSXImporter("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/Redraweringmaster.bsx");
+        lots = importer.getInventoryLocationList();
+        currentInventory.setDivisionTable(importer.getDrawerDivisionTable());
+        currentInventory.setDivisionList(importer.getDrawerDivisionList());
+
+
+        currentInventory.mapLocationsToDivisions();
+
+        inventoryView.setItems(lots);
+	}
+
 	public void Start()
 	{
+
 		ObservableList<TablePosition> selectedCells = FXCollections.observableArrayList();
 		Button btn = new Button();
         btn.setText("Toolbar Placeholder'");
         btn.setOnAction(e -> System.out.println("Hello World!"));
-        importer = new BSXImporter("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/Redraweringmaster.bsx");
-        lots = importer.getInventoryLocationList();
-        currentInventory.setDivisionTable(importer.getDrawerDivisionTable());
-        currentInventory.setDivisionList(importer.getDrawerDivisionList());
 
 
 
@@ -93,7 +113,11 @@ public class IMSGUIView
         TableColumn<InventoryLocation,Short> IndexColumn = new TableColumn<>("Index");
         IndexColumn.setMinWidth(50);
         IndexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
-        
+
+        TableColumn<InventoryLocation,Character> ConditionColumn = new TableColumn<>("Condition");
+        ConditionColumn.setMinWidth(20);
+        ConditionColumn.setPrefWidth(20);
+        ConditionColumn.setCellValueFactory(new PropertyValueFactory<>("Condition"));
 
         TableColumn<InventoryLocation,String> ItemIDColumn = new TableColumn<>("ItemID");
         ItemIDColumn.setMinWidth(50);
@@ -104,9 +128,22 @@ public class IMSGUIView
        	NameColumn.setCellValueFactory(new PropertyValueFactory<>("ItemName"));
        	NameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
+        TableColumn<InventoryLocation,String> ColorColumn = new TableColumn<>("Color");
+        ColorColumn.setMinWidth(50);
+        ColorColumn.setCellValueFactory(new PropertyValueFactory<>("ColorName"));
+
+        TableColumn<InventoryLocation,Integer> QtyColumn = new TableColumn<>("Qty");
+        QtyColumn.setMinWidth(30);
+        QtyColumn.setCellValueFactory(new PropertyValueFactory<>("Qty"));
+
+        TableColumn<InventoryLocation,Double> PriceColumn = column("Price", item -> item.priceProperty().asObject());
+        PriceColumn.setMinWidth(50);
+        //PriceColumn.setCellValueFactory(new PropertyValueFactory<>("Price"));
+
         TableColumn<InventoryLocation,Short> CabinetColumn = new TableColumn<>("Cabinet");
         CabinetColumn.setMinWidth(50);
         CabinetColumn.setCellValueFactory(new PropertyValueFactory<>("Cabinet"));
+
 
         //CabinetColumn.setCellFactory(col -> new EditingShortCell<>());
 
@@ -143,14 +180,21 @@ public class IMSGUIView
         inventoryView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         inventoryView.setItems(lots);
         inventoryView.getColumns().add(ImageColumn);
-        inventoryView.getColumns().add(IndexColumn);
+       // inventoryView.getColumns().add(IndexColumn);
         inventoryView.getColumns().add(ItemIDColumn);
         inventoryView.getColumns().add(NameColumn);
+        inventoryView.getColumns().add(ConditionColumn);
+        inventoryView.getColumns().add(ColorColumn);
+        inventoryView.getColumns().add(QtyColumn);
+        inventoryView.getColumns().add(PriceColumn);
         inventoryView.getColumns().add(CabinetColumn);
         inventoryView.getColumns().add(CategoryIDColumn);
         inventoryView.getColumns().add(CategoryNameColumn);
         inventoryView.getColumns().add(MultiColumn);
         inventoryView.getColumns().add(RawRemarksColumn);
+
+
+        PriceColumn.setCellFactory(col -> new PriceTableCell<>());
 
         inventoryView.setEditable(true);
 
@@ -226,9 +270,9 @@ public class IMSGUIView
 
 
 
+
         //root.addAll(menuBar);
 
-        currentInventory.mapLocationsToDivisions();
         //currentInventory.identifyEmptyUndividedDrawers();
 
 	}
@@ -298,7 +342,7 @@ public class IMSGUIView
 				}
 				else
 				{
-					lot.setPrice(0);
+					lot.setPrice(0.00);
 				}
 			}
 			catch (IllegalArgumentException e)
@@ -360,10 +404,16 @@ public class IMSGUIView
 			lots.add(location);
 		}
 
+
 	}
 
 
 
+    private static <S,T> TableColumn<S,T> column(String title, Function<S, Property<T>> property) {
+        TableColumn<S,T> col = new TableColumn<>(title);
+        col.setCellValueFactory(cellData -> property.apply(cellData.getValue()));
+        return col ;
+    }
 
 
 
