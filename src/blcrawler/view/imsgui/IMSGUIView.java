@@ -4,13 +4,17 @@ package blcrawler.view.imsgui;
 import java.util.function.Function;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 
 import javafx.beans.property.Property;
 import javafx.scene.control.Button;
+import javafx.scene.control.IndexedCell;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -26,6 +30,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,16 +39,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.converter.ShortStringConverter;
 
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
@@ -59,11 +74,89 @@ public class IMSGUIView
 	TableView<InventoryLocation> inventoryView;
 	ObservableList<InventoryLocation> lots;
 	BSXImporter importer;
+	public static DataFormat dataFormat = new DataFormat("mydata");
+    private Timeline scrolltimeline = new Timeline();
+    private double scrollDirection = 0;
+    public int rootIndex=0;
+    public int minIndex=0;
+    public int maxIndex=0;
+    public int minSelectedIndex=0;
+    public int maxSelectedIndex=0;
 	public static Inventory currentInventory;
 	public IMSGUIView() {
 		currentInventory = new Inventory();
 		Start();
 	}
+
+    private void setupScrolling() {
+        scrolltimeline.setCycleCount(Timeline.INDEFINITE);
+        scrolltimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), "Scoll", (ActionEvent) -> { dragScroll();}));
+        inventoryView.setOnDragExited(event -> {
+            if (event.getY() > 0) {
+                scrollDirection = 1.0 / inventoryView.getItems().size();
+            }
+            else {
+                scrollDirection = -1.0 / inventoryView.getItems().size();
+            }
+            scrolltimeline.play();
+        });
+        inventoryView.setOnDragEntered(event -> {
+            scrolltimeline.stop();
+        });
+        inventoryView.setOnDragDone(event -> {
+            scrolltimeline.stop();
+        });
+    }
+
+    private void dragScroll() {
+        ScrollBar sb = getVerticalScrollbar();
+        if (sb != null) {
+            double newValue = sb.getValue() + scrollDirection;
+            newValue = Math.min(newValue, 1.0);
+            newValue = Math.max(newValue, 0.0);
+            if (sb.getValue()<newValue)
+            {
+                if (minSelectedIndex<rootIndex)
+                {
+                	minSelectedIndex++;
+                	clearDownwards();
+                }
+                else
+                {
+                	maxSelectedIndex++;
+                	selectDownwards();
+                }
+            }
+            else
+            {
+                if (minSelectedIndex<rootIndex)
+                {
+                	minSelectedIndex--;
+                	selectUpwards();
+                }
+                else
+                {
+                	maxSelectedIndex--;
+                	clearUpwards();
+                }
+            }
+            sb.setValue(newValue);
+
+        }
+    }
+
+    private ScrollBar getVerticalScrollbar() {
+        ScrollBar result = null;
+        for (Node n : inventoryView.lookupAll(".scroll-bar")) {
+            if (n instanceof ScrollBar) {
+                ScrollBar bar = (ScrollBar) n;
+                if (bar.getOrientation().equals(Orientation.VERTICAL)) {
+                    result = bar;
+                }
+            }
+        }
+        return result;
+    }
 
 	public Scene getScene()
 	{
@@ -80,9 +173,9 @@ public class IMSGUIView
 		this.window = w;
 	}
 
-	public void importBSX()
+	public void importBSX(File file)
 	{
-		importer = new BSXImporter("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/Redraweringmaster.bsx");
+		importer = new BSXImporter(file.getAbsolutePath());
         lots = importer.getInventoryLocationList();
         currentInventory.setDivisionTable(importer.getDrawerDivisionTable());
         currentInventory.setDivisionList(importer.getDrawerDivisionList());
@@ -126,7 +219,7 @@ public class IMSGUIView
         TableColumn<InventoryLocation,String> NameColumn = new TableColumn<>("Name");
         NameColumn.setMinWidth(100);
        	NameColumn.setCellValueFactory(new PropertyValueFactory<>("ItemName"));
-       	NameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+       	//NameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
         TableColumn<InventoryLocation,String> ColorColumn = new TableColumn<>("Color");
         ColorColumn.setMinWidth(50);
@@ -177,6 +270,7 @@ public class IMSGUIView
         RawRemarksColumn.setCellValueFactory(new PropertyValueFactory<>("Remarks"));
 
         inventoryView = new TableView<>();
+        inventoryView.setPrefHeight(600);
         inventoryView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         inventoryView.setItems(lots);
         inventoryView.getColumns().add(ImageColumn);
@@ -193,10 +287,92 @@ public class IMSGUIView
         inventoryView.getColumns().add(MultiColumn);
         inventoryView.getColumns().add(RawRemarksColumn);
 
+        inventoryView.setRowFactory(new Callback<TableView<InventoryLocation>, TableRow<InventoryLocation>>()
+        {
+
+
+        	@Override
+    	    public TableRow<InventoryLocation> call(TableView<InventoryLocation> p) {
+    	        final TableRow<InventoryLocation> row = new TableRow<InventoryLocation>();
+    	        row.setOnDragEntered(new EventHandler<DragEvent>() {
+    	            @Override
+    	            public void handle(DragEvent t) {
+    	                if (row.getIndex()<rootIndex)
+    	                {
+    	                	minSelectedIndex = row.getIndex();
+    	                	selectUpwards();
+    	                }
+    	                else
+    	                {
+    	                	maxSelectedIndex = row.getIndex();
+    	                	selectDownwards();
+    	                }
+    	                System.out.println("absolute min: "+minIndex);
+    	                System.out.println("selected min: "+minSelectedIndex);
+    	                System.out.println("absolute max: "+maxIndex);
+    	                System.out.println("selected max: "+maxSelectedIndex);
+    	            	//setSelection(row);
+    	            }
+    	        });
+    	        row.setOnDragExited(new EventHandler<DragEvent>() {
+    	        	@Override
+    	            public void handle(DragEvent t) {
+    	                if (row.getIndex()<rootIndex)
+    	                {
+    	                	clearDownwards();
+    	                }
+    	                else
+    	                {
+    	                	clearUpwards();
+
+    	                }
+
+    	        	}
+    	        });
+    	        row.setOnDragDetected(new EventHandler<MouseEvent>() {
+    	            @Override
+    	            public void handle(MouseEvent t)
+    				{
+    	                rootIndex = row.getIndex();
+    	                minIndex = rootIndex;
+    	                minSelectedIndex = rootIndex;
+    	                maxIndex = rootIndex;
+    	                maxSelectedIndex = rootIndex;
+    	            	Dragboard db = row.getTableView().startDragAndDrop(TransferMode.COPY);
+    	                ClipboardContent content = new ClipboardContent();
+						content.put(dataFormat, "XData");
+    	                db.setContent(content);
+    	                setSelection(row);
+    	                t.consume();
+    	            }
+    	        });
+    	        row.setOnMouseReleased(new EventHandler<MouseEvent>() {
+    	        	@Override
+     	            public void handle(MouseEvent t)
+     				{
+	    	        	rootIndex=0;
+	    	    	    minIndex=0;
+	    	    	    maxIndex=0;
+	    	    	    minSelectedIndex=0;
+	    	    	    maxSelectedIndex=0;
+     				}
+    	        });
+    	        return row;
+    	    }
+    	});
+
+
+
+
+
+
 
         PriceColumn.setCellFactory(col -> new PriceTableCell<>());
 
         inventoryView.setEditable(true);
+
+        setupScrolling();
+
 
 
         Button ShowCompartments = new Button();
@@ -223,10 +399,14 @@ public class IMSGUIView
 
         // --- Menu File
         Menu menuFile = new Menu("File");
+        MenuItem newMenu = new MenuItem("new								   Ctrl-N");
+        MenuItem openMenu = new MenuItem("open								   Ctrl-O");
         MenuItem aye = new MenuItem("aye                                   Ctrl-P");
         MenuItem bae = new MenuItem("bae");
 
         aye.setOnAction(e->AddPart.display());
+        newMenu.setOnAction(e->newFile());
+        openMenu.setOnAction(e->openFile());
 
         FadeTransition ft = new FadeTransition(Duration.millis(3000), menuFile.getGraphic());
 
@@ -237,7 +417,7 @@ public class IMSGUIView
 
 
 
-        menuFile.getItems().addAll(aye, bae);
+        menuFile.getItems().addAll(newMenu, openMenu, aye, bae);
 
 
 
@@ -266,15 +446,102 @@ public class IMSGUIView
         root.getChildren().add(menuBar);
         root.getChildren().add(btn);
 
-        scene = new Scene(mainScene, 1024, 768);
+        scene = new Scene(mainScene, 1800, 1100);
 
 
+        scene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        	@Override
+	            public void handle(MouseEvent t)
+				{
+	        	rootIndex=0;
+	    	    minIndex=0;
+	    	    maxIndex=0;
+	    	    minSelectedIndex=0;
+	    	    maxSelectedIndex=0;
+				}
+        });
 
 
         //root.addAll(menuBar);
 
         //currentInventory.identifyEmptyUndividedDrawers();
 
+	}
+
+	private void selectDownwards()
+	{
+    	if (maxSelectedIndex > maxIndex)
+    	{
+    		maxIndex = maxSelectedIndex;
+    	}
+    	for(int i = rootIndex; i<=maxSelectedIndex; i++)
+    	{
+    		inventoryView.getSelectionModel().select(i);
+    	}
+	}
+
+	private void selectUpwards()
+	{
+    	if (minSelectedIndex < minIndex)
+    	{
+    		minIndex = minSelectedIndex;
+    	}
+    	for (int i = minSelectedIndex; i<=rootIndex; i++)
+    	{
+    		inventoryView.getSelectionModel().select(i);
+    	}
+	}
+
+	private void clearDownwards()
+	{
+    	for (int i = minIndex; i<=minSelectedIndex; i++)
+    	{
+    		inventoryView.getSelectionModel().clearSelection(i);
+    	}
+	}
+
+	private void clearUpwards()
+	{
+    	for(int i = maxSelectedIndex; i<=maxIndex; i++)
+    	{
+    		inventoryView.getSelectionModel().clearSelection(i);
+    	}
+	}
+
+	private void setSelection(IndexedCell cell)
+	{
+	    if (cell.isSelected())
+	    {
+	        System.out.println("False enter");
+	        inventoryView.getSelectionModel().clearSelection(cell.getIndex());
+	    }
+	    else
+	    {
+	        System.out.println("Select");
+	        inventoryView.getSelectionModel().select(cell.getIndex());
+	    }
+	}
+
+	public void newFile()
+	{
+
+	}
+
+	public void openFile()
+	{
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		fileChooser.setInitialDirectory(new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX"));
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("BSX", "*.bsx"));
+		File file = fileChooser.showOpenDialog(window);
+		if (file != null) {
+            openFile(file);
+        }
+	}
+
+	public void openFile(File file)
+	{
+        importBSX(file);
 	}
 
 	private void invertDisplay()

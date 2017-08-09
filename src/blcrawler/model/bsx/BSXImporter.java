@@ -295,7 +295,14 @@ public class BSXImporter
 				lot.setItemType(currentElement.getChildText("ItemType"));
 				lot.setRemarks(currentElement.getChildText("Remarks"));
 				lot.deriveAllRemarks(currentElement.getChildText("Remarks"));
-				lot.setLotID(Integer.parseInt(currentElement.getChildText("LotID")));
+				try
+				{
+					lot.setLotID(Integer.parseInt(currentElement.getChildText("LotID")));
+				}
+				catch (Exception e)
+				{
+					lot.setLotID(0);
+				}
 				//lot.generateImageLocation();
 
 

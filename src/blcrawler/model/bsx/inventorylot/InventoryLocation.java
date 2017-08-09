@@ -95,7 +95,16 @@ public class InventoryLocation extends InventoryEntry
 
 
 		Remarks = Remarks.replaceAll("\\s+","~");
-		deriveTrimmedRemarks();
+		try
+		{
+			deriveTrimmedRemarks();
+		}
+		catch (Exception e)
+		{
+			Cabinet = 0;
+			Drawer = 0;
+			SectionID = 1;
+		}
 		generateImageLocation();
 		//System.out.println(trimmedRemarks);
 
@@ -120,7 +129,16 @@ public class InventoryLocation extends InventoryEntry
 		Comments = lot.getComments();
 
 		Remarks = remarks;
-		deriveAllRemarks(Remarks);
+		try
+		{
+			deriveAllRemarks(Remarks);
+		}
+		catch (Exception e)
+		{
+			Cabinet = 0;
+			Drawer = 0;
+			SectionID = 1;
+		}
 		//Cabinet = lot.getCabinet();
 		//Drawer = lot.getDrawer();
 		//SectionID = lot.getSectionID();
@@ -141,17 +159,25 @@ public class InventoryLocation extends InventoryEntry
 
 	public void deriveAllRemarks(String s)
 	{
-		Remarks = s;
-		Cabinet = Short.parseShort(s.substring(0, 3));
-		//System.out.println("Cabinet of " + s + " is " + Cabinet);
-		Drawer = Short.parseShort(s.substring(4, 6));
-		//System.out.println("Drawer of " + s + " is " + Drawer);
-		if (s.length()>=7)
+		try
 		{
-			if (s.charAt(6)=='-')
+			Remarks = s;
+			Cabinet = Short.parseShort(s.substring(0, 3));
+			//System.out.println("Cabinet of " + s + " is " + Cabinet);
+			Drawer = Short.parseShort(s.substring(4, 6));
+			//System.out.println("Drawer of " + s + " is " + Drawer);
+			if (s.length()>=7)
 			{
-				SectionID = Short.parseShort(s.substring(7,9));
-				//System.out.println("Section of " + s + " is " + SectionID);
+				if (s.charAt(6)=='-')
+				{
+					SectionID = Short.parseShort(s.substring(7,9));
+					//System.out.println("Section of " + s + " is " + SectionID);
+				}
+				else
+				{
+					SectionID = 1;
+					//System.out.println("Drawer " + s + " is undivided");
+				}
 			}
 			else
 			{
@@ -159,10 +185,11 @@ public class InventoryLocation extends InventoryEntry
 				//System.out.println("Drawer " + s + " is undivided");
 			}
 		}
-		else
+		catch (NumberFormatException e)
 		{
+			Cabinet = 0;
+			Drawer = 0;
 			SectionID = 1;
-			//System.out.println("Drawer " + s + " is undivided");
 		}
 	}
 

@@ -53,17 +53,25 @@ public class InventoryLot extends InventoryEntry
 
 	public void deriveAllRemarks(String s)
 	{
-		Remarks = s;
-		Cabinet = Short.parseShort(s.substring(0, 3));
-		//System.out.println("InventoryLot: Cabinet of " + s + " is " + Cabinet);
-		Drawer = Short.parseShort(s.substring(4, 6));
-		//System.out.println("InventoryLot: Drawer of " + s + " is " + Drawer);
-		if (s.length()>=7)
+		try
 		{
-			if (s.charAt(6)=='-')
+			Remarks = s;
+			Cabinet = Short.parseShort(s.substring(0, 3));
+			//System.out.println("InventoryLot: Cabinet of " + s + " is " + Cabinet);
+			Drawer = Short.parseShort(s.substring(4, 6));
+			//System.out.println("InventoryLot: Drawer of " + s + " is " + Drawer);
+			if (s.length()>=7)
 			{
-				SectionID = Short.parseShort(s.substring(7,9));
-				//System.out.println("InventoryLot: Section of " + s + " is " + SectionID);
+				if (s.charAt(6)=='-')
+				{
+					SectionID = Short.parseShort(s.substring(7,9));
+					//System.out.println("InventoryLot: Section of " + s + " is " + SectionID);
+				}
+				else
+				{
+					SectionID = 1;
+					//System.out.println("InventoryLot: Drawer " + s + " is undivided");
+				}
 			}
 			else
 			{
@@ -71,10 +79,11 @@ public class InventoryLot extends InventoryEntry
 				//System.out.println("InventoryLot: Drawer " + s + " is undivided");
 			}
 		}
-		else
+		catch (NumberFormatException e)
 		{
+			Cabinet = 0;
+			Drawer = 0;
 			SectionID = 1;
-			//System.out.println("InventoryLot: Drawer " + s + " is undivided");
 		}
 
 

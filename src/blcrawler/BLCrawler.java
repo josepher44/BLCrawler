@@ -43,6 +43,7 @@ public class BLCrawler extends Application {
         primaryStage.setScene(imsgui.getScene());
         ConsoleGUIModel.getImsgui().setWindow(primaryStage);
         primaryStage.show();
+        primaryStage.setMaximized(true);
 
         //partDatabase = new PartDatabase();
 

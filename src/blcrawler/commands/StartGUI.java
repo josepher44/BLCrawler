@@ -36,7 +36,7 @@ public class StartGUI implements Command {
 
 	@Override
 	public void execute() {
-		ConsoleGUIModel.getImsgui().importBSX();
+		//ConsoleGUIModel.getImsgui().importBSX();
 
 
 
