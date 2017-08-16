@@ -43,6 +43,10 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.Scene;
@@ -59,6 +63,8 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+import blcrawler.commands.imsgui.AddPartIMSGUI;
+import blcrawler.commands.imsgui.Delete;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.bsx.BSXImporter;
@@ -72,7 +78,7 @@ public class IMSGUIView
 	Scene scene;
 	Stage window;
 	TableView<InventoryLocation> inventoryView;
-	ObservableList<InventoryLocation> lots;
+	ObservableList<InventoryLocation> lots = FXCollections.observableArrayList();
 	BSXImporter importer;
 	public static DataFormat dataFormat = new DataFormat("mydata");
     private Timeline scrolltimeline = new Timeline();
@@ -127,7 +133,7 @@ public class IMSGUIView
                 	selectDownwards();
                 }
             }
-            else
+            else if (sb.getValue()>newValue)
             {
                 if (minSelectedIndex<rootIndex)
                 {
@@ -287,9 +293,21 @@ public class IMSGUIView
         inventoryView.getColumns().add(MultiColumn);
         inventoryView.getColumns().add(RawRemarksColumn);
 
+        inventoryView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        	@Override
+        	  public void handle( KeyEvent  keyEvent )
+        	  {
+		          if ( keyEvent.getCode() == KeyCode.DELETE &&keyEvent.getEventType() == KeyEvent.KEY_PRESSED)
+		          {
+		        	  IMSGUIHistory.addCommand(new Delete(inventoryView.getSelectionModel().getSelectedItems(),
+		        			  inventoryView.getSelectionModel().getSelectedIndices()));
+		          }
+        	  }
+        });
+
         inventoryView.setRowFactory(new Callback<TableView<InventoryLocation>, TableRow<InventoryLocation>>()
         {
-
+        	Boolean mouseIn = false;
 
         	@Override
     	    public TableRow<InventoryLocation> call(TableView<InventoryLocation> p) {
@@ -314,14 +332,32 @@ public class IMSGUIView
     	            	//setSelection(row);
     	            }
     	        });
+    	        row.setOnMouseEntered(new EventHandler<MouseEvent>() {
+	    	        @Override
+	    	        public void handle(MouseEvent t) {
+	    	        	mouseIn=true;
+	    	        }
+    	        });
+    	        row.setOnMouseExited(new EventHandler<MouseEvent>() {
+	    	        @Override
+	    	        public void handle(MouseEvent t) {
+	    	        	mouseIn=false;
+	    	        }
+    	        });
+    	        row.setOnMouseDragExited(new EventHandler<MouseEvent>() {
+	    	        @Override
+	    	        public void handle(MouseEvent t) {
+	    	        	mouseIn=false;
+	    	        }
+    	        });
     	        row.setOnDragExited(new EventHandler<DragEvent>() {
     	        	@Override
     	            public void handle(DragEvent t) {
-    	                if (row.getIndex()<rootIndex)
+    	        		if (row.getIndex()<rootIndex &&!mouseIn)
     	                {
     	                	clearDownwards();
     	                }
-    	                else
+    	                else if (!mouseIn)
     	                {
     	                	clearUpwards();
 
@@ -346,17 +382,17 @@ public class IMSGUIView
     	                t.consume();
     	            }
     	        });
-    	        row.setOnMouseReleased(new EventHandler<MouseEvent>() {
-    	        	@Override
-     	            public void handle(MouseEvent t)
-     				{
-	    	        	rootIndex=0;
-	    	    	    minIndex=0;
-	    	    	    maxIndex=0;
-	    	    	    minSelectedIndex=0;
-	    	    	    maxSelectedIndex=0;
-     				}
-    	        });
+//    	        row.setOnMouseReleased(new EventHandler<MouseEvent>() {
+//    	        	@Override
+//     	            public void handle(MouseEvent t)
+//     				{
+//	    	        	rootIndex=0;
+//	    	    	    minIndex=0;
+//	    	    	    maxIndex=0;
+//	    	    	    minSelectedIndex=0;
+//	    	    	    maxSelectedIndex=0;
+//     				}
+//    	        });
     	        return row;
     	    }
     	});
@@ -399,9 +435,9 @@ public class IMSGUIView
 
         // --- Menu File
         Menu menuFile = new Menu("File");
-        MenuItem newMenu = new MenuItem("new								   Ctrl-N");
-        MenuItem openMenu = new MenuItem("open								   Ctrl-O");
-        MenuItem aye = new MenuItem("aye                                   Ctrl-P");
+        MenuItem newMenu = new MenuItem("new");
+        MenuItem openMenu = new MenuItem("open");
+        MenuItem aye = new MenuItem("aye");
         MenuItem bae = new MenuItem("bae");
 
         aye.setOnAction(e->AddPart.display());
@@ -431,8 +467,17 @@ public class IMSGUIView
         Menu menuEdit = new Menu("Edit");
 
         MenuItem see = new MenuItem("see");
+        MenuItem undo = new MenuItem("Undo");
+        MenuItem redo = new MenuItem("Redo");
+        MenuItem cut = new MenuItem("Cut");
 
-        menuEdit.getItems().addAll(see);
+        undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
+        redo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
+
+        undo.setOnAction(e->undo());
+        redo.setOnAction(e->redo());
+
+        menuEdit.getItems().addAll(see, undo, redo, cut);
 
         // --- Menu View
         Menu menuView = new Menu("View");
@@ -466,6 +511,16 @@ public class IMSGUIView
 
         //currentInventory.identifyEmptyUndividedDrawers();
 
+	}
+
+	private void redo()
+	{
+		IMSGUIHistory.redo();
+	}
+
+	public void undo()
+	{
+		IMSGUIHistory.undo();
 	}
 
 	private void selectDownwards()
@@ -550,6 +605,24 @@ public class IMSGUIView
 
 	}
 
+	public void removeItems(ObservableList<InventoryLocation> items)
+	{
+		System.out.println("IMSGUI commanded to remove count "+items.size());
+		inventoryView.getItems().removeAll(items);
+		inventoryView.getSelectionModel().clearSelection();
+	}
+
+	public void addItems(ObservableList<InventoryLocation> items, ObservableList<Integer> ids)
+	{
+		int i = 0;
+		System.out.println("Items to add back: "+items.size());
+		for (InventoryLocation entry : items)
+		{
+			inventoryView.getItems().add(ids.get(i), entry);
+			i++;
+		}
+	}
+
 	public static Inventory getCurrentInventory()
 	{
 		return currentInventory;
@@ -563,14 +636,22 @@ public class IMSGUIView
 	public int getHighestIndex()
 	{
 		int index = 0;
-		for (InventoryLocation item : lots)
+		if (lots.size()>0)
 		{
-			if(item.getIndex()>index)
+			for (InventoryLocation item : lots)
 			{
-				index = item.getIndex();
+				if(item.getIndex()>index)
+				{
+					index = item.getIndex();
+				}
 			}
+			return index;
 		}
-		return index;
+		else
+		{
+			return -1;
+		}
+
 	}
 
 	public void addPart()
@@ -620,6 +701,7 @@ public class IMSGUIView
 			try
 			{
 				locationString = AddPart.getLocationString();
+				System.out.println(locationString);
 				if(locationString.length()==9)
 				{
 					lot.setSectionID(Short.valueOf(locationString.substring(7, 9)));
@@ -663,12 +745,13 @@ public class IMSGUIView
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 		}
 
 		if(!error)
 		{
 			InventoryLocation location = new InventoryLocation(lot);
-			lots.add(location);
+			IMSGUIHistory.addCommand(new AddPartIMSGUI(location, inventoryView.getItems().size()));
 		}
 
 
@@ -681,6 +764,20 @@ public class IMSGUIView
         col.setCellValueFactory(cellData -> property.apply(cellData.getValue()));
         return col ;
     }
+
+	public void removeItem(InventoryLocation item)
+	{
+
+		inventoryView.getItems().remove(item);
+		inventoryView.getSelectionModel().clearSelection();// TODO Auto-generated method stub
+
+	}
+
+	public void addItem(InventoryLocation item, Integer location)
+	{
+		inventoryView.getItems().add(location, item);
+
+	}
 
 
 

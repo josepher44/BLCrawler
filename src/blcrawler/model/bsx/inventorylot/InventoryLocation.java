@@ -84,6 +84,7 @@ public class InventoryLocation extends InventoryEntry
 		Comments = lot.getComments();
 
 		Remarks = lot.getRemarks();
+		System.out.println("Remarks are "+Remarks);
 		deriveAllRemarks(Remarks);
 
 		lotID = lot.getLotID();
