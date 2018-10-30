@@ -26,6 +26,7 @@ public class PartDatabase
 	{
 		databasePath = System.getProperty("user.home")+"\\blcrawler-data\\data\\database.xml";
 		System.out.println(databasePath);
+		System.out.println("Created a database anyways. Screw the rules");
 		catalogParts = new ArrayList<>();
 		//ReadDatabase();
 	}

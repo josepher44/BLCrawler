@@ -1,36 +1,31 @@
 package blcrawler;
 
-import java.awt.*;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import java.awt.event.*;
 
-import javax.swing.*;
-
-import blcrawler.controller.GUIMainController;
 import blcrawler.model.ConsoleGUIModel;
-import blcrawler.model.database.PartDatabase;
 import blcrawler.view.imsgui.IMSGUIView;
 
+/**
+ * {@code BLCrawler} is the top level class of the BLCrawler application. 
+ * It should only be instantiated once. It extends a JavaFX application class, 
+ * and launches both the console interface and the IMSGUI system.
+ * 
+ * @author Joe Gallagher
+ *
+ */
 public class BLCrawler extends Application {
-
-	private static GUIMainController guiMainController;
-	private static ConsoleGUIModel guiModel;
-	private static JLabel emptyLabel;
-	private static PartDatabase partDatabase;
+	
+	//private static JLabel emptyLabel;
+	//private static PartDatabase partDatabase;
 	private static IMSGUIView imsgui;
 
 	public static void main(String[] args) {
 
-		guiModel = new ConsoleGUIModel("gui");
+		new ConsoleGUIModel("gui");
 		imsgui = new IMSGUIView();
-		guiModel.setImsgui(imsgui);
+		ConsoleGUIModel.setImsgui(imsgui);
 
 		launch(args);
 	}
