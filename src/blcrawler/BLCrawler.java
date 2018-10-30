@@ -1,6 +1,5 @@
 package blcrawler;
 
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 

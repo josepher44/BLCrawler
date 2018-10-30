@@ -1,5 +1,11 @@
 package blcrawler.api;
 
+
+/**
+ * Constant declarations for API elements. Direct from API documentation
+ * @author Joe Gallagher
+ *
+ */
 public class OAuthConstants {
 
 	public static final String	TIMESTAMP		= "oauth_timestamp";

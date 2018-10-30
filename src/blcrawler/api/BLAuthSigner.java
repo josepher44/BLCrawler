@@ -16,7 +16,11 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-
+/**
+ * Signature generation class for API requests. Derived from API documenation
+ * @author Joe Gallagher
+ *
+ */
 public class BLAuthSigner {
 	private static final String	CHARSET			= "UTF-8";
 	private static final String	HMAC_SHA1		= "HmacSHA1";
@@ -38,6 +42,12 @@ public class BLAuthSigner {
 
 	private Timer				timer;
 
+	/**
+	 * BLAuthSigner: Constructor for class which generates a hashmap of 
+	 * parameters used for authentication with the bricklink API
+	 * @param consumerKey hashed consumer key code used for request
+	 * @param consumerSecret hashed consumer secret code used for request
+	 */
 	public BLAuthSigner(String consumerKey, String consumerSecret) {
 		this.consumerKey = consumerKey;
 		this.consumerSecret = consumerSecret;
@@ -46,23 +56,56 @@ public class BLAuthSigner {
 		this.timer = new Timer();
 	}
 
+	/**
+	 * Sets the token value and secret used for authentication. Called 
+	 * external to this class. Token values are unique to static IP address, 
+	 * and generated/provided by the bricklink system
+	 * @param tokenValue the token value used for the request
+	 * @param tokenSecret the token secret used for the request
+	 */
 	public void setToken( String tokenValue, String tokenSecret ) {
 		this.tokenValue = tokenValue;
 		this.tokenSecret = tokenSecret;
 	}
 	
+	/**
+	 * Sets the base URL being accessed. URL is generated based on API doc 
+	 * and includes a representation of additional request parameters
+	 * @param url The url being used for the request with request parameters 
+	 * attached
+	 */
 	public void setURL( String url ) {
 		this.url = url;
 	}
 	
+	/**
+	 * Sets the action being taken, either GET, PUT, or POST
+	 * @param verb the verb of the current request
+	 */
 	public void setVerb( String verb ) {
 		this.verb = verb;
 	}
 
+	/**
+	 * Attaches a request parameter to the request. This does not update 
+	 * the URL, this must be done separately during the call to setURL in 
+	 * accordance with the API documentation
+	 * @param key The name of the parameter, given as "parameter name" in 
+	 * the API documentation
+	 * @param value The value being sent. Boolean values are represented as 
+	 * "Y" and "N"
+	 */
 	public void addParameter( String key, String value ) {
 		queryParameters.put( key, value );
 	}
 
+	/**
+	 * Produces a map of parameter names to parameter values, used to 
+	 * populate the final request URL
+	 * @return a map containing the signature, nonce, version, consumer key, 
+	 * sig method, token, and timestamp, labeled accordingly
+	 * @throws Exception if all values cannot be computed
+	 */
 	public Map<String, String> getFinalOAuthParams( ) throws Exception {
 		String signature = computeSignature();
 		
@@ -72,7 +115,13 @@ public class BLAuthSigner {
 
 		return params;
 	}
-
+	
+	/**
+	 * Computes the unique request signature from all request parameters 
+	 * Signature is a checksum, depends on all other values.
+	 * @return The signature based on all other auth parameters
+	 * @throws Exception if signature cannot be computed
+	 */
 	public String computeSignature( ) throws Exception {
 		addOAuthParameter( OAuthConstants.VERSION, version );
 		addOAuthParameter( OAuthConstants.TIMESTAMP, getTimestampInSeconds() );
@@ -86,22 +135,41 @@ public class BLAuthSigner {
 		String signature = doSign( baseString, keyString );
 		return signature;
 	}
-
+	
+	/**
+	 * Adds an authentication parameter to the class' hashtable
+	 * @param key the ID of the parameter being added
+	 * @param value the value of the parameter being added
+	 */
 	private void addOAuthParameter( String key, String value ) {
 		oauthParameters.put( key, value );
 	}
 
+	/**
+	 * Computes the timestamp of the current request
+	 * @return the timestamp, in seconds
+	 */
 	private String getTimestampInSeconds( ) {
 		Long ts = timer.getMilis();
 		return String.valueOf( TimeUnit.MILLISECONDS.toSeconds( ts ) );
 	}
-
+	
+	/**
+	 * Generates the nonce, a random string value computed for each request
+	 * @return the nonce string
+	 */
 	private String getNonce( ) {
 		Long ts = timer.getMilis();
 		return String.valueOf( ts + Math.abs( timer.getRandomInteger() ) );
 	}
 
-	public String getBaseString( ) throws Exception {
+	/**
+	 * Generates the base string used to generate the signature. 
+	 * Only for internal use
+	 * @return
+	 * @throws Exception
+	 */
+	private String getBaseString( ) throws Exception {
 		List<String> params = new ArrayList<>();
 
 		for( Entry<String, String> entry : oauthParameters.entrySet() ) {
@@ -153,6 +221,11 @@ public class BLAuthSigner {
 		}
 	}
 
+	/**
+	 * Encoder class which performs URL encoding where needed
+	 * @author Joe Gallagher
+	 *
+	 */
 	static class OAuthEncoder {
 		private static final Map<String, String>	ENCODING_RULES;
 
