@@ -17,31 +17,43 @@ import blcrawler.view.imsgui.IMSGUIView;
  */
 public class BLCrawler extends Application {
 	
-	//private static JLabel emptyLabel;
-	//private static PartDatabase partDatabase;
+	/*
+	 * Fields. Note that the console GUI is static and not named, declared
+	 * first line of main
+	 * >imsgui: gui for inventory management system. Subservient to console
+	 */
 	private static IMSGUIView imsgui;
 
+	/**
+	 * Main method, from which everything beings. Creates single instances of 
+	 * ConsoleGUIModel and IMSGUIView, and makes the imsguiview a child of
+	 * ConsoleGUIModel
+	 * @param args arguments passed at launch. Always null
+	 */
 	public static void main(String[] args) {
 
 		new ConsoleGUIModel("gui");
+		//TODO: Refactor such that this is pointed to IMSGUI model
 		imsgui = new IMSGUIView();
 		ConsoleGUIModel.setImsgui(imsgui);
 
 		launch(args);
 	}
-
+	
+	
+	/*
+	 * Override of Application's Start method, called at program launch. Sets 
+	 * the basic parameters of the IMSGUI stage, and ties the imsgui view to 
+	 * this stage.
+	 */
 	@Override
     public void start(Stage primaryStage) {
 		//imports extended inventory management system gui info from view class
-		//imsgui = new IMSGUIView();
         primaryStage.setTitle("BLCrawl Inventory Management System");
         primaryStage.setScene(imsgui.getScene());
         ConsoleGUIModel.getImsgui().setWindow(primaryStage);
         primaryStage.show();
         primaryStage.setMaximized(true);
-
-        //partDatabase = new PartDatabase();
-
 	}
 
 }
