@@ -261,7 +261,7 @@ public class SeleniumModel {
 
 			try
 			{
-				File file = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Images/notfound.txt");
+				File file = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Images/notfound.txt");
 
 				// if file doesnt exists, then create it
 				if (!file.exists()) {

@@ -22,8 +22,8 @@ public class AddAllPartCatalogs implements Command {
 	@Override
 	public void execute() {
 		
-		PartCatalogIndex index = new PartCatalogIndex("http://www.bricklink.com/catalogTree.asp?itemType=P");
-		new ConsoleOutput("CommandResult", "Page of type PartCatalogIndex at url=http://www.bricklink.com/catalogTree.asp?itemType=P successfully accessed and recorded");
+		PartCatalogIndex index = new PartCatalogIndex("http://www.bricklink.com/Catalog/Tree.asp?itemType=P");
+		new ConsoleOutput("CommandResult", "Page of type PartCatalogIndex at url=http://www.bricklink.com/Catalog/Tree.asp?itemType=P successfully accessed and recorded");
 		index.listPartCatalogMasterPages();
 		isFinished=true;
 		

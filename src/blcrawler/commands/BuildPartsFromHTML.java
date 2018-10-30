@@ -39,7 +39,7 @@ public class BuildPartsFromHTML implements Command {
 		Thread thread = new Thread() {
 			public void run() 
 			{
-				File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/");
+				File dir = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/HTML/");
 				partIDs = new ArrayList<>();
 				int i=0;
 				for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())

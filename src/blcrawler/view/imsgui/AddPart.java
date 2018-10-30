@@ -5,7 +5,7 @@ import java.util.IllegalFormatException;
 
 import org.apache.commons.lang3.StringUtils;
 
-import blcrawler.view.css.*;
+//import blcrawler.view.css.*;
 
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;

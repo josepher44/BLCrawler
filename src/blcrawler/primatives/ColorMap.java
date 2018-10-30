@@ -25,7 +25,7 @@ public class ColorMap
 		colorNames = new ArrayList<>();
 		colorIDs = new ArrayList<>();
 		
-		String path = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/ColorCodes.xml";
+		String path = "C:/Users/Owner/Documents/BLCrawler/ColorCodes.xml";
 		File colors = new File(path);
 		
 		SAXBuilder builder3 = new SAXBuilder();

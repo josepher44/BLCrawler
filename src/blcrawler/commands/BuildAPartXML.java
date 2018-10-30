@@ -41,7 +41,7 @@ public class BuildAPartXML implements Command {
 	
 	@Override
 	public void execute() {
-		File masterXML = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml");
+		File masterXML = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/part_database.xml");
 		
 		SAXBuilder builder3 = new SAXBuilder();
 		Document doc = null;

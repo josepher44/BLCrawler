@@ -547,7 +547,7 @@ public class InventoryLocation extends InventoryEntry
 
 	public void generateImageLocation()
 	{
-		imageLocation = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Images/"+ItemID+"_"+ColorName+".png";
+		imageLocation = "C:/Users/Owner/Documents/BLCrawler/Catalog/Images/"+ItemID+"_"+ColorName+".png";
 		File file = new File(imageLocation);
 		Image image = null;
 		try

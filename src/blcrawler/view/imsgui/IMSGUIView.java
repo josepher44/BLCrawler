@@ -439,10 +439,13 @@ public class IMSGUIView
         MenuItem openMenu = new MenuItem("open");
         MenuItem aye = new MenuItem("aye");
         MenuItem bae = new MenuItem("bae");
+        MenuItem moldAssessment = new MenuItem("molds");
 
         aye.setOnAction(e->AddPart.display());
         newMenu.setOnAction(e->newFile());
         openMenu.setOnAction(e->openFile());
+        moldAssessment.setOnAction(e->AssessMolds.display());
+        
 
         FadeTransition ft = new FadeTransition(Duration.millis(3000), menuFile.getGraphic());
 
@@ -453,7 +456,7 @@ public class IMSGUIView
 
 
 
-        menuFile.getItems().addAll(newMenu, openMenu, aye, bae);
+        menuFile.getItems().addAll(newMenu, openMenu, aye, bae, moldAssessment);
 
 
 
@@ -586,7 +589,7 @@ public class IMSGUIView
 	{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
-		fileChooser.setInitialDirectory(new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX"));
+		fileChooser.setInitialDirectory(new File("C:/Users/Owner/Documents/BLCrawler"));
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("BSX", "*.bsx"));
 		File file = fileChooser.showOpenDialog(window);
 		if (file != null) {
@@ -654,12 +657,13 @@ public class IMSGUIView
 
 	}
 
+	//Method called upon 
 	public void addPart()
 	{
 		InventoryLot lot = new InventoryLot();
 
+		//Initialize default fields for part to be added
 		Boolean error = false;
-
 		CatalogPart part=null;
 		String colorString=null;
 		String locationString = "";
@@ -668,6 +672,7 @@ public class IMSGUIView
 		String quantity=null;
 		char condition='U';
 
+		//create catalogpart from 
 		part = AddPart.getPart();
 		colorString = AddPart.getColor();
 		comments = AddPart.getComments();

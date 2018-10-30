@@ -43,7 +43,7 @@ public class GetAllPartInventories implements Command {
 	
 	@Override
 	public void execute() {
-		basepath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts/";
+		basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/";
 		
 		Thread thread = new Thread() {
 			public void run() 

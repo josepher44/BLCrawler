@@ -36,7 +36,7 @@ public class PartInventoryEntry
 		{
 			flagForRemoval = true;
 			//System.out.println("Warning: Stacked parts with inventory, part number "+txtRep);
-			String basepath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts/";
+			String basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/";
 			inv_parent.addToInventory(new PartInventory(basepath+"part_"+txtRep+".txt"));
 		}
 		return txtRep;

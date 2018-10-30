@@ -110,7 +110,7 @@ public class PartCatalogIndex implements Page {
 		{
 
 			buffer = links.get(i).attr("abs:href");
-			if (buffer.startsWith("http://www.bricklink.com/catalogList.asp?catType=P")&&buffer.contains("catString"))
+			if (buffer.startsWith("http://www.bricklink.com/Catalog/List.asp?catType=P")&&buffer.contains("catString"))
 			{
 				linkList.add(buffer);
 			}

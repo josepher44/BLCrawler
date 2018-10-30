@@ -163,7 +163,7 @@ public class CatalogPart
 		}
 //		else
 //		{
-//			String path = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/part_"+partNumber+".html";
+//			String path = "C:/Users/Owner/Documents/BLCrawler/Catalog/HTML/part_"+partNumber+".html";
 //
 //			ConsoleGUIModel.getDatabase().removeFromMasterXML(this);
 //			try
@@ -182,7 +182,7 @@ public class CatalogPart
 //				e1.printStackTrace();
 //			}
 //
-//			if (txtRep.contains("www.bricklink.com/catalogItemInv.asp?P"))
+//			if (txtRep.contains("www.bricklink.com/Catalog/ItemInv.asp?P"))
 //			{
 //				hasInventory = true;
 //				System.out.println("Part "+partNumber+" has an inventory");
@@ -352,7 +352,7 @@ public class CatalogPart
 		else
 		{
 			partNumber = id;
-			htmlpath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/part_"+id+".html";
+			htmlpath = "C:/Users/Owner/Documents/BLCrawler/Catalog/HTML/part_"+id+".html";
 		}
 
 
@@ -410,7 +410,7 @@ public class CatalogPart
 		}
 		else
 		{
-			buildFromFile("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/part_database.xml");
+			buildFromFile("C:/Users/Owner/Documents/BLCrawler/Catalog/part_database.xml");
 		}
 
 	}
@@ -1715,13 +1715,13 @@ public class CatalogPart
 
 			while (!PriceGuideSubstring.equals(""))
 			{
-				if (PriceGuideSubstring.contains("http://www.bricklink.com/catalogPG"))
+				if (PriceGuideSubstring.contains("http://www.bricklink.com/Catalog/PG"))
 				{
 					String Color = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("colorID="),PriceGuideSubstring.indexOf("</span><br")+11);
 					PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("colorID=")+8);
-					if (PriceGuideSubstring.contains("http://www.bricklink.com/catalogPG"))
+					if (PriceGuideSubstring.contains("http://www.bricklink.com/Catalog/PG"))
 					{
-						PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("http://www.bricklink.com/catalogPG"));
+						PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("http://www.bricklink.com/Catalog/PG"));
 					}
 
 					String Count = Color;
@@ -1761,13 +1761,13 @@ public class CatalogPart
 
 			while (!KnownSubstring.equals(""))
 			{
-				if (KnownSubstring.contains("http://www.bricklink.com/catalogItemIn"))
+				if (KnownSubstring.contains("http://www.bricklink.com/Catalog/ItemIn"))
 				{
 					String Color = KnownSubstring.substring(KnownSubstring.indexOf("colorID="),KnownSubstring.indexOf("</span><br")+11);
 					KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("colorID=")+8);
-					if (KnownSubstring.contains("http://www.bricklink.com/catalogItemIn"))
+					if (KnownSubstring.contains("http://www.bricklink.com/Catalog/ItemIn"))
 					{
-						KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("http://www.bricklink.com/catalogItemIn"));
+						KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("http://www.bricklink.com/Catalog/ItemIn"));
 					}
 
 					String Count = Color;

@@ -229,7 +229,7 @@ public class PageManager {
 			{
 
 				buffer = links.get(k).attr("abs:href");
-				if (buffer.startsWith("http://www.bricklink.com/catalogItem.asp?P"))
+				if (buffer.startsWith("http://www.bricklink.com/Catalog/Item.asp?P"))
 				{
 					urls.add(buffer);
 				}
@@ -310,7 +310,7 @@ public class PageManager {
 					
 					for (int k=2; k<1+forEnd; k++)
 					{
-						String url = "http://www.bricklink.com/catalogList.asp?pg=" + k + "&"+txtRep.substring(46, txtRep.indexOf("[/URL]"));
+						String url = "http://www.bricklink.com/Catalog/List.asp?pg=" + k + "&"+txtRep.substring(46, txtRep.indexOf("[/URL]"));
 						urls.add(url);
 						new ConsoleOutput("PageManager", "From File " + fiveDigits(i+1)+ ", url " +url+ " recorded for parsing");
 					}

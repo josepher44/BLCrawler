@@ -147,7 +147,7 @@ public class ConsoleGUIModel {
 		masterClock = new MasterClock();
 		selenium = new SeleniumDistributor();
 		database = new DatabaseController();
-		//bsxImporter = new BSXImporter("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/Redraweringmaster.bsx");
+		//bsxImporter = new BSXImporter("C:/Users/Owner/Documents/BLCrawler/Redraweringmaster.bsx");
 		//Subselenium = new SeleniumModel("9152");
 		//apitest= new APIModel();
 

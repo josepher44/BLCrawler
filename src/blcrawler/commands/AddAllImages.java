@@ -43,7 +43,7 @@ public class AddAllImages implements Command {
 	
 	@Override
 	public void execute() {
-		basepath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Images/";
+		basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Images/";
 		
 		Thread thread = new Thread() {
 			public void run() 

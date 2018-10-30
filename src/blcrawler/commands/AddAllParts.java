@@ -38,7 +38,7 @@ public class AddAllParts implements Command {
 		Thread thread = new Thread() {
 			public void run() 
 			{
-				File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/");
+				File dir = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/");
 				partIDs = new ArrayList<>();
 				for(File file: dir.listFiles()) 
 				{

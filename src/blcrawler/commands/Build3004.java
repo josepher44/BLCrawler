@@ -41,7 +41,7 @@ public class Build3004 implements Command {
 		Thread thread = new Thread() {
 			public void run() 
 			{
-				String path = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/HTML/part_"+partNumber+".html";
+				String path = "C:/Users/Owner/Documents/BLCrawler/Catalog/HTML/part_"+partNumber+".html";
 				ConsoleGUIModel.getDatabase().addCatalogPart(new CatalogPart(path));
 
 				

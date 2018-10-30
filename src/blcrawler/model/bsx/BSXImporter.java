@@ -68,10 +68,10 @@ public class BSXImporter
 		file = new File(path);
 		readBSX();
 
-		this.csvpath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/XMLDrawerDivisions.xml";
+		this.csvpath = "C:/Users/Owner/Documents/BLCrawler/XMLDrawerDivisions.xml";
 		csvfile = new File(csvpath);
 
-		this.partsummarypath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/parts.xml";
+		this.partsummarypath = "C:/Users/Owner/Documents/BLCrawler/parts.xml";
 		partsummaryfile = new File(partsummarypath);
 
 
@@ -86,7 +86,7 @@ public class BSXImporter
 	{
 		System.out.println("Reading drawer layout and empty locations from csv");
 
-		this.csvpath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/XMLDrawerDivisions.xml";
+		this.csvpath = "C:/Users/Owner/Documents/BLCrawler/XMLDrawerDivisions.xml";
 		csvfile = new File(csvpath);
 
 		SAXBuilder builder2 = new SAXBuilder();
@@ -132,7 +132,7 @@ public class BSXImporter
 	{
 		System.out.println("Reading summary data for all parts in bricklink catalog");
 
-		this.partsummarypath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/OtherBSX/parts.xml";
+		this.partsummarypath = "C:/Users/Owner/Documents/BLCrawler/parts.xml";
 		partsummaryfile = new File(partsummarypath);
 
 		SAXBuilder builder3 = new SAXBuilder();
@@ -164,7 +164,7 @@ public class BSXImporter
 			Element node = (Element) list.get(i);
 			//System.out.println("Reading part "+(i+1)+" of "+list.size());
 
-			f = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/"
+			f = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/"
 					+"part_"+node.getChildText("ITEMID")+".xml");
 			if(f.exists())
 			{
@@ -191,7 +191,7 @@ public class BSXImporter
 
 					// display nice nice
 					xmlOutput.setFormat(Format.getPrettyFormat());
-					xmlOutput.output(subdoc, new FileWriter("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/"
+					xmlOutput.output(subdoc, new FileWriter("C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/"
 							+"part_"+node.getChildText("ITEMID")+".xml"));
 
 					System.out.println(node.getChildText("ITEMID")+" File Saved!");

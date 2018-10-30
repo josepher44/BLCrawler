@@ -35,7 +35,7 @@ public class TestHTTPRequest implements Command {
 	@Override
 	public void execute() {
 
-		ConsoleGUIModel.getSelenium().getImage(url, queueID, "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/test.png");
+		ConsoleGUIModel.getSelenium().getImage(url, queueID, "C:/Users/Owner/Documents/BLCrawler/Catalog/test.png");
 		//new ConsoleOutput("CommandResult", "Directed Selenium module to parse data for url "+url);
 		isFinished = true;
 		

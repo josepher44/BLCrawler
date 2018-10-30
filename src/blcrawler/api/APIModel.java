@@ -74,7 +74,7 @@ public class APIModel
 		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?color_id="+colorid;
 		signer.addParameter("color_id", Integer.toString(colorid));
 		signer.setURL( baseURL );
-		String writePath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts/part_"+partnumber+".txt";
+		String writePath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/part_"+partnumber+".txt";
 		callAPI(baseURL, writePath);
 	}
 	
@@ -85,7 +85,7 @@ public class APIModel
 		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?break_minifigs=Y";
 		signer.addParameter("break_minifigs", "Y");
 		signer.setURL( baseURL );
-		String writePath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Inventories/Parts/part_"+partnumber+".txt";
+		String writePath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/part_"+partnumber+".txt";
 		callAPI(baseURL, writePath);
 	}
 	

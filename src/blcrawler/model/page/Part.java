@@ -60,7 +60,7 @@ public class Part implements Page {
 		else if (input.startsWith("part_"))
 		{
 			ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new PullPartFromSite(input, this));
-			filepath = "C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/"+input;
+			filepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/"+input;
 			
 			
 			

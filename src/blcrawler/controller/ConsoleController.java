@@ -55,7 +55,7 @@ public class ConsoleController
 		commandLibrary.put("buildinventories", () -> {buildInventories();});
 		commandLibrary.put("startgui", () -> {startGUI();});
 
-		//Depreciated Methods, Avoid using or investigate function
+		//Depreciated Methods old system. Avoid using or investigate function
 		commandLibrary.put("timertest", () -> {createTimertest();});
 		commandLibrary.put("invalid", () -> {createInvalid();});
 		commandLibrary.put("addpage", () -> {createAddPage();});
@@ -224,7 +224,7 @@ public class ConsoleController
 	}
 	public void clearAllParts()
 	{
-		File dir = new File("C:/Users/Joseph/Downloads/bricksync-win64-169/bricksync-win64/data/blcrawl/Catalog/Parts/");
+		File dir = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/");
 		for(File file: dir.listFiles())
 		    if (!file.isDirectory())
 		        file.delete();
@@ -409,7 +409,7 @@ public class ConsoleController
 	private void updateTextAreaFromSystem(final String text) {
 		  SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	if (!text.contains("\n")&&text.length()>4)
+		    	if (!text.contains("\n")&&text.length()>0)
 		    	{
 			    	new ConsoleOutput("System", text);
 		    	}
