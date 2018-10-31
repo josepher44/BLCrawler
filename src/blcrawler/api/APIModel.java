@@ -6,9 +6,13 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-
 import blcrawler.model.ConsoleGUIModel;
+
+/**
+ * Test class for API actions. To be depreciated
+ * @author Joe Gallagher
+ *
+ */
 public class APIModel
 {
 	BLAuthSigner signer;
@@ -20,35 +24,35 @@ public class APIModel
 	String tokenSecretTwitter;
 	int queueID;
 	
+	/**
+	 * Provides dummy methods for accessing API
+	 * @param QueueID the command Queue the API call is performed within. 
+	 * Used for IP-based rate limiting purposes
+	 */
 	public APIModel(int QueueID) 
 	{
+		/*
+		 * All keys provided by bricklink
+		 * URL: https://www.bricklink.com/v2/api/register_consumer.page
+		 * Consumer key/secret are account based, Tokens are IP+account based
+		 */
 		consumerKey = "16AB07C5220C43768822A29EB745FDC1";
 		consumerSecret = "F0FE04252666486CB1D954006CA580A3";
 		tokenValue = "0FD7279A6760427681A6C37E2AC89768";
 		tokenSecret = "986EE49534414CE684D53A59E07FDEEA";
 		
+		//Um, what was this for again? When did twitter get involved? 
+		//Probably super depreciated
 		consumerSecretTwitter = "MCD8BKwGdgPHvAuvgvz4EQpqDAtx89grbuNMRd7Eh98";
 		tokenSecretTwitter = "J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA";
 		
 		this.queueID = QueueID;
-
-
-		
-//		try
-//		{
-//			System.out.println(getHTML(fullURL));
-//		}
-//		catch (Exception e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-
 	}
 	
-
-	
+	/**
+	 * Returns a price guide for a given price guide. UNTESTED
+	 * @param partnumber the part number to evaluate the price guide for
+	 */
 	public void getPriceGuide(String partnumber)
 	{
 		buildSigner();
@@ -58,15 +62,21 @@ public class APIModel
 //		signer.addParameter("no", partnumber);
 		signer.addParameter("color_id", "11");
 		signer.addParameter("guide_type", "sold");
+		String writePath = "C:/Users/Owner/Documents/BLCrawler/Catalog/PriceGuides/Parts/part_"+partnumber+".txt";
 		
 //		String baseURL = "https://api.bricklink.com/api/store/v1/orders?direction=in";
 //		signer.addParameter("direction", "in");
 
-		signer.setURL( baseURL );
+		signer.setURL( baseURL);
 		
-		//callAPI(baseURL);
+		callAPI(baseURL, writePath);
 	}
 	
+	/**
+	 * Returns the inventory of a multipart part with a color
+	 * @param partnumber the part number being assessed
+	 * @param colorid the color of the part being assessed
+	 */
 	public void getColoredItemInventory(String partnumber, int colorid)
 	{
 		buildSigner();
@@ -78,6 +88,10 @@ public class APIModel
 		callAPI(baseURL, writePath);
 	}
 	
+	/**
+	 * Returns the inventory of a multipart part
+	 * @param partnumber the part number being assessed
+	 */
 	public void getItemInventory(String partnumber)
 	{
 		buildSigner();
@@ -89,8 +103,12 @@ public class APIModel
 		callAPI(baseURL, writePath);
 	}
 	
+	/**
+	 * Consolidates the keys under a single signer object
+	 */
 	public void buildSigner()
 	{
+		//Seriously, what's up with the twitter stuff?
 		boolean twitter = false;
 		
 		
@@ -106,12 +124,15 @@ public class APIModel
 		}
 	}
 	
+	/**
+	 * Method containing generic call API functionality, which builds the 
+	 * correct authentication URL
+	 * @param baseURL URL to access as described in Bricklink API doc. NOT
+	 * the same as used in authSigner
+	 * @param path the path to write outputs to
+	 */
 	public void callAPI(String baseURL, String path)
 	{
-
-
-		
-		
 		Map<String, String> params = Collections.emptyMap();
 		
 		try {
@@ -165,11 +186,18 @@ public class APIModel
 			fullURL = fullURL.replace("%3A", ":");
 			fullURL = fullURL.replace("%7B", "{");
 			fullURL = fullURL.replace("%7D", "}");				
-				
+			
+			//This maybe gets replaced with the getHTML method below?
 			ConsoleGUIModel.getSelenium().getURLHTTP(fullURL, queueID, path);
 		}
 	}
 	
+	/**
+	 * Read HTML to a string, via direct HTTP connection. Seemingly unused
+	 * @param urlToRead URL to read
+	 * @return String containing the raw HTOM of the page
+	 * @throws Exception
+	 */
 	public static String getHTML(String urlToRead) throws Exception {
 	      StringBuilder result = new StringBuilder();
 	      URL url = new URL(urlToRead);
