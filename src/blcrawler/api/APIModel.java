@@ -9,7 +9,7 @@ import java.util.Map;
 import blcrawler.model.ConsoleGUIModel;
 
 /**
- * Test class for API actions. To be depreciated
+ * Test class for API actions. Class to be depreciated, functionality split
  * @author Joe Gallagher
  *
  */

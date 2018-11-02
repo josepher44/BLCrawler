@@ -73,9 +73,9 @@ public class SeleniumModel {
 		
 		try
 		{
-			System.setProperty("webdriver.gecko.driver", "C:/Users/Joseph/Desktop/Multicircuit Tors/Geckodriver/geckodriver.exe");
+			System.setProperty("webdriver.gecko.driver", "C:/Users/Owner/Desktop/Multicircuit Tors/Geckodriver/geckodriver.exe");
 
-		    String cmd = "C:/Users/Joseph/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ";
+		    String cmd = "C:/Users/Owner/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ";
 		    Runtime.getRuntime().exec(cmd);
 			//Runtime.getRuntime().exec("C:/Users/Joseph/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ");
 			
@@ -353,7 +353,7 @@ public class SeleniumModel {
 		}
 		ownFirefoxIDs.clear();
 		Thread.sleep(1000);
-		Runtime.getRuntime().exec("C:/Users/Joseph/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ");
+		Runtime.getRuntime().exec("C:/Users/Owner/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ");
 		
 		driver = new FirefoxDriver(myprofile);
 		driver.manage().window().setPosition(new Point(0+ThreadLocalRandom.current().nextInt(0,100),
