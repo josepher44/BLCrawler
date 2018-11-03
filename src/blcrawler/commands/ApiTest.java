@@ -22,14 +22,14 @@ import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
-public class APITest implements Command {
+public class ApiTest implements Command {
 
 	boolean isFinished;
 	String partID;
 	ArrayList<String> partIDs;
 	private int queueID;
 	String partNumber;
-	public APITest(String partnumber) {
+	public ApiTest(String partnumber) {
 		
 		isFinished = false;
 		partNumber = partnumber;

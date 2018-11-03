@@ -199,7 +199,7 @@ public class ConsoleController
 
 	public void testapi()
 	{
-		APITest test = new APITest(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
+		ApiTest test = new ApiTest(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		test.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(test);
 	}
