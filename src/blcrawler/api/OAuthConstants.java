@@ -6,8 +6,8 @@ package blcrawler.api;
  * @author Joe Gallagher
  *
  */
-public class OAuthConstants {
-
+public class OAuthConstants 
+{
 	public static final String	TIMESTAMP		= "oauth_timestamp";
 	public static final String	SIGN_METHOD		= "oauth_signature_method";
 	public static final String	SIGNATURE		= "oauth_signature";

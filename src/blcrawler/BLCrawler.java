@@ -14,7 +14,8 @@ import blcrawler.view.imsgui.IMSGUIView;
  * @author Joe Gallagher
  *
  */
-public class BLCrawler extends Application {
+public class BLCrawler extends Application 
+{
 	
 	/*
 	 * Fields. Note that the console GUI is static and not named, declared
@@ -29,7 +30,8 @@ public class BLCrawler extends Application {
 	 * ConsoleGUIModel
 	 * @param args arguments passed at launch. Always null
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 
 		new ConsoleGUIModel("gui");
 		//TODO: Refactor such that this is pointed to IMSGUI model
@@ -46,7 +48,8 @@ public class BLCrawler extends Application {
 	 * this stage.
 	 */
 	@Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) 
+	{
 		//imports extended inventory management system gui info from view class
         primaryStage.setTitle("BLCrawl Inventory Management System");
         primaryStage.setScene(imsgui.getScene());

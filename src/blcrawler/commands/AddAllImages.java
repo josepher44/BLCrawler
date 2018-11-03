@@ -1,54 +1,71 @@
 package blcrawler.commands;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Random;
-import java.util.Scanner;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-
-import blcrawler.commands.addpage.AddPart;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.primatives.ColorMap;
 
-public class AddAllImages implements Command {
+/**
+ * Top level command for image scraping from bricklink. Auto-generates commands for scraping
+ * images from all parts in the database
+ * TODO: Expand for sets, minifigs, etc.
+ * TODO: Allow path to be set from within executable
+ * @author Joe Gallagher
+ *
+ */
 
+public class AddAllImages implements Command 
+{
+
+	/*
+	 * Standard fields
+	 */
 	boolean isFinished;
-	String partID;
-	ArrayList<String> urls;
-	Hashtable<String, String> pathMap;
+	
+	/*
+	 * Particular fields
+	 */
+	private ArrayList<String> urls;		//List of image urls to create commands for
+	private Hashtable<String, String> pathMap; //Maps urls (key) to database paths
+	private String basepath;	//The master directory all files are saved in
+	private String path;		//Path for a specific part. Iterated repeatedly
+	
+	//probably depreciated fields
+	//String partID;
 	private int queueID;
-	private String path;
-	private String basepath;
-	public AddAllImages() {
-		
+	
+	/**
+	 * Constructor
+	 */
+	public AddAllImages() 
+	{
 		isFinished = false;
-
-
 	}
 	
 	@Override
-	public void execute() {
+	public void execute() 
+	{
+		//Define the directory used to save images
+		//TODO: Settable via application
 		basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Images/";
 		
-		Thread thread = new Thread() {
+		//TODO: Verify that this kind of action benefits from threading
+		Thread thread = new Thread() 
+		{
 			public void run() 
 			{
-				
+				/*
+				 * Initialize values. Colormap maps the 
+				 */
 				ColorMap colormap = ConsoleGUIModel.getDatabase().getColormap();
 				urls = new ArrayList<>();
 				pathMap = new Hashtable<>();
@@ -56,8 +73,10 @@ public class AddAllImages implements Command {
 				{
 					for(String color : part.getKnownColorsBLMenu())
 					{
-						path = basepath+part.getPartNumber()+"_"+color+".png";
-						urls.add("https://img.bricklink.com/ItemImage/PN/"+colormap.idFromName(color)+"/"+part.getPartNumber()+".png");
+						path = basepath+part.getPartNumber() + "_" + color + ".png";
+						urls.add(	"https://img.bricklink.com/ItemImage/PN/"+
+									colormap.idFromName(color)+"/"+part.getPartNumber()+".png"
+									);
 						pathMap.put("https://img.bricklink.com/ItemImage/PN/"+colormap.idFromName(color)+"/"+part.getPartNumber()+".png",
 								path);
 					
@@ -113,8 +132,8 @@ public class AddAllImages implements Command {
 	}
 
 	@Override
-	public boolean executeImmediately() {
-		// TODO Auto-generated method stub
+	public boolean executeImmediately() 
+	{
 		return true;
 	}
 
@@ -154,10 +173,12 @@ public class AddAllImages implements Command {
 		
 	}
 	
+	//Probably depreciated
+	
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
 		
 	}
-
+	 
 }
