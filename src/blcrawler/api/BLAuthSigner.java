@@ -21,7 +21,8 @@ import org.apache.commons.codec.binary.Base64;
  * @author Joe Gallagher
  *
  */
-public class BLAuthSigner {
+public class BLAuthSigner 
+{
 	private static final String	CHARSET			= "UTF-8";
 	private static final String	HMAC_SHA1		= "HmacSHA1";
 	private static final String	EMPTY_STRING	= "";
@@ -48,7 +49,8 @@ public class BLAuthSigner {
 	 * @param consumerKey hashed consumer key code used for request
 	 * @param consumerSecret hashed consumer secret code used for request
 	 */
-	public BLAuthSigner(String consumerKey, String consumerSecret) {
+	public BLAuthSigner(String consumerKey, String consumerSecret) 
+	{
 		this.consumerKey = consumerKey;
 		this.consumerSecret = consumerSecret;
 		this.oauthParameters = new HashMap<>();
@@ -63,7 +65,8 @@ public class BLAuthSigner {
 	 * @param tokenValue the token value used for the request
 	 * @param tokenSecret the token secret used for the request
 	 */
-	public void setToken( String tokenValue, String tokenSecret ) {
+	public void setToken( String tokenValue, String tokenSecret ) 
+	{
 		this.tokenValue = tokenValue;
 		this.tokenSecret = tokenSecret;
 	}
@@ -74,7 +77,8 @@ public class BLAuthSigner {
 	 * @param url The url being used for the request with request parameters 
 	 * attached
 	 */
-	public void setURL( String url ) {
+	public void setURL( String url ) 
+	{
 		this.url = url;
 	}
 	
@@ -82,7 +86,8 @@ public class BLAuthSigner {
 	 * Sets the action being taken, either GET, PUT, or POST
 	 * @param verb the verb of the current request
 	 */
-	public void setVerb( String verb ) {
+	public void setVerb( String verb ) 
+	{
 		this.verb = verb;
 	}
 
@@ -95,7 +100,8 @@ public class BLAuthSigner {
 	 * @param value The value being sent. Boolean values are represented as 
 	 * "Y" and "N"
 	 */
-	public void addParameter( String key, String value ) {
+	public void addParameter( String key, String value ) 
+	{
 		queryParameters.put( key, value );
 	}
 
@@ -106,7 +112,8 @@ public class BLAuthSigner {
 	 * sig method, token, and timestamp, labeled accordingly
 	 * @throws Exception if all values cannot be computed
 	 */
-	public Map<String, String> getFinalOAuthParams( ) throws Exception {
+	public Map<String, String> getFinalOAuthParams( ) throws Exception 
+	{
 		String signature = computeSignature();
 		
 		Map<String, String> params = new HashMap<>();
@@ -122,7 +129,8 @@ public class BLAuthSigner {
 	 * @return The signature based on all other auth parameters
 	 * @throws Exception if signature cannot be computed
 	 */
-	public String computeSignature( ) throws Exception {
+	public String computeSignature( ) throws Exception 
+	{
 		addOAuthParameter( OAuthConstants.VERSION, version );
 		addOAuthParameter( OAuthConstants.TIMESTAMP, getTimestampInSeconds() );
 		addOAuthParameter( OAuthConstants.NONCE, getNonce() );
@@ -141,7 +149,8 @@ public class BLAuthSigner {
 	 * @param key the ID of the parameter being added
 	 * @param value the value of the parameter being added
 	 */
-	private void addOAuthParameter( String key, String value ) {
+	private void addOAuthParameter( String key, String value ) 
+	{
 		oauthParameters.put( key, value );
 	}
 
@@ -149,7 +158,8 @@ public class BLAuthSigner {
 	 * Computes the timestamp of the current request
 	 * @return the timestamp, in seconds
 	 */
-	private String getTimestampInSeconds( ) {
+	private String getTimestampInSeconds( ) 
+	{
 		Long ts = timer.getMilis();
 		return String.valueOf( TimeUnit.MILLISECONDS.toSeconds( ts ) );
 	}
@@ -158,7 +168,8 @@ public class BLAuthSigner {
 	 * Generates the nonce, a random string value computed for each request
 	 * @return the nonce string
 	 */
-	private String getNonce( ) {
+	private String getNonce( ) 
+	{
 		Long ts = timer.getMilis();
 		return String.valueOf( ts + Math.abs( timer.getRandomInteger() ) );
 	}
@@ -169,15 +180,18 @@ public class BLAuthSigner {
 	 * @return
 	 * @throws Exception
 	 */
-	private String getBaseString( ) throws Exception {
+	private String getBaseString( ) throws Exception 
+	{
 		List<String> params = new ArrayList<>();
 
-		for( Entry<String, String> entry : oauthParameters.entrySet() ) {
+		for( Entry<String, String> entry : oauthParameters.entrySet() ) 
+		{
 			String param = OAuthEncoder.encode( entry.getKey() ).concat( "=" ).concat( entry.getValue() );
 			params.add( param );
 		}
 
-		for( Entry<String, String> entry : queryParameters.entrySet() ) {
+		for( Entry<String, String> entry : queryParameters.entrySet() ) 
+		{
 			String param = OAuthEncoder.encode( entry.getKey() ).concat( "=" ).concat( entry.getValue() );
 			params.add( param );
 		}
@@ -185,7 +199,8 @@ public class BLAuthSigner {
 		Collections.sort( params );
 
 		StringBuilder builder = new StringBuilder();
-		for( String param : params ) {
+		for( String param : params ) 
+		{
 			builder.append( '&' ).append( param );
 		}
 
@@ -205,7 +220,8 @@ public class BLAuthSigner {
 	 * @return The signed output
 	 * @throws Exception
 	 */
-	private String doSign( String toSign, String keyString ) throws Exception {
+	private String doSign( String toSign, String keyString ) throws Exception 
+	{
 		SecretKeySpec key = new SecretKeySpec( (keyString).getBytes( CHARSET ), HMAC_SHA1 );
 		Mac mac = Mac.getInstance( HMAC_SHA1 );
 		mac.init( key );
@@ -219,7 +235,8 @@ public class BLAuthSigner {
 	 * @return String representation of the data
 	 * @throws Exception
 	 */
-	private String bytesToBase64String( byte[] bytes ) throws Exception {
+	private String bytesToBase64String( byte[] bytes ) throws Exception 
+	{
 		return new String( Base64.encodeBase64( bytes ), "UTF-8" );
 	}
 
@@ -228,14 +245,17 @@ public class BLAuthSigner {
 	 * @author Joe Gallagher
 	 *
 	 */
-	static class Timer {
+	static class Timer 
+	{
 		private final Random	rand	= new Random();
 
-		Long getMilis( ) {
+		Long getMilis( ) 
+		{
 			return System.currentTimeMillis();
 		}
 
-		Integer getRandomInteger( ) {
+		Integer getRandomInteger( ) 
+		{
 			return rand.nextInt();
 		}
 	}
@@ -245,10 +265,12 @@ public class BLAuthSigner {
 	 * @author Joe Gallagher
 	 *
 	 */
-	static class OAuthEncoder {
+	static class OAuthEncoder 
+	{
 		private static final Map<String, String>	ENCODING_RULES;
 
-		static {
+		static 
+		{
 			Map<String, String> rules = new HashMap<String, String>();
 			rules.put( "*", "%2A" );
 			rules.put( "+", "%20" );
@@ -256,10 +278,12 @@ public class BLAuthSigner {
 			ENCODING_RULES = Collections.unmodifiableMap( rules );
 		}
 
-		public static String encode( String plain ) throws UnsupportedEncodingException {
+		public static String encode( String plain ) throws UnsupportedEncodingException 
+		{
 			String encoded = URLEncoder.encode( plain, CHARSET );
 
-			for( Map.Entry<String, String> rule : ENCODING_RULES.entrySet() ) {
+			for( Map.Entry<String, String> rule : ENCODING_RULES.entrySet() ) 
+			{
 				encoded = encoded.replaceAll( Pattern.quote( rule.getKey() ), rule.getValue() );
 			}
 			return encoded;

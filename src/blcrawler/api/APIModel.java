@@ -15,14 +15,17 @@ import blcrawler.model.ConsoleGUIModel;
  */
 public class APIModel
 {
-	BLAuthSigner signer;
-	String consumerKey;
+	/*
+	 * Declare fields
+	 */
+	BLAuthSigner signer;	//Signer, contains methods for auth generation
+	String consumerKey;		//All hashes from bricklink
 	String consumerSecret;
 	String tokenValue;
 	String tokenSecret;
-	String consumerSecretTwitter;
-	String tokenSecretTwitter;
-	int queueID;
+	String consumerSecretTwitter;	//Depreciated
+	String tokenSecretTwitter;		//Depreciated
+	int queueID;			//ID of selenium queue requests are run through
 	
 	/**
 	 * Provides dummy methods for accessing API
@@ -46,12 +49,23 @@ public class APIModel
 		consumerSecretTwitter = "MCD8BKwGdgPHvAuvgvz4EQpqDAtx89grbuNMRd7Eh98";
 		tokenSecretTwitter = "J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA";
 		
-		this.queueID = QueueID;
+		this.queueID = QueueID;	//QueueID set by constructor via command call
 	}
 	
+	/*
+	 * API call sequence pseudocode
+	 * buildSigner() -- instantiate signer under signer
+	 * set verb
+	 * generate the base url from documentation
+	 * add any parameters, also including them in the base url
+	 * set the write path
+	 * run callAPI on baseURL, writePath
+	 */
+	
 	/**
-	 * Returns a price guide for a given price guide. UNTESTED
+	 * Returns a price guide for a given price guide. Works, 
 	 * @param partnumber the part number to evaluate the price guide for
+	 * 
 	 */
 	public void getPriceGuide(String partnumber)
 	{
@@ -60,15 +74,12 @@ public class APIModel
 		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/price?color_id=11&guide_type=sold";
 //		signer.addParameter("type", "part");
 //		signer.addParameter("no", partnumber);
+		//TODO: change color and guide type to selectable parameters
 		signer.addParameter("color_id", "11");
 		signer.addParameter("guide_type", "sold");
+		//TODO: Add versioning, so that new data doesn't overwrite old
 		String writePath = "C:/Users/Owner/Documents/BLCrawler/Catalog/PriceGuides/Parts/part_"+partnumber+".txt";
-		
-//		String baseURL = "https://api.bricklink.com/api/store/v1/orders?direction=in";
-//		signer.addParameter("direction", "in");
-
-		signer.setURL( baseURL);
-		
+		signer.setURL(baseURL);	
 		callAPI(baseURL, writePath);
 	}
 	
@@ -84,6 +95,7 @@ public class APIModel
 		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?color_id="+colorid;
 		signer.addParameter("color_id", Integer.toString(colorid));
 		signer.setURL( baseURL );
+		//TODO: Add versioning, so that new data doesn't overwrite old
 		String writePath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/part_"+partnumber+".txt";
 		callAPI(baseURL, writePath);
 	}
@@ -99,6 +111,7 @@ public class APIModel
 		String baseURL = "https://api.bricklink.com/api/store/v1/items/part/"+partnumber+"/subsets?break_minifigs=Y";
 		signer.addParameter("break_minifigs", "Y");
 		signer.setURL( baseURL );
+		//TODO: add versioning, so that new data doesn't overwrite old
 		String writePath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/part_"+partnumber+".txt";
 		callAPI(baseURL, writePath);
 	}
@@ -135,12 +148,17 @@ public class APIModel
 	{
 		Map<String, String> params = Collections.emptyMap();
 		
-		try {
+		//read all authentication parameters to the params map
+		try 
+		{
 			params = signer.getFinalOAuthParams();
-		} catch( Exception e ) {
+		} 
+		catch( Exception e ) 
+		{
 			e.printStackTrace();
 		}
 		
+		//Take each element of params, write to named variable
 		String Signature = params.get("oauth_signature");
 		String Nonce = params.get("oauth_nonce");
 		String Version = params.get("oauth_version");
@@ -148,14 +166,8 @@ public class APIModel
 		String SigMethod = params.get("oauth_signature_method");
 		String Token = params.get("oauth_token");
 		String Timestamp = params.get("oauth_timestamp");
-//		System.out.println(Signature);
-//		System.out.println(Nonce);
-//		System.out.println("Version: "+Version);
-//		System.out.println(ConsumerKey);
-//		System.out.println(SigMethod);
-//		System.out.println(Token);
-//		System.out.println(Timestamp);
 		
+		//Filter out + characters, can cause confusion with URL formatting
 		if(Signature.contains("+"))
 		{
 			System.out.println("Suspected bad signature, "+Signature+", regen attempt");
@@ -163,7 +175,7 @@ public class APIModel
 		}
 		else
 		{
-			
+			//Assemble complete call URL from base plus auth parameters
 			String fullURL = baseURL+
 							"&Authorization=%7B%22oauth_signature%22%3A%22"+
 							Signature+
@@ -181,35 +193,40 @@ public class APIModel
 							Timestamp+
 							"%22%7D";
 			
+			//Replace HTML special char codes
 			fullURL = fullURL.replace("%22", "\"");
 			fullURL = fullURL.replace("%2C", ",");
 			fullURL = fullURL.replace("%3A", ":");
 			fullURL = fullURL.replace("%7B", "{");
 			fullURL = fullURL.replace("%7D", "}");				
 			
-			//This maybe gets replaced with the getHTML method below?
+			//Send the full URL to the selenium distributor, responds via
+			//console and file writes
 			ConsoleGUIModel.getSelenium().getURLHTTP(fullURL, queueID, path);
 		}
 	}
 	
 	/**
-	 * Read HTML to a string, via direct HTTP connection. Seemingly unused
+	 * Read HTML to a string, via direct HTTP connection. Test method only, 
+	 * use getURLHTTP() in the selenium distributor for Tor masking
 	 * @param urlToRead URL to read
 	 * @return String containing the raw HTOM of the page
 	 * @throws Exception
 	 */
-	public static String getHTML(String urlToRead) throws Exception {
-	      StringBuilder result = new StringBuilder();
-	      URL url = new URL(urlToRead);
-	      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	     
-	      conn.setRequestMethod("GET");
-	      BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-	      String line;
-	      while ((line = rd.readLine()) != null) {
-	         result.append(line);
-	      }
-	      rd.close();
-	      return result.toString();
-	   }
+	public static String getHTML(String urlToRead) throws Exception 
+	{
+	StringBuilder result = new StringBuilder();
+	URL url = new URL(urlToRead);
+	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	
+	conn.setRequestMethod("GET");
+	BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	String line;
+	while ((line = rd.readLine()) != null) 
+	{
+	   result.append(line);
+	}
+	rd.close();
+	return result.toString();
+	}
 }
