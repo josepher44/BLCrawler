@@ -250,8 +250,11 @@ public class DatabaseController
 				// TODO Auto-generated catch block
 				en.printStackTrace();
 			}
-		}
 
+		}
+		
+		//Might break everything, or might save gobs of memory
+		partsDoc = null;
 
 
 

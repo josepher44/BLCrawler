@@ -59,20 +59,34 @@ public class AddAllImages implements Command
 		basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Images/";
 		
 		//TODO: Verify that this kind of action benefits from threading
-		Thread thread = new Thread() 
+		//Define thread
+		Thread addImagesThread = new Thread() 
 		{
 			public void run() 
 			{
 				/*
-				 * Initialize values. Colormap maps the 
+				 * Initialize values. Colormap provides conversions between string and ID
 				 */
 				ColorMap colormap = ConsoleGUIModel.getDatabase().getColormap();
 				urls = new ArrayList<>();
 				pathMap = new Hashtable<>();
+				
+				/*
+				 * Run on every part in the master database
+				 */
 				for(CatalogPart part: ConsoleGUIModel.getDatabase().getCatalogParts()) 
 				{
+					
+					/*
+					 * Run on every known color the part comes in
+					 * TODO: Checking for cases where the menu does not represent all actual colors
+					 */
 					for(String color : part.getKnownColorsBLMenu())
 					{
+						/*
+						 * Generate the url to the image, and the path it should be saved. Puts
+						 * them into pathMap and urls
+						 */
 						path = basepath+part.getPartNumber() + "_" + color + ".png";
 						urls.add(	"https://img.bricklink.com/ItemImage/PN/"+
 									colormap.idFromName(color)+"/"+part.getPartNumber()+".png"
@@ -83,52 +97,61 @@ public class AddAllImages implements Command
 					}
 					
 				}
+				//Read out number of images to scrape
 				System.out.println("Added "+urls.size()+" images to queue");
 				
+				//Randomize the order of the urls
 				long seed = System.nanoTime();
 				Collections.shuffle(urls, new Random(seed));
+				
+				//Reads the list of parts which do not have images into memory
+				//TODO: WAY better memory management at this step, this is a heckin' massive string
+				//TODO: Figure out a way to periodically update this
 				String notfound = "";
 				try
 				{
 					notfound = new String(Files.readAllBytes(Paths.get(basepath+"notfound.txt")));
 				}
-				catch (IOException e)
+				catch (IOException e)	//Catch -- if notfound.txt isn't there
 				{
-					// TODO Auto-generated catch block
+					System.out.println("Exception thrown: notfound.txt is...um...not found. This "+
+									   "file should contain a list of all urls, seperated by"+
+									   "newlines, which do not have images on bricklink");
 					e.printStackTrace();
 				}
 
+				//For each URL, create a scrape command spread through open seleniums
 				for (String geturl : urls)
 				{
-	//				ConsoleGUIModel.getSelenium().addToInstant(new AddPart(partIDs.get(i)));
+					//Create file to write to
 					File filepath = new File(pathMap.get(geturl));
-					if (notfound.contains(geturl))
+					
+					//TODO: There is no way that this is the most efficient way to do this
+					//At the very least, should be by part number+color code, not full URL
+					if (notfound.contains(geturl))	//If the part has no image according to file
 					{
-						//System.out.println("Already scraped "+geturl+", image does not exist");
+						System.out.println("Already scraped "+geturl+", image does not exist");
 					}
-					else if (!filepath.exists())
+					else if (!filepath.exists())//If the part needs to be scraped
 					{
 						ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new AddImage(geturl, pathMap.get(geturl)));
 					}
-					else			
+					else						//If the part has already been successfully scraped	
 					{
-						//System.out.println("Already scraped "+geturl+", file added to folder");
+						System.out.println("Already scraped "+geturl+", file in to folder");
 					}
-					
-					//System.out.println("Part of ID #"+partIDs.get(i)+" added to instantQueue");
 				}
 				
+				//Conclude top level command call
 				new ConsoleOutput("CommandResult", "Generated get image commands for all parts in catalog");
 				isFinished = true;
 				
 			}
 		};
 		
-		thread.setDaemon(true);
-		thread.start();
-		
-
-		
+		//Launch thread
+		addImagesThread.setDaemon(true);
+		addImagesThread.start();		
 	}
 
 	@Override
@@ -138,43 +161,41 @@ public class AddAllImages implements Command
 	}
 
 	@Override
-	public boolean executeNext() {
+	public boolean executeNext() 
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public long getDelay() {
-		// TODO Auto-generated method stub
+	public long getDelay() 
+	{
 		return 0;
 	}
 
 	@Override
-	public int getTimeout() {
-		// TODO Auto-generated method stub
+	public int getTimeout() 
+	{
 		return 0;
 	}
 
 	@Override
-	public boolean isFinished() {
-		// TODO Auto-generated method stub
-		return true;
+	public boolean isFinished() 
+	{
+		return isFinished;
 	}
 
 	@Override
-	public void queue() {
-		// TODO Auto-generated method stub
-		
+	public void queue() 
+	{
 	}
 
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
-		
 	}
 	
-	//Probably depreciated
-	
+	//TODO: Explicitly assign queue id for instant queue commands
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
