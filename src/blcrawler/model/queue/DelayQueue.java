@@ -29,6 +29,7 @@ public class DelayQueue extends Queue
 	public DelayQueue(int ID) 
 	{
 		id = ID;
+
 		execute = false;
 		queue = new ArrayList<>();
 		//new ConsoleOutput("SeleniumDistro", "Created new Selenium Queue, ID# " + String.valueOf(id));
@@ -37,6 +38,8 @@ public class DelayQueue extends Queue
 		commandsExecuted = 0;
 		limit = ThreadLocalRandom.current().nextInt(4500, 4600);
 		clear = false;
+
+		System.out.println("Created a queue with ID "+ID);
 		
 
 		Thread thread = new Thread() {

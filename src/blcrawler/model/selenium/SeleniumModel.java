@@ -20,23 +20,26 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import org.apache.http.HttpHost;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+//import org.apache.http.HttpHost;
+//import org.apache.http.client.ClientProtocolException;
+//import org.apache.http.client.config.RequestConfig;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.impl.client.HttpClientBuilder;
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.util.EntityUtils;
 import org.apache.commons.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
+//import org.openqa.selenium.firefox.FirefoxDriver;
+//import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 
 
 import blcrawler.model.ConsoleOutput;
@@ -54,33 +57,36 @@ public class SeleniumModel {
 	private int controlport;
 	private SocketAddress socket;
 	private Proxy proxy;
+	FirefoxOptions firefoxOptions;
 	
 	FileWriter fw;
 	BufferedWriter bw;
 	
-	public SeleniumModel(String id) {
+	public SeleniumModel(String ID) {
 		//bufferedFirefoxIDs = new ArrayList<>();
 		ownFirefoxIDs = new ArrayList<>();
 		//otherFirefoxIDs = new ArrayList<>();
-		this.id = Integer.parseInt(id);
+		this.id = Integer.parseInt(ID);
 		//populateExistingProcesses();
-		controlport = Integer.parseInt(id)-100;
-		socksport = Integer.parseInt(id);
+		controlport = Integer.parseInt(ID)-100;
+		socksport = Integer.parseInt(ID);
 		
-		System.out.println("Profile name: "+id);
+		System.out.println("Profile name: "+ID);
 		
 		
 		
 		try
 		{
-			System.setProperty("webdriver.gecko.driver", "C:/Users/Owner/Desktop/Multicircuit Tors/Geckodriver/geckodriver.exe");
+
+			System.out.println("Started making selenium");
+			System.setProperty("webdriver.gecko.driver", "C:/Users/Owner/Desktop/Multicircuit Tors/Geckodriver/geckodriver-v0.23.0-win64/geckodriver.exe");
 
 		    String cmd = "C:/Users/Owner/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ";
 		    Runtime.getRuntime().exec(cmd);
 			//Runtime.getRuntime().exec("C:/Users/Joseph/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ");
 			
 			profile = new ProfilesIni();
-			myprofile = profile.getProfile(id);
+			myprofile = profile.getProfile(ID);
 
 			myprofile.setPreference( "places.history.enabled", false );
 			myprofile.setPreference( "privacy.clearOnShutdown.offlineApps", true );
@@ -96,13 +102,19 @@ public class SeleniumModel {
 			myprofile.setPreference( "network.proxy.type", 1 );
 			myprofile.setPreference( "network.proxy.socks_version", 5 );
 			myprofile.setPreference( "network.proxy.socks", "127.0.0.1" );
-			myprofile.setPreference( "network.proxy.socks_port", id );
+			myprofile.setPreference( "network.proxy.socks_port", ID );
 			myprofile.setPreference( "network.proxy.socks_remote_dns", true );
 			
 			//myprofile.setPreference( "permissions.default.image", 2 );
 			
+	        firefoxOptions = new FirefoxOptions();
+	        firefoxOptions.setProfile(myprofile);
 			
-			driver = new FirefoxDriver(myprofile);
+
+			System.out.println("StartedFFWindow");
+			driver = new FirefoxDriver(firefoxOptions);
+
+			System.out.println("MadeFFWindow");
 			driver.manage().window().setPosition(new Point(0+ThreadLocalRandom.current().nextInt(0,100),
 					ThreadLocalRandom.current().nextInt(0, 100)));
 			driver.manage().window().setSize(new Dimension(150+ThreadLocalRandom.current().nextInt(0, 300),
@@ -112,8 +124,8 @@ public class SeleniumModel {
 
 			//wait(5000);
 			//identifyOwnProcesses();
-			
 
+			System.out.println("Finished making selenium");
 			
 		}
 		catch (Exception e)
@@ -355,7 +367,7 @@ public class SeleniumModel {
 		Thread.sleep(1000);
 		Runtime.getRuntime().exec("C:/Users/Owner/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ");
 		
-		driver = new FirefoxDriver(myprofile);
+		driver = new FirefoxDriver(firefoxOptions);
 		driver.manage().window().setPosition(new Point(0+ThreadLocalRandom.current().nextInt(0,100),
 				ThreadLocalRandom.current().nextInt(0, 100)));
 		driver.manage().window().setSize(new Dimension(150+ThreadLocalRandom.current().nextInt(0, 300),

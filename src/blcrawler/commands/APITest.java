@@ -33,6 +33,8 @@ public class APITest implements Command {
 		
 		isFinished = false;
 		partNumber = partnumber;
+		//DIRTY TEST, SHOULD NOT BE HARD CODED
+		queueID = 9152;
 
 
 	}

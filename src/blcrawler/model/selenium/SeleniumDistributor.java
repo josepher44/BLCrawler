@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import blcrawler.commands.Command;
@@ -58,10 +59,10 @@ public class SeleniumDistributor
 		
 //		for (int i=0;i<10;i++)
 //		{
-//			currentModuleCreationProcess = 9153+i;
+//			currentModuleCreationProcess = 9152+i;
 //			System.out.println("Created Selenium number "+(i+1));
-//			delayQueueMap.put(9153+i, new DelayQueue(9153+i));
-//			delayQueueList.add(delayQueueMap.get(9153+i));
+//			delayQueueMap.put(9152+i, new DelayQueue(9152+i));
+//			delayQueueList.add(delayQueueMap.get(9152+i));
 //			updateProcessLinks();
 //		}
 	}
@@ -75,13 +76,19 @@ public class SeleniumDistributor
 		
 		Thread thread = new Thread() {
 			public void run() {
-				for (int i=0;i<count;i++)
+				
+				System.out.println("count is "+count);
+				for (int i=0; i<count ; i++)
 				{
-					currentModuleCreationProcess = 9153+i;
-					System.out.println("Created Selenium number "+(i+1));
+					System.out.println("Running creation loop, i is "+i);
+					currentModuleCreationProcess = 9152+i;
+					System.out.println("Created Selenium numberxor "+(i+1));
 					
-					delayQueueMap.put(9153+i, new DelayQueue(9153+i));
-					delayQueueList.add(delayQueueMap.get(9153+i));
+					delayQueueMap.put(9152+i, new DelayQueue(9152+i));
+					delayQueueList.add(delayQueueMap.get(9152+i));
+
+					System.out.println("ID to create is "+9152+i);
+					//delayQueueMap.
 					try
 					{
 						Thread.sleep(500);
@@ -111,6 +118,16 @@ public class SeleniumDistributor
 	
 	public void getURLHTTP(String url, int id, String path)
 	{
+		//Diagnostic
+		System.out.println("id: "+id);
+		Set<Integer> keys = delayQueueMap.keySet();
+        for(Integer key: keys){
+            System.out.println("valid key: "+key);
+        }
+        System.out.println("done printing keys");
+        System.out.println("url: "+url);
+        System.out.println("path: "+path);
+        
 		delayQueueMap.get(id).getSelenium().httpProxyHTML(url, path);
 	}
 	
@@ -144,6 +161,7 @@ public class SeleniumDistributor
 	{
 		int k=-1;
 		DelayQueue out = null;
+		System.out.println("Delay Queue size: "+delayQueueList.size());
 		for (int i=0; i<delayQueueList.size(); i++)
 		{
 			if (k<0||delayQueueList.get(i).getQueueSize()<k)

@@ -409,7 +409,7 @@ public class ConsoleController
 	private void updateTextAreaFromSystem(final String text) {
 		  SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		    	if (!text.contains("\n")&&text.length()>0)
+		    	if (!text.contains("\n")&&text.length()>1)
 		    	{
 			    	new ConsoleOutput("System", text);
 		    	}
