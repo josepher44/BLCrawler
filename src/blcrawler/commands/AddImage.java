@@ -12,6 +12,14 @@ import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.page.Part;
 
+/**
+ * Low level command for adding an image to the database for a specific part, called via URL.
+ * This command is typically called via AddAllImages instead of directly by the user
+ * TODO: Expand for sets, minifigs, etc.
+ * TODO: Create variant which takes a part number as an argument instead of a url, for manual use
+ * @author Joe Gallagher
+ *
+ */
 public class AddImage implements Command {
 
 	boolean isFinished;
@@ -59,6 +67,9 @@ public class AddImage implements Command {
 		return delay;
 	}
 
+	/*TODO: Implement timeout behavior. Should retry command a few times, then shift itself to a
+	 *different selenium queue and try a few more times, then give up, logging the error.
+	 */
 	@Override
 	public int getTimeout() {
 		// TODO Auto-generated method stub

@@ -28,8 +28,8 @@ public class AddAllParts implements Command
 	/*
 	 * Particular fields
 	 */
-	String partID;
-	ArrayList<String> partIDs;
+	String partID;					//The individual part being processed at the moment
+	ArrayList<String> partIDs;		//List of all part ids
 	
 	//Probably depreciated fields
 	int queueID;
@@ -43,15 +43,24 @@ public class AddAllParts implements Command
 	}
 	
 	@Override
-	public void execute() {
-		Thread thread = new Thread() {
+	public void execute() 
+	{
+		//Queue parts in a seperate thread
+		Thread addAllPartsThread = new Thread() 
+		{
 			public void run() 
 			{
+				//Set directory and initialize fields
+				//TODO: Settable via application
 				File dir = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/");
 				partIDs = new ArrayList<>();
+				
+				/*For each file in the directory, perform basic error checking -- failed scrapes 
+				 *can generate very small files. Add parts with no file or incomplete file, 
+				 *print statement and skip parts already scraped
+				 */
 				for(File file: dir.listFiles()) 
 				{
-					//Basic error checking -- failed scrapes can generate very small files
 					//TODO: Make this a more comprehensive check -- read the last characters maybe?
 					if (file.length()<50000)
 					{
@@ -62,69 +71,74 @@ public class AddAllParts implements Command
 					{
 						System.out.println("part_"+file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"))+"already scraped");
 					}
-					
-					
 				}
 				
+				//Randomize part order, so calls to site are random
 				long seed = System.nanoTime();
 				Collections.shuffle(partIDs, new Random(seed));
+				
+				/*
+				 * For each part, create an addPart command.
+				 * NOTE: AddPart does NOT directly contain the scrape command, and as a result, 
+				 * the instant queue is the correct place for this even though it feels wrong
+				 * TODO: Refactor this so that it's more straightforwards and intuitive
+				 */
 				for (int i=0; i<partIDs.size(); i++)
 				{
 					ConsoleGUIModel.getSelenium().addToInstant(new AddPart(partIDs.get(i)));
 					//System.out.println("Part of ID #"+partIDs.get(i)+" added to instantQueue");
 				}
 				
-				new ConsoleOutput("CommandResult", "Generated add part commands for all parts in catalog");
+				//Finish execution
 				isFinished = true;
+				done();
 				
 			}
 		};
 		
-		thread.setDaemon(true);
-		thread.start();
-		
-
-		
+		addAllPartsThread.setDaemon(true);
+		addAllPartsThread.start();
 	}
 
 	@Override
-	public boolean executeImmediately() {
-		// TODO Auto-generated method stub
+	public boolean executeImmediately() 
+	{
 		return true;
 	}
 
 	@Override
-	public boolean executeNext() {
-		// TODO Auto-generated method stub
+	public boolean executeNext() 
+	{
 		return false;
 	}
 
 	@Override
-	public long getDelay() {
-		// TODO Auto-generated method stub
+	public long getDelay() 
+	{
 		return 0;
 	}
 
 	@Override
-	public int getTimeout() {
-		// TODO Auto-generated method stub
+	public int getTimeout() 
+	{
 		return 0;
 	}
 
 	@Override
-	public boolean isFinished() {
-		// TODO Auto-generated method stub
-		return true;
+	public boolean isFinished() 
+	{
+		return isFinished;
 	}
 
 	@Override
-	public void queue() {
-		// TODO Auto-generated method stub
-		
+	public void queue() 
+	{
+		// TODO Auto-generated method stub	
 	}
 
 	@Override
-	public void forceQuit() {
+	public void forceQuit() 
+	{
 		// TODO Auto-generated method stub
 		
 	}
@@ -132,13 +146,12 @@ public class AddAllParts implements Command
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
-		
 	}
 
 	@Override
-	public void done() {
-		// TODO Auto-generated method stub
-		
+	public void done() 
+	{
+		new ConsoleOutput("CommandResult", "Generated add part commands for all parts in catalog");
 	}
 
 }
