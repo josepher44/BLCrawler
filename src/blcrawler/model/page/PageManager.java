@@ -24,6 +24,7 @@ import org.jsoup.select.Elements;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
+//TODO: Validate that this whole thing can be depreciated
 public class PageManager {
 	
 	public List<PartBrowse> partBrowsePages; 

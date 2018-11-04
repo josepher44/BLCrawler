@@ -1,4 +1,4 @@
-package blcrawler.commands;
+package blcrawler.commands.toplevelcalls;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Random;
 
+import blcrawler.commands.Command;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
@@ -23,7 +24,7 @@ import blcrawler.primatives.ColorMap;
  *
  */
 
-public class AddAllImages implements Command 
+public class AllImagesBLToDatabase implements Command 
 {
 
 	/*
@@ -46,7 +47,7 @@ public class AddAllImages implements Command
 	/**
 	 * Constructor
 	 */
-	public AddAllImages() 
+	public AllImagesBLToDatabase() 
 	{
 		isFinished = false;
 	}

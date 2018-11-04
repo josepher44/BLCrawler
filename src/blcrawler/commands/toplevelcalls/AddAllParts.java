@@ -1,18 +1,19 @@
-package blcrawler.commands;
+package blcrawler.commands.toplevelcalls;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import blcrawler.commands.Command;
 import blcrawler.commands.addpage.AddPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
 
 /**
- * Top level command for image scraping from bricklink. Auto-generates commands for scraping
- * images from all parts in the database
+ * Top level command for part scraping from bricklink. Auto-generates commands for scraping
+ * part html for all parts in database
  * TODO: Expand for sets, minifigs, etc.
  * TODO: Allow path to be set from within executable
  * @author Joe Gallagher
@@ -55,9 +56,10 @@ public class AddAllParts implements Command
 				File dir = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Parts/");
 				partIDs = new ArrayList<>();
 				
-				/*For each file in the directory, perform basic error checking -- failed scrapes 
-				 *can generate very small files. Add parts with no file or incomplete file, 
-				 *print statement and skip parts already scraped
+				/* For each file in the directory, perform completion check -- failed scrapes 
+				 * can generate very small files, and empty files are generated from the downloaded
+				 * bricklink catalog summary. Add parts with no file or incomplete file, 
+				 * print statement and skip parts already scraped
 				 */
 				for(File file: dir.listFiles()) 
 				{

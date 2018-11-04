@@ -24,7 +24,7 @@ import org.jsoup.select.Elements;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
-
+@Deprecated
 public class PartBrowseIndex implements Page {
 	
 

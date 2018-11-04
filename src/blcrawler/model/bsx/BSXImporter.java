@@ -32,7 +32,8 @@ import blcrawler.model.bsx.inventorylot.InventoryLot;
 import blcrawler.view.imsgui.IMSGUIView;
 
 
-
+//TODO: THIS FILE IS GROSS. Contains whole bunches of stuff which have nothing to do with BSX
+//importing. It was just a convenient place you knew would run on startup. Major refactor ASAP
 public class BSXImporter
 {
 	String path;
@@ -82,6 +83,7 @@ public class BSXImporter
 
 	}
 
+	//What were you thinking putting this in this file?
 	public void readDrawerDivisions()
 	{
 		System.out.println("Reading drawer layout and empty locations from csv");
@@ -128,6 +130,7 @@ public class BSXImporter
 		System.out.println("CSV import complete, beginning BSX import");
 	}
 
+	//Why on earth is this here?
 	public void readBLCatalogSummary()
 	{
 		System.out.println("Reading summary data for all parts in bricklink catalog");

@@ -8,7 +8,7 @@ import blcrawler.model.ConsoleOutput;
  * @author Joe Gallagher
  *
  */
-
+@Deprecated
 public class AddUrl implements Command 
 {
 	
