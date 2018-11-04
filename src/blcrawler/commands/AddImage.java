@@ -1,16 +1,8 @@
 package blcrawler.commands;
 
-import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import blcrawler.commands.addpage.AddPart;
 import blcrawler.model.ConsoleGUIModel;
-import blcrawler.model.ConsoleOutput;
-import blcrawler.model.page.Part;
 
 /**
  * Low level command for adding an image to the database for a specific part, called via URL.
@@ -37,6 +29,11 @@ public class AddImage implements Command {
 	String url;				//The url being accessed
 	private String path;	//The path the data will be saved to
 	
+	/**
+	 * Constructor
+	 * @param URL The URL the target image is located at
+	 * @param Path The path the data will be saved to
+	 */
 	public AddImage(String URL, String Path) 
 	{
 		//Initialize values

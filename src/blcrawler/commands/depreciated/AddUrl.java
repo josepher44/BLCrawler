@@ -1,4 +1,5 @@
 package blcrawler.commands.depreciated;
+
 import blcrawler.commands.Command;
 import blcrawler.model.ConsoleOutput;
 
@@ -8,10 +9,11 @@ import blcrawler.model.ConsoleOutput;
  *
  */
 
-public class AddUrl implements Command {
+public class AddUrl implements Command 
+{
 	
 	private String url;
-	private int queueID;
+	int queueID;
 	
 	public AddUrl(String url) 
 	{
@@ -59,9 +61,6 @@ public class AddUrl implements Command {
 	{
 		
 	}
-
-
-	
 	
 	@Override
 	public void forceQuit() {
@@ -72,8 +71,7 @@ public class AddUrl implements Command {
 	@Override
 	public void setQueueID(int id)
 	{
-		this.queueID=id;
-		
+		queueID=id;
 	}
 
 	@Override

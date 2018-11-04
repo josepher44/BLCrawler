@@ -1,105 +1,102 @@
 package blcrawler.commands;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Random;
-import java.util.Scanner;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-
 import blcrawler.api.APIModel;
-import blcrawler.commands.addpage.AddPart;
-import blcrawler.model.CatalogPart;
-import blcrawler.model.ConsoleGUIModel;
-import blcrawler.model.ConsoleOutput;
 
-public class ApiTest implements Command {
-
+/**
+ * Test class for API functionality. Currently, switching between calls is done by changing hard
+ * coded line in execute(). To be depreciated and replaced with a suite of specific commands
+ * @author Joe Gallagher
+ *
+ */
+public class ApiTest implements Command 
+{
+	/*
+	 * Standard fields
+	 */
 	boolean isFinished;
-	String partID;
-	ArrayList<String> partIDs;
-	private int queueID;
-	String partNumber;
-	public ApiTest(String partnumber) {
-		
+	int queueID;
+	
+	/*
+	 * Particular fields
+	 */
+	String partNumber;	//The part being queried
+	
+	/**
+	 * Constructor
+	 * @param partnumber the part number being queried, first command line argument
+	 */
+	public ApiTest(String partnumber) 
+	{	
 		isFinished = false;
-		partNumber = partnumber;
+		this.partNumber = partnumber;
 		//DIRTY TEST, SHOULD NOT BE HARD CODED
-		queueID = 9152;
-
-
+		this.queueID = 9152;
 	}
 	
 	@Override
-	public void execute() {
+	public void execute() 
+	{
+		//Create an APIModel class, and call specified function
+		//TODO: Migrate functionality of API model into the execute command, depreciate class
 		APIModel api = new APIModel(queueID);
 		api.getPriceGuide(partNumber); 
 		
-
-		
+		//Conclude command call
+		done();
+		isFinished = true;
 	}
 
 	@Override
-	public boolean executeImmediately() {
-		// TODO Auto-generated method stub
+	public boolean executeImmediately() 
+	{
 		return true;
 	}
 
 	@Override
-	public boolean executeNext() {
-		// TODO Auto-generated method stub
+	public boolean executeNext() 
+	{
 		return false;
 	}
 
 	@Override
-	public long getDelay() {
-		// TODO Auto-generated method stub
+	public long getDelay() 
+	{
+		return 0;
+	}
+
+	//TODO: This command should absolutely have a timeout working
+	@Override
+	public int getTimeout() 
+	{
 		return 0;
 	}
 
 	@Override
-	public int getTimeout() {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean isFinished() 
+	{
+		return isFinished;
 	}
 
 	@Override
-	public boolean isFinished() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public void queue() {
-		// TODO Auto-generated method stub
+	public void queue() 
+	{
 		
 	}
 
 	@Override
-	public void forceQuit() {
-		// TODO Auto-generated method stub
+	public void forceQuit() 
+	{
 		
 	}
-	
+	@Override
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
-		
 	}
 
 	@Override
-	public void done() {
-		// TODO Auto-generated method stub
+	public void done() 
+	{
 		
 	}
-
 }

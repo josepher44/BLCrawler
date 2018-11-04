@@ -40,7 +40,7 @@ public class ConsoleController
 		commandLibrary.put("createselenium", () -> {createSelenium();});
 		commandLibrary.put("fixhtml", () -> {fixHTMLs();});
 		commandLibrary.put("buildparts", () -> {buildParts();});
-		commandLibrary.put("buildapart", () -> {build3004();});
+		commandLibrary.put("buildapart", () -> {buildPartHTML();});
 		commandLibrary.put("writepartsxml", () -> {writeXMLParts();});
 		commandLibrary.put("buildapartxml", () -> {buildpartxml();});
 		commandLibrary.put("readxml", () -> {readXMLParts();});
@@ -184,9 +184,9 @@ public class ConsoleController
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}
 
-	public void build3004()
+	public void buildPartHTML()
 	{
-		Build3004 buildParts = new Build3004(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
+		BuildPartHTML buildParts = new BuildPartHTML(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}
