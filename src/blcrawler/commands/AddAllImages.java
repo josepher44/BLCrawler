@@ -41,7 +41,7 @@ public class AddAllImages implements Command
 	
 	//probably depreciated fields
 	//String partID;
-	private int queueID;
+	int queueID;
 	
 	/**
 	 * Constructor
@@ -120,6 +120,8 @@ public class AddAllImages implements Command
 					e.printStackTrace();
 				}
 
+				int i = 1;
+				int size = urls.size();
 				//For each URL, create a scrape command spread through open seleniums
 				for (String geturl : urls)
 				{
@@ -128,22 +130,28 @@ public class AddAllImages implements Command
 					
 					//TODO: There is no way that this is the most efficient way to do this
 					//At the very least, should be by part number+color code, not full URL
+					//Execution of this command is way slower than it should be, probable cause
 					if (notfound.contains(geturl))	//If the part has no image according to file
 					{
-						System.out.println("Already scraped "+geturl+", image does not exist");
+						System.out.println("(" + i + " of " + size + ") Already scraped "+geturl+","
+								+ " image does not exist");
 					}
 					else if (!filepath.exists())//If the part needs to be scraped
 					{
-						ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new AddImage(geturl, pathMap.get(geturl)));
+						System.out.println("(" + i + " of " + size + "Scraping " + geturl);
+						ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new AddImage(geturl,
+								pathMap.get(geturl)));
 					}
 					else						//If the part has already been successfully scraped	
 					{
-						System.out.println("Already scraped "+geturl+", file in to folder");
+						//System.out.println("(" + i + " of " + size + ") Already scraped "+geturl+","
+						//		+ " file in to folder");
 					}
+					i++;
 				}
 				
 				//Conclude top level command call
-				new ConsoleOutput("CommandResult", "Generated get image commands for all parts in catalog");
+				done();
 				isFinished = true;
 				
 			}
@@ -191,7 +199,7 @@ public class AddAllImages implements Command
 	}
 
 	@Override
-	public void stop() {
+	public void forceQuit() {
 		// TODO Auto-generated method stub
 	}
 	
@@ -199,7 +207,12 @@ public class AddAllImages implements Command
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
-		
 	}
-	 
+
+	@Override
+	public void done() 
+	{
+		new ConsoleOutput("CommandResult", "Generated get image commands for all parts in"
+			+ " catalog");
+	}
 }

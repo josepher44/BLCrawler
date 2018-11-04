@@ -1,36 +1,45 @@
 package blcrawler.commands;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Random;
-import java.util.Scanner;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 
 import blcrawler.commands.addpage.AddPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
-public class AddAllParts implements Command {
 
+/**
+ * Top level command for image scraping from bricklink. Auto-generates commands for scraping
+ * images from all parts in the database
+ * TODO: Expand for sets, minifigs, etc.
+ * TODO: Allow path to be set from within executable
+ * @author Joe Gallagher
+ *
+ */
+public class AddAllParts implements Command 
+{
+	/*
+	 * Standard fields
+	 */
 	boolean isFinished;
+	
+	/*
+	 * Particular fields
+	 */
 	String partID;
 	ArrayList<String> partIDs;
-	private int queueID;
-	public AddAllParts() {
-		
+	
+	//Probably depreciated fields
+	int queueID;
+	
+	/**
+	 * Constructor
+	 */
+	public AddAllParts() 
+	{
 		isFinished = false;
-
-
 	}
 	
 	@Override
@@ -42,7 +51,8 @@ public class AddAllParts implements Command {
 				partIDs = new ArrayList<>();
 				for(File file: dir.listFiles()) 
 				{
-
+					//Basic error checking -- failed scrapes can generate very small files
+					//TODO: Make this a more comprehensive check -- read the last characters maybe?
 					if (file.length()<50000)
 					{
 						partID = file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"));
@@ -114,7 +124,7 @@ public class AddAllParts implements Command {
 	}
 
 	@Override
-	public void stop() {
+	public void forceQuit() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -122,6 +132,12 @@ public class AddAllParts implements Command {
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
+		
+	}
+
+	@Override
+	public void done() {
+		// TODO Auto-generated method stub
 		
 	}
 

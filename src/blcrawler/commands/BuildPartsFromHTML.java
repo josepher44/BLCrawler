@@ -138,7 +138,7 @@ public class BuildPartsFromHTML implements Command {
 	}
 
 	@Override
-	public void stop() {
+	public void forceQuit() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -146,6 +146,12 @@ public class BuildPartsFromHTML implements Command {
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
+		
+	}
+
+	@Override
+	public void done() {
+		// TODO Auto-generated method stub
 		
 	}
 

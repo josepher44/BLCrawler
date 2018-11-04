@@ -82,7 +82,12 @@ public interface Command
 	 * Safely force-stop a command in the process of execution. Called when a command reaches its
 	 * timeout, can also be called directly
 	 */
-	void stop();
+	void forceQuit();
+	
+	/**
+	 * Actions to take upon safe completion of a command and all its sub-commands
+	 */
+	void done();
 	
 	/**
 	 * Affiliates the command with a specific Queue ID. Queue IDs are socks port numbers for

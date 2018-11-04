@@ -79,7 +79,7 @@ public class StartGUI implements Command {
 	}
 
 	@Override
-	public void stop() {
+	public void forceQuit() {
 		// TODO Auto-generated method stub
 
 	}
@@ -88,6 +88,12 @@ public class StartGUI implements Command {
 	{
 		this.queueID=id;
 
+	}
+
+	@Override
+	public void done() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
