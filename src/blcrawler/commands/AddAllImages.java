@@ -204,6 +204,7 @@ public class AddAllImages implements Command
 	}
 	
 	//TODO: Explicitly assign queue id for instant queue commands
+	@Override
 	public void setQueueID(int id)
 	{
 		this.queueID=id;

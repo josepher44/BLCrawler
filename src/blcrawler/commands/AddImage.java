@@ -22,48 +22,63 @@ import blcrawler.model.page.Part;
  */
 public class AddImage implements Command {
 
+
+	/*
+	 * Standard fields
+	 */
 	boolean isFinished;
-	String url;
-	private int queueID;
-	
 	private long delay;
 	private int timeout;
+	private int queueID;
 	
-	private String path;
-	public AddImage(String URL, String Path) {
-		
-		int randomNum = ThreadLocalRandom.current().nextInt(0, 8);
-		timeout = 15+randomNum;
-		delay = 0+randomNum;
+	/*
+	 * Particular fields
+	 */
+	String url;				//The url being accessed
+	private String path;	//The path the data will be saved to
+	
+	public AddImage(String URL, String Path) 
+	{
+		//Initialize values
 		isFinished = false;
 		this.url = URL;
 		this.path = Path;
+		
+		//Initialize delay and timeout, with random added offset. Timeout occurs 3 seconds later
+		//TODO: See timeout note below
+		int randomNum = ThreadLocalRandom.current().nextInt(0, 8);
+		timeout = 15+randomNum;
+		delay = 0+randomNum;
 	}
 	
 	@Override
-	public void execute() {
-		
+	public void execute() 
+	{
+		//Send data to the selenium distributor for scraping
 		ConsoleGUIModel.getSelenium().getImage(url, queueID, path);
 		//new ConsoleOutput("CommandResult", "Directed Selenium module to parse data for url "+url);
+		
+		//Finish execution
 		isFinished = true;
+		done();
 		
 	}
 
 	@Override
-	public boolean executeImmediately() {
-		// TODO Auto-generated method stub
+	public boolean executeImmediately() 
+	{
 		return true;
 	}
 
 	@Override
-	public boolean executeNext() {
-		// TODO Auto-generated method stub
+	public boolean executeNext() 
+	{
 		return false;
 	}
 
 	@Override
-	public long getDelay() {
-		// TODO Auto-generated method stub
+	public long getDelay() 
+	{
 		return delay;
 	}
 
@@ -71,39 +86,36 @@ public class AddImage implements Command {
 	 *different selenium queue and try a few more times, then give up, logging the error.
 	 */
 	@Override
-	public int getTimeout() {
+	public int getTimeout() 
+	{
 		// TODO Auto-generated method stub
 		return timeout;
 	}
 
 	@Override
-	public boolean isFinished() {
-		// TODO Auto-generated method stub
+	public boolean isFinished() 
+	{
 		return isFinished;
 	}
 
 	@Override
-	public void queue() {
-		// TODO Auto-generated method stub
-		
+	public void queue() 
+	{
 	}
 
 	@Override
-	public void forceQuit() {
-		// TODO Auto-generated method stub
-		
+	public void forceQuit() 
+	{
 	}
 	
+	@Override
 	public void setQueueID(int id)
 	{
 		this.queueID=id;
-		
 	}
 
 	@Override
-	public void done() {
-		// TODO Auto-generated method stub
-		
+	public void done() 
+	{
 	}
-
 }

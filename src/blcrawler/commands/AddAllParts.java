@@ -69,7 +69,7 @@ public class AddAllParts implements Command
 					}
 					else
 					{
-						System.out.println("part_"+file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"))+"already scraped");
+						System.out.println(file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"))+"already scraped");
 					}
 				}
 				
@@ -143,6 +143,7 @@ public class AddAllParts implements Command
 		
 	}
 	
+	@Override
 	public void setQueueID(int id)
 	{
 		this.queueID=id;

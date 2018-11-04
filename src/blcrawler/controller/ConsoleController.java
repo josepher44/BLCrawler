@@ -20,6 +20,7 @@ import blcrawler.commands.addpage.AddPart;
 import blcrawler.commands.addpage.AddPartBrowse;
 import blcrawler.commands.addpage.AddPartCatalog;
 import blcrawler.commands.api.GetAllPartInventories;
+import blcrawler.commands.depreciated.AddUrl;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
