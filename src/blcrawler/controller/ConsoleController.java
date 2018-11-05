@@ -14,15 +14,15 @@ import java.lang.reflect.Method;
 import javax.swing.SwingUtilities;
 
 import blcrawler.commands.*;
-import blcrawler.commands.api.GetAllPartInventories;
 import blcrawler.commands.depreciated.AddAllPartBrowses;
 import blcrawler.commands.depreciated.AddAllPartCatalogs;
 import blcrawler.commands.depreciated.AddPartBrowse;
 import blcrawler.commands.depreciated.AddPartCatalog;
 import blcrawler.commands.depreciated.AddUrl;
 import blcrawler.commands.individualcalls.PartBLToRawDatabase;
-import blcrawler.commands.toplevelcalls.AllImagesBLToDatabase;
-import blcrawler.commands.toplevelcalls.AllPartsBLToRawDatabase;
+import blcrawler.commands.toplevelcalls.api.AllInventoriesBLToRawDatabase;
+import blcrawler.commands.toplevelcalls.selenium.AllImagesBLToDatabase;
+import blcrawler.commands.toplevelcalls.selenium.AllPartsBLToRawDatabase;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
@@ -118,7 +118,7 @@ public class ConsoleController
 
 	public void addAllInventories()
 	{
-		GetAllPartInventories command = new GetAllPartInventories();
+		AllInventoriesBLToRawDatabase command = new AllInventoriesBLToRawDatabase();
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}

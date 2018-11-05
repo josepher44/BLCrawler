@@ -1,4 +1,4 @@
-package blcrawler.commands.toplevelcalls;
+package blcrawler.commands.toplevelcalls.selenium;
 
 import java.io.File;
 import java.util.ArrayList;
