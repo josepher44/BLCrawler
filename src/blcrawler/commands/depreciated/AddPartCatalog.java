@@ -11,6 +11,7 @@ import blcrawler.model.page.PartCatalog;
  * @author Joe Gallagher
  *
  */
+@Deprecated
 public class AddPartCatalog implements Command {
 	
 	/*

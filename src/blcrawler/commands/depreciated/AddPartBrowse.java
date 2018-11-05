@@ -11,6 +11,7 @@ import blcrawler.model.page.PartBrowse;
  * @author Joe Gallagher
  *
  */
+@Deprecated
 public class AddPartBrowse implements Command 
 {
 	/*

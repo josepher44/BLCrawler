@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Random;
 
-import blcrawler.commands.AddImage;
 import blcrawler.commands.Command;
+import blcrawler.commands.individualcalls.AddImage;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;

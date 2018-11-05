@@ -1,7 +1,8 @@
-package blcrawler.commands;
+package blcrawler.commands.individualcalls;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import blcrawler.commands.Command;
 import blcrawler.model.ConsoleGUIModel;
 
 /**
