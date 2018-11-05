@@ -1,8 +1,6 @@
 package blcrawler.commands.depreciated;
 import blcrawler.commands.Command;
 import blcrawler.model.ConsoleOutput;
-import blcrawler.model.ConsoleGUIModel;
-import blcrawler.model.page.PartBrowse;
 import blcrawler.model.page.PartBrowseIndex;
 
 /**
@@ -20,7 +18,7 @@ public class AddAllPartBrowses implements Command {
 	private final int timeout;
 	private final int delay;
 	private boolean isFinished;
-	private int queueID;
+	int queueID;
 	
 	/**
 	 * Constructor
@@ -92,7 +90,7 @@ public class AddAllPartBrowses implements Command {
 	@Override
 	public void setQueueID(int id)
 	{
-		this.queueID=id;
+		queueID=id;
 	}
 
 	@Override

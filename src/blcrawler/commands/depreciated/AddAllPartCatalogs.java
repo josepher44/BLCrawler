@@ -1,84 +1,91 @@
-package blcrawler.commands.addpage;
+package blcrawler.commands.depreciated;
 import blcrawler.commands.Command;
 import blcrawler.model.ConsoleOutput;
-import blcrawler.model.ConsoleGUIModel;
-import blcrawler.model.page.PartBrowse;
-import blcrawler.model.page.PartBrowseIndex;
 import blcrawler.model.page.PartCatalogIndex;
 
+/**
+ * Deprecated command to add parts via the part catalog page
+ * @author Joe Gallagher
+ *
+ */
+
+@Deprecated
 public class AddAllPartCatalogs implements Command {
 	
+	/*
+	 * Standard Fields
+	 */
 	private final int timeout;
 	private final int delay;
 	private boolean isFinished;
-	private int queueID;
+	int queueID;
 	
-	public AddAllPartCatalogs() {
+	/**
+	 * Constructor
+	 */
+	public AddAllPartCatalogs() 
+	{
 		timeout=10;
 		delay=5;
 		isFinished=false;
 	}
 
 	@Override
-	public void execute() {
-		
+	public void execute() 
+	{
+		//Create deprecated class PartCatalogIndex and pull all page links
 		PartCatalogIndex index = new PartCatalogIndex("http://www.bricklink.com/Catalog/Tree.asp?itemType=P");
 		new ConsoleOutput("CommandResult", "Page of type PartCatalogIndex at url=http://www.bricklink.com/Catalog/Tree.asp?itemType=P successfully accessed and recorded");
 		index.listPartCatalogMasterPages();
-		isFinished=true;
 		
+		//Finish Execuiton
+		isFinished=true;
+		done();
 	}
 
 	@Override
-	public boolean executeImmediately() {
-		// TODO Auto-generated method stub
+	public boolean executeImmediately() 
+	{
 		return false;
 	}
 
 	@Override
-	public boolean executeNext() {
-		// TODO Auto-generated method stub
+	public boolean executeNext() 
+	{
 		return false;
 	}
 
 	@Override
-	public long getDelay() {
-		// TODO Auto-generated method stub
+	public long getDelay() 
+	{
 		return delay;
 	}
 
-
-
 	@Override
-	public int getTimeout() {
-		// TODO Auto-generated method stub
+	public int getTimeout() 
+	{
 		return timeout;
 	}
 
-
-
 	@Override
-	public boolean isFinished() {
-
-		// TODO Auto-generated method stub
+	public boolean isFinished() 
+	{
 		return isFinished;
 	}
 
-
-
 	@Override
-	public void queue() {
+	public void queue() 
+	{
 
 	}
 
-
-
 	@Override
-	public void forceQuit() {
-		// TODO Auto-generated method stub
+	public void forceQuit() 
+	{
 		
 	}
 	
+	@Override
 	public void setQueueID(int id)
 	{
 		this.queueID=id;

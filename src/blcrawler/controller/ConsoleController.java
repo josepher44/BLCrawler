@@ -14,15 +14,15 @@ import java.lang.reflect.Method;
 import javax.swing.SwingUtilities;
 
 import blcrawler.commands.*;
-import blcrawler.commands.addpage.AddAllPartCatalogs;
-import blcrawler.commands.addpage.AddPart;
-import blcrawler.commands.addpage.AddPartBrowse;
-import blcrawler.commands.addpage.AddPartCatalog;
 import blcrawler.commands.api.GetAllPartInventories;
 import blcrawler.commands.depreciated.AddAllPartBrowses;
+import blcrawler.commands.depreciated.AddAllPartCatalogs;
+import blcrawler.commands.depreciated.AddPartBrowse;
+import blcrawler.commands.depreciated.AddPartCatalog;
 import blcrawler.commands.depreciated.AddUrl;
+import blcrawler.commands.individualcalls.PartBLToRawDatabase;
 import blcrawler.commands.toplevelcalls.AllImagesBLToDatabase;
-import blcrawler.commands.toplevelcalls.AddAllParts;
+import blcrawler.commands.toplevelcalls.AllPartsBLToRawDatabase;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
@@ -97,7 +97,7 @@ public class ConsoleController
 
 	public void addAllParts()
 	{
-		AddAllParts addAllParts = new AddAllParts();
+		AllPartsBLToRawDatabase addAllParts = new AllPartsBLToRawDatabase();
 		addAllParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(addAllParts);
 	}
@@ -241,14 +241,14 @@ public class ConsoleController
 	}
 
 	public void createPart() {
-		AddPart addPart = new AddPart(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
+		PartBLToRawDatabase addPart = new PartBLToRawDatabase(commandBuffer.substring(commandBuffer.indexOf(' ')+1));
 		addPart.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPart);
 
 	}
 
 	public void createPart(String string) {
-		AddPart addPart = new AddPart(string);
+		PartBLToRawDatabase addPart = new PartBLToRawDatabase(string);
 		addPart.queue();
 		ConsoleGUIModel.getTaskTimer().addToQueue(addPart);
 

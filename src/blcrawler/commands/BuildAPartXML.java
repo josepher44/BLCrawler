@@ -19,7 +19,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
-import blcrawler.commands.addpage.AddPart;
+import blcrawler.commands.individualcalls.PartBLToRawDatabase;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;

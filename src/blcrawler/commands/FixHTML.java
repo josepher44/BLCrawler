@@ -16,7 +16,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-import blcrawler.commands.addpage.AddPart;
+import blcrawler.commands.individualcalls.PartBLToRawDatabase;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 

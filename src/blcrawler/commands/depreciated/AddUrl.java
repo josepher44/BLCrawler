@@ -11,10 +11,16 @@ import blcrawler.model.ConsoleOutput;
 @Deprecated
 public class AddUrl implements Command 
 {
-	
+	/*
+	 * Standard Fields
+	 */
 	private String url;
 	int queueID;
 	
+	/**
+	 * Constructor
+	 * @param url the url to process
+	 */
 	public AddUrl(String url) 
 	{
 		this.url=url;

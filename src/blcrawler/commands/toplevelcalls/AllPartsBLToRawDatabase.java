@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import blcrawler.commands.Command;
-import blcrawler.commands.addpage.AddPart;
+import blcrawler.commands.individualcalls.PartBLToRawDatabase;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 
@@ -19,7 +19,7 @@ import blcrawler.model.ConsoleOutput;
  * @author Joe Gallagher
  *
  */
-public class AddAllParts implements Command 
+public class AllPartsBLToRawDatabase implements Command 
 {
 	/*
 	 * Standard fields
@@ -38,7 +38,7 @@ public class AddAllParts implements Command
 	/**
 	 * Constructor
 	 */
-	public AddAllParts() 
+	public AllPartsBLToRawDatabase() 
 	{
 		isFinished = false;
 	}
@@ -58,8 +58,8 @@ public class AddAllParts implements Command
 				
 				/* For each file in the directory, perform completion check -- failed scrapes 
 				 * can generate very small files, and empty files are generated from the downloaded
-				 * bricklink catalog summary. Add parts with no file or incomplete file, 
-				 * print statement and skip parts already scraped
+				 * bricklink catalog summary. Add parts with no file or incomplete file in the form
+				 * "part_#####.xml", print statement and skip parts already scraped.
 				 */
 				for(File file: dir.listFiles()) 
 				{
@@ -87,7 +87,7 @@ public class AddAllParts implements Command
 				 */
 				for (int i=0; i<partIDs.size(); i++)
 				{
-					ConsoleGUIModel.getSelenium().addToInstant(new AddPart(partIDs.get(i)));
+					ConsoleGUIModel.getSelenium().addToInstant(new PartBLToRawDatabase(partIDs.get(i)));
 					//System.out.println("Part of ID #"+partIDs.get(i)+" added to instantQueue");
 				}
 				
