@@ -1,4 +1,4 @@
-package blcrawler.commands;
+package blcrawler.commands.individualcalls;
 
 import blcrawler.commands.abstractcommands.InstantCommand;
 import blcrawler.model.CatalogPart;
@@ -19,6 +19,10 @@ public class BuildPartHTML extends InstantCommand
 	 */
 	String partNumber;	//The part to be built
 	
+	/**
+	 * Constructor
+	 * @param partnumber the part number being built
+	 */
 	public BuildPartHTML(String partnumber) 
 	{
 		isFinished = false;

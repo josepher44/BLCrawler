@@ -9,8 +9,8 @@ import java.io.PrintStream;
 import javax.swing.*;
 
 import blcrawler.api.APIModel;
-import blcrawler.commands.BuildPartsFromHTML;
 import blcrawler.commands.ReadPartsFromXML;
+import blcrawler.commands.toplevelcalls.AllPartHTMLToMasterXML;
 import blcrawler.controller.ConsoleController;
 import blcrawler.controller.DatabaseController;
 import blcrawler.controller.GUIMainController;

@@ -161,6 +161,7 @@ public class Part implements Page {
 		return pageHTML;
 	}
 
+	//TODO: Incorporate actions in "fixHTML" directly here
 	public void setPageHTML(String pageHTML)
 	{
 		this.pageHTML = pageHTML;

@@ -19,12 +19,15 @@ import blcrawler.commands.depreciated.AddAllPartCatalogs;
 import blcrawler.commands.depreciated.AddPartBrowse;
 import blcrawler.commands.depreciated.AddPartCatalog;
 import blcrawler.commands.depreciated.AddUrl;
+import blcrawler.commands.individualcalls.BuildPartHTML;
 import blcrawler.commands.individualcalls.scraping.PartBLToRawDatabase;
 import blcrawler.commands.individualcalls.xml.BuildAPartXML;
 import blcrawler.commands.toplevelcalls.BuildInventories;
+import blcrawler.commands.toplevelcalls.AllPartHTMLToMasterXML;
 import blcrawler.commands.toplevelcalls.api.AllInventoriesBLToRawDatabase;
 import blcrawler.commands.toplevelcalls.selenium.AllImagesBLToDatabase;
 import blcrawler.commands.toplevelcalls.selenium.AllPartsBLToRawDatabase;
+import blcrawler.commands.toplevelcalls.selenium.CreateSelenium;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 
@@ -183,7 +186,7 @@ public class ConsoleController
 
 	public void buildParts()
 	{
-		BuildPartsFromHTML buildParts = new BuildPartsFromHTML();
+		AllPartHTMLToMasterXML buildParts = new AllPartHTMLToMasterXML();
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}

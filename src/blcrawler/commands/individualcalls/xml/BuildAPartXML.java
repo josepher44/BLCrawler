@@ -54,6 +54,7 @@ public class BuildAPartXML extends InstantCommand
 		{
 			//TODO: Method to export this part, so that this class can be used outside of
 					//command tests
+			@SuppressWarnings("unused")
 			CatalogPart part = new CatalogPart(xmlpart);
 		}
 		
