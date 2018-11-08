@@ -1,6 +1,6 @@
 package blcrawler.commands.individualcalls.scraping;
 
-import blcrawler.commands.Command;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.page.Part;
 

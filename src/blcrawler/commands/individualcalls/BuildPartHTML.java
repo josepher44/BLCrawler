@@ -1,6 +1,6 @@
 package blcrawler.commands.individualcalls;
 
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 

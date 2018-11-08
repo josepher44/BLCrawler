@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
-import blcrawler.commands.Command;
-import blcrawler.commands.Delay;
-import blcrawler.commands.InitialCommand;
+import blcrawler.commands.residuals.Delay;
+import blcrawler.commands.residuals.InitialCommand;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.selenium.SeleniumModel;

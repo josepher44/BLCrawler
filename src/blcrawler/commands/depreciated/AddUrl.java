@@ -1,6 +1,6 @@
 package blcrawler.commands.depreciated;
 
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 import blcrawler.model.ConsoleOutput;
 
 /**

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import blcrawler.commands.individualcalls.scraping.PartBLToRawDatabase;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.page.Part;

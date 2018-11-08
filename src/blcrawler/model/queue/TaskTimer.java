@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import blcrawler.commands.Command;
-import blcrawler.commands.InitialCommand;
 import blcrawler.commands.TimerTest;
 import blcrawler.commands.Timestamp;
+import blcrawler.commands.residuals.InitialCommand;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.ConsoleGUIModel;
 

@@ -1,5 +1,7 @@
 package blcrawler.commands;
 
+import blcrawler.commands.templates.Command;
+
 public class OpenBSX implements Command
 {
 

@@ -12,7 +12,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 import blcrawler.model.CatalogPart;
 
 /**

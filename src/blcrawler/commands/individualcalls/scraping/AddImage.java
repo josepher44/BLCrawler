@@ -2,7 +2,7 @@ package blcrawler.commands.individualcalls.scraping;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import blcrawler.commands.Command;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 
 /**

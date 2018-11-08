@@ -1,6 +1,6 @@
-package blcrawler.commands;
+package blcrawler.commands.toplevelcalls.admin;
 
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 import blcrawler.model.ConsoleGUIModel;
 
 /**

@@ -1,0 +1,4 @@
+Package should be used to contain all commands which perform sweeping actions
+across all of a class stored in large (>5000) quantities, for example, all
+parts, all molds, etc. In many cases, there will be a corresponding command
+in individualcalls for processing a singular element.

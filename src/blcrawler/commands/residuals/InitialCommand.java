@@ -1,6 +1,7 @@
-package blcrawler.commands;
+package blcrawler.commands.residuals;
 
 import blcrawler.model.ConsoleOutput;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.queue.TaskTimer;
 

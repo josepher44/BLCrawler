@@ -1,0 +1,2 @@
+Used for commands which don't serve much direct functional purpose, but
+maintain system integrity, such as silent delays, placeholders, etc.

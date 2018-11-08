@@ -1,7 +1,7 @@
-package blcrawler.commands;
+package blcrawler.commands.dev;
 
 import blcrawler.api.APIModel;
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 
 /**
  * Test class for API functionality. Currently, switching between calls is done by changing hard

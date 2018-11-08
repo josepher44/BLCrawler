@@ -1,4 +1,4 @@
-package blcrawler.commands;
+package blcrawler.commands.templates;
 
 public interface Command 
 {

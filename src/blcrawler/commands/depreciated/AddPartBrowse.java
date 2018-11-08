@@ -1,7 +1,7 @@
 package blcrawler.commands.depreciated;
 
-import blcrawler.commands.Command;
 import blcrawler.model.ConsoleOutput;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.page.PartBrowse;
 

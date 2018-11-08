@@ -3,7 +3,7 @@ package blcrawler.commands.individualcalls.scraping;
 import java.util.concurrent.ThreadLocalRandom;
 
 import blcrawler.api.APIModel;
-import blcrawler.commands.Command;
+import blcrawler.commands.templates.Command;
 
 /**
  * Scrapes and records the inventory of a single part via the api

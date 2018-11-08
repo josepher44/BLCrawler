@@ -3,7 +3,7 @@ package blcrawler.commands.toplevelcalls;
 import java.io.File;
 import java.util.ArrayList;
 
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 

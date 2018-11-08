@@ -1,6 +1,6 @@
 package blcrawler.model.queue;
 
-import blcrawler.commands.Command;
+import blcrawler.commands.templates.Command;
 
 public class QueueEntry {
 	private Command command;

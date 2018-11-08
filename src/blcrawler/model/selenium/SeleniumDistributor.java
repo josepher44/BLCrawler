@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import blcrawler.commands.Command;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.queue.DelayQueue;

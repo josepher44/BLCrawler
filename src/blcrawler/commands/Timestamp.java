@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleOutput;
 
 public class Timestamp implements Command {

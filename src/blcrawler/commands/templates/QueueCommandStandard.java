@@ -1,70 +1,65 @@
-package blcrawler.commands.abstractcommands;
-
-import blcrawler.commands.Command;
+package blcrawler.commands.templates;
 
 /**
- * Abstract representation of an instantely executed command.
+ * Abstract representation of a command with a non-zero delay and timeout, called via a delay queue
  * executeImmediately, executeNext, getDelay, getTimeout, isFinished, setQueueID all inherited
+ * TODO: Force quit will likely have some mostly-standard behaviors when that is implemented
  * @author Joe Gallagher
  *
  */
-public abstract class InstantCommand implements Command 
-{
+public abstract class QueueCommandStandard implements Command {
 	/*
 	 * Standard fields
 	 */
+	public int timeout;
+	public int delay;
 	public boolean isFinished;
 	public int queueID;
 	
 	/**
 	 * Constructor
 	 */
-	public InstantCommand() 
-	{	
-		//Usually specified by extending class, contains base code
-		isFinished = false;
+	public QueueCommandStandard() 
+	{
+		
 	}
-	
+
 	/**
 	 * Always specified by extending class
 	 */
 	@Override
 	public void execute() 
 	{
+		
 	}
-	
+
 	@Override
 	public boolean executeImmediately() 
 	{
-		//Instant commands are always executed immedately
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean executeNext() 
 	{
-		//Since execute immediately is true, executeNext must be false
 		return false;
 	}
 
 	@Override
 	public long getDelay() 
 	{
-		//Immediate commands execute with no delay
-		return 0;
+		return delay;
 	}
 
 	@Override
 	public int getTimeout() 
 	{
-		//Immediate commands do not take actions which can timeout
-		return 0;
+		return timeout;
 	}
 
 	@Override
 	public boolean isFinished() 
 	{
-		//Instant commands use simple finished checking
 		return isFinished;
 	}
 
@@ -80,9 +75,9 @@ public abstract class InstantCommand implements Command
 		
 	}
 	
+	@Override
 	public void setQueueID(int id)
 	{
-		//Instant commands all go to the same queue, the instantqueue
 		this.queueID=id;
 	}
 
@@ -91,5 +86,4 @@ public abstract class InstantCommand implements Command
 	{
 		
 	}
-
 }

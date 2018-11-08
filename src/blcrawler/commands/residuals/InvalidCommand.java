@@ -1,5 +1,6 @@
-package blcrawler.commands;
+package blcrawler.commands.residuals;
 
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleOutput;
 
 public class InvalidCommand implements Command {

@@ -1,0 +1,2 @@
+Development commands, used for manually testing features which will always
+be automatic and similar functionality

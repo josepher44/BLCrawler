@@ -1,5 +1,5 @@
 package blcrawler.commands.depreciated;
-import blcrawler.commands.Command;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.page.PartCatalogIndex;
 

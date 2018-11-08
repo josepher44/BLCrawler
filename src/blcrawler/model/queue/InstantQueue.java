@@ -3,8 +3,8 @@ package blcrawler.model.queue;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import blcrawler.commands.Command;
-import blcrawler.commands.InitialCommand;
+import blcrawler.commands.residuals.InitialCommand;
+import blcrawler.commands.templates.Command;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.selenium.SeleniumModel;

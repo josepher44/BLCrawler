@@ -1,6 +1,6 @@
 package blcrawler.commands.toplevelcalls.selenium;
 
-import blcrawler.commands.abstractcommands.InstantCommand;
+import blcrawler.commands.templates.InstantCommand;
 import blcrawler.model.ConsoleGUIModel;
 
 /**
