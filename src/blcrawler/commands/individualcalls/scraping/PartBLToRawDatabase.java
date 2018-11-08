@@ -1,4 +1,4 @@
-package blcrawler.commands.individualcalls;
+package blcrawler.commands.individualcalls.scraping;
 
 import blcrawler.commands.Command;
 import blcrawler.model.ConsoleGUIModel;

@@ -1,4 +1,4 @@
-package blcrawler.commands.individualcalls;
+package blcrawler.commands.individualcalls.scraping;
 
 import java.util.concurrent.ThreadLocalRandom;
 

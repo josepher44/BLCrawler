@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import blcrawler.commands.Command;
-import blcrawler.commands.individualcalls.PartBLToRawDatabase;
+import blcrawler.commands.individualcalls.scraping.PartBLToRawDatabase;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 

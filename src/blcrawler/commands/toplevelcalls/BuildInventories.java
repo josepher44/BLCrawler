@@ -1,22 +1,26 @@
-package blcrawler.commands;
+package blcrawler.commands.toplevelcalls;
 
 import blcrawler.commands.abstractcommands.InstantCommand;
 import blcrawler.model.ConsoleGUIModel;
 
 /**
- * Creates the master mold XML file from part number based inferences, using the part database
- * xml as a source. At the moment, contains no provisions for adding/preserving manually added
- * associations
+ * Class for building into memory the inventories of all parts which have them, from previously
+ * scaped data via api
  * @author Joe Gallagher
  *
  */
-public class BuildMolds extends InstantCommand
+public class BuildInventories extends InstantCommand
 {
-
+	/*
+	 * Standard fields
+	 */
+	boolean isFinished;
+	int queueID;
+	
 	/**
 	 * Constructor
 	 */
-	public BuildMolds() 
+	public BuildInventories() 
 	{	
 		isFinished = false;
 	}
@@ -24,18 +28,19 @@ public class BuildMolds extends InstantCommand
 	@Override
 	public void execute() 
 	{
+		System.out.println("reached execute");
 		Thread thread = new Thread() 
 		{
 			public void run() 
 			{
-				//Call the database's build molds method
-				ConsoleGUIModel.getDatabase().buildMoldXML();
+				//Call database method to build inventories
+				ConsoleGUIModel.getDatabase().buildInventories();
 			}
 		};
 		thread.setDaemon(true);
 		thread.start();
 		
-		//Finish execution
+		//Finish Execution
 		isFinished = true;
 		done();
 	}

@@ -1,6 +1,7 @@
 package blcrawler.commands;
 
 import blcrawler.api.APIModel;
+import blcrawler.commands.abstractcommands.InstantCommand;
 
 /**
  * Test class for API functionality. Currently, switching between calls is done by changing hard
@@ -8,14 +9,8 @@ import blcrawler.api.APIModel;
  * @author Joe Gallagher
  *
  */
-public class ApiTest implements Command 
-{
-	/*
-	 * Standard fields
-	 */
-	boolean isFinished;
-	int queueID;
-	
+public class ApiTest extends InstantCommand
+{	
 	/*
 	 * Particular fields
 	 */
@@ -30,7 +25,7 @@ public class ApiTest implements Command
 		isFinished = false;
 		this.partNumber = partnumber;
 		//DIRTY TEST, SHOULD NOT BE HARD CODED
-		this.queueID = 9152;
+		queueID = 9152;
 	}
 	
 	@Override
@@ -47,37 +42,6 @@ public class ApiTest implements Command
 	}
 
 	@Override
-	public boolean executeImmediately() 
-	{
-		return true;
-	}
-
-	@Override
-	public boolean executeNext() 
-	{
-		return false;
-	}
-
-	@Override
-	public long getDelay() 
-	{
-		return 0;
-	}
-
-	//TODO: This command should absolutely have a timeout working
-	@Override
-	public int getTimeout() 
-	{
-		return 0;
-	}
-
-	@Override
-	public boolean isFinished() 
-	{
-		return isFinished;
-	}
-
-	@Override
 	public void queue() 
 	{
 		
@@ -87,11 +51,6 @@ public class ApiTest implements Command
 	public void forceQuit() 
 	{
 		
-	}
-	@Override
-	public void setQueueID(int id)
-	{
-		this.queueID=id;
 	}
 
 	@Override

@@ -377,7 +377,7 @@ public class DatabaseController
 				if (partsdone.containsKey(strnew))
 				{
 					m++;
-					//System.out.println("Added "+str+" to already existing part "+partsdone.get(strnew)+", consolidation count "+m);
+					System.out.println("Added "+str+" to already existing part "+partsdone.get(strnew)+", consolidation count "+m);
 					addToMold(partsdone.get(strnew), str);
 				}
 				else

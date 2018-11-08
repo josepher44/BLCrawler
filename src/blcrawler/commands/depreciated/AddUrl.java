@@ -1,6 +1,6 @@
 package blcrawler.commands.depreciated;
 
-import blcrawler.commands.Command;
+import blcrawler.commands.abstractcommands.InstantCommand;
 import blcrawler.model.ConsoleOutput;
 
 /**
@@ -9,7 +9,7 @@ import blcrawler.model.ConsoleOutput;
  *
  */
 @Deprecated
-public class AddUrl implements Command 
+public class AddUrl extends InstantCommand
 {
 	/*
 	 * Standard Fields
@@ -23,6 +23,7 @@ public class AddUrl implements Command
 	 */
 	public AddUrl(String url) 
 	{
+		isFinished = false;
 		this.url=url;
 	}
 
@@ -30,36 +31,8 @@ public class AddUrl implements Command
 	public void execute() 
 	{
 		sortUrl();
-	}
-
-	@Override
-	public boolean executeImmediately() 
-	{
-		return true;
-	}
-
-	@Override
-	public boolean executeNext() 
-	{
-		return false;
-	}
-
-	@Override
-	public long getDelay() 
-	{
-		return 0;
-	}
-
-	@Override
-	public int getTimeout() 
-	{
-		return 0;
-	}
-
-	@Override
-	public boolean isFinished() 
-	{
-		return false;
+		isFinished = true;
+		done();
 	}
 
 	@Override
@@ -73,13 +46,7 @@ public class AddUrl implements Command
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void setQueueID(int id)
-	{
-		queueID=id;
-	}
-
+	
 	@Override
 	public void done() {
 		// TODO Auto-generated method stub

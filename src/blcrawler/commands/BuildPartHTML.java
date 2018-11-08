@@ -1,5 +1,6 @@
 package blcrawler.commands;
 
+import blcrawler.commands.abstractcommands.InstantCommand;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
 
@@ -11,14 +12,8 @@ import blcrawler.model.ConsoleGUIModel;
  * @author Joe Gallagher
  *
  */
-public class BuildPartHTML implements Command {
-
-	/*
-	 * Standard fields
-	 */
-	boolean isFinished;
-	int queueID;
-	
+public class BuildPartHTML extends InstantCommand 
+{
 	/*
 	 * Particular fields
 	 */
@@ -52,36 +47,6 @@ public class BuildPartHTML implements Command {
 	}
 
 	@Override
-	public boolean executeImmediately() 
-	{
-			return true;
-	}
-
-	@Override
-	public boolean executeNext() 
-	{
-		return false;
-	}
-
-	@Override
-	public long getDelay() 
-	{
-		return 0;
-	}
-
-	@Override
-	public int getTimeout() 
-	{
-		return 0;
-	}
-
-	@Override
-	public boolean isFinished() 
-	{
-		return true;
-	}
-
-	@Override
 	public void queue() 
 	{
 		
@@ -91,11 +56,6 @@ public class BuildPartHTML implements Command {
 	public void forceQuit() 
 	{
 		
-	}
-	
-	public void setQueueID(int id)
-	{
-		this.queueID=id;
 	}
 
 	@Override
