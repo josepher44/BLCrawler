@@ -2,6 +2,13 @@ package blcrawler.commands;
 
 import blcrawler.commands.templates.Command;
 
+/**
+ * Command to parse a bsx file into memory for use in the imsgui system. Currently empty, function
+ * achieved by the overdone OpenBSX class, to be refactored
+ * TODO: Move key methods of OpenBSX here, or at least put function calls in execute
+ * @author Joe Gallagher
+ *
+ */
 public class OpenBSX implements Command
 {
 
