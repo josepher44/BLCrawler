@@ -10,7 +10,8 @@ import blcrawler.model.page.PartBrowseIndex;
  *
  */
 @Deprecated
-public class AddAllPartBrowses implements Command {
+public class AddAllPartBrowses implements Command 
+{
 	
 	/*
 	 * Standard Fields
