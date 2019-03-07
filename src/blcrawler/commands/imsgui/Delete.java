@@ -12,7 +12,7 @@ public class Delete implements GUICommand
 	 * Particular Fields
 	 */
 	public ObservableList<InventoryLocation> items;	//The items to be deleted
-	public ObservableList<Integer> indecies;	//The indecies in the table of the selected items
+	public ObservableList<Integer> indices;	//The indices in the table of the selected items
 	
 	/**
 	 * Constructor
@@ -27,9 +27,9 @@ public class Delete implements GUICommand
 		items = FXCollections.observableArrayList();	
 		items.addAll(selection);
 		
-		//Add all selected index IDs to indecies. Only used for undo
-		indecies = FXCollections.observableArrayList();
-		indecies.addAll(ids);
+		//Add all selected index IDs to indices. Only used for undo
+		indices = FXCollections.observableArrayList();
+		indices.addAll(ids);
 		execute();
 	}
 
@@ -46,6 +46,6 @@ public class Delete implements GUICommand
 	public void undo()
 	{
 		//Reinsert all items, at each corresponding index
-		ConsoleGUIModel.getImsgui().addItems(items, indecies);
+		ConsoleGUIModel.getImsgui().addItems(items, indices);
 	}
 }

@@ -59,6 +59,10 @@ public class SeleniumModel {
 	private Proxy proxy;
 	FirefoxOptions firefoxOptions;
 	
+	
+	//String which the page being scraped is SUPPOSED to contain
+	private String pageIdentifier;
+	
 	FileWriter fw;
 	BufferedWriter bw;
 	
@@ -131,8 +135,10 @@ public class SeleniumModel {
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
+		    System.out.println("Module creation failed for module #"+socksport);
 			e.printStackTrace();
 		}
+		
 
 		//ConsoleGUIModel.getGuiView().setIndeterminiteOff();	
 	}

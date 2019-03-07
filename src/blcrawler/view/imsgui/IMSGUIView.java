@@ -276,7 +276,7 @@ public class IMSGUIView
         RawRemarksColumn.setCellValueFactory(new PropertyValueFactory<>("Remarks"));
 
         inventoryView = new TableView<>();
-        inventoryView.setPrefHeight(600);
+        inventoryView.setPrefHeight(900);
         inventoryView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         inventoryView.setItems(lots);
         inventoryView.getColumns().add(ImageColumn);

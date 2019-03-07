@@ -100,12 +100,38 @@ public class DatabaseController
 		for (ObjectSpecificColorCount o: priceGuides)
 		{
 			//System.out.println(o.getCc().getCount()+" Part Number: "+o.getPartNumber()+", Color: "+o.getCc().getColor()+", Quantity "+o.getCc().getCount());
+		    
+            int listid=0;
+            int fscount=0;
+            for (ColorCount fscolor: getPart(o.getPartNumber()).getItemsForSale())
+            {
+                if (fscolor.getColorID() == o.getCc().getColorID())
+                {
+                    fscount=getPart(o.getPartNumber()).getItemsForSale().get(listid).getCount();
+                    break;
+                }
+                listid++;
+            }
+		    
+		    if (fscount==0)
+		    {
+		        fscount=1;
+		    }
 			int V = getPart(o.getPartNumber()).getLengthMill() * getPart(o.getPartNumber()).getWidthMill() * getPart(o.getPartNumber()).getHeightMill();
+			int VQ = V*fscount;
 			//System.out.println(o.getCc().getCount()*V);
+			//System.out.println(VQ+": Part number: " +o.getPartNumber()+" Color: "+o.getCc().getColor()+ " Volume: "+V+" Quantity Volume: "+VQ);
+			//System.out.println(V);
+			
+			double weight = getPart(o.getPartNumber()).getWeight();
+			System.out.println(weight);
+			
 			if(getPart(o.getPartNumber()).getLengthMill()>150 || getPart(o.getPartNumber()).getWidthMill()>150 || getPart(o.getPartNumber()).getHeightMill()>150)
 			{
 				int V2 = getPart(o.getPartNumber()).getLengthMill() * getPart(o.getPartNumber()).getWidthMill() * getPart(o.getPartNumber()).getHeightMill();
-				System.out.println("Oversize part: Part Number: "+o.getPartNumber()+" Volume = "+V2);
+
+			
+				//System.out.println("Oversize part: Part Number: "+o.getPartNumber()+" Volume = "+V2);
 
 			}
 
@@ -254,7 +280,7 @@ public class DatabaseController
 		}
 		
 		//Might break everything, or might save gobs of memory
-		partsDoc = null;
+		//partsDoc = null;
 
 
 
@@ -325,7 +351,7 @@ public class DatabaseController
 		Hashtable<String, String> partsdone = new Hashtable<>();
 		int k = 0;
 		int m = 0;
-		int n = 0;
+		int enn = 0;
 		Pattern p = Pattern.compile("(p|pb|px)0?0?0?([0-9])([0-9])?([0-9])?([0-9])?");
 		for(CatalogPart part : catalogParts)
 		{
@@ -338,12 +364,12 @@ public class DatabaseController
 
 				if (part.getKnownColorsBL().size()>1)
 				{
-					n=n+part.getKnownColorsBL().size();
+					enn=enn+part.getKnownColorsBL().size();
 					//System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n+", size is "+part.getKnownColorsBL().size());
 				}
 				else
 				{
-					n++;
+					enn++;
 					//System.out.println("Part "+part.getPartNumber()+" has inventory, inventory count is "+n);
 				}
 

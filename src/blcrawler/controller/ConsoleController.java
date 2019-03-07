@@ -67,6 +67,7 @@ public class ConsoleController
 		commandLibrary.put("addallinventories", () -> {addAllInventories();});
 		commandLibrary.put("buildinventories", () -> {buildInventories();});
 		commandLibrary.put("startgui", () -> {startGUI();});
+	    commandLibrary.put("readBLSummary", () -> {readBLSummary();});
 
 		//Depreciated Methods old system. Avoid using or investigate function
 		commandLibrary.put("timertest", () -> {createTimertest();});
@@ -223,6 +224,13 @@ public class ConsoleController
 		buildParts.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(buildParts);
 	}
+
+   public void readBLSummary()
+    {
+        ReadBLSummary summary = new ReadBLSummary();
+        summary.queue();
+        ConsoleGUIModel.getSelenium().addToInstant(summary);
+    }
 
 	public void addPartIndex()
 	{

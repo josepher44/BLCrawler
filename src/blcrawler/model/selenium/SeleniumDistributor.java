@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 import blcrawler.commands.templates.Command;
@@ -114,6 +116,44 @@ public class SeleniumDistributor
 		return delayQueueMap.get(id).getSelenium().getHTML();
 	}
 	
+	   //
+    public String getURLWithCheck(String url, int id, String checkstring)
+    {
+        delayQueueMap.get(id).getSelenium().gotoURL(url);
+        String outstring = delayQueueMap.get(id).getSelenium().getHTML();
+        if (outstring.contains(checkstring)&& outstring.contains("social-link__follow"))
+        {
+            return outstring;
+        }
+        else
+        {
+            System.out.println("Checkstring is "+checkstring);
+            System.out.println("String mismatch, recursing in module "+id);
+            return getURLWithCheckRecursive(url, id, checkstring);
+        }
+    }
+    
+    //
+ public String getURLWithCheckRecursive(String url, int id, String checkstring)
+ {
+     String outstring="";
+     int i=0;
+     int recurse=0;
+
+     outstring = delayQueueMap.get(id).getSelenium().getHTML();
+     while(!(outstring.contains(checkstring) && outstring.contains("social-link__follow")))
+     {
+         i++;
+         if (i>=100000)
+         {
+             i=0;
+             recurse++;
+             outstring = delayQueueMap.get(id).getSelenium().getHTML();
+             System.out.println("String mismatch, recursing in module "+id+"recursion: "+recurse);
+         }
+     }
+     return outstring;
+ }
 	
 	
 	public void getURLHTTP(String url, int id, String path)
@@ -161,7 +201,7 @@ public class SeleniumDistributor
 	{
 		int k=-1;
 		DelayQueue out = null;
-		System.out.println("Delay Queue size: "+delayQueueList.size());
+		//System.out.println("Delay Queue size: "+delayQueueList.size());
 		for (int i=0; i<delayQueueList.size(); i++)
 		{
 			if (k<0||delayQueueList.get(i).getQueueSize()<k)
@@ -172,7 +212,7 @@ public class SeleniumDistributor
 		}
 		out.add(command);
 		command.setQueueID(out.getId());
-		System.out.println("Added command to queue #"+out.getId()+", queue size of "+out.getQueueSize());
+		//System.out.println("Added command to queue #"+out.getId()+", queue size of "+out.getQueueSize());
 	}
 	
 	public void updateProcessLinks()
@@ -196,10 +236,10 @@ public class SeleniumDistributor
 		currentModuleCreationProcess = module;
 		for (int i=0; i<delayQueueList.size(); i++)
 		{
-			if (delayQueueList.get(i).getLimit()-delayQueueList.get(i).getCommandsExecuted()<20)//10 for part scraping
+			if (delayQueueList.get(i).getLimit()-delayQueueList.get(i).getCommandsExecuted()<25)//10 for part scraping
 			{
 				delayQueueList.get(i).setCommandsExecuted(delayQueueList.get(i).getCommandsExecuted()-
-					25-ThreadLocalRandom.current().nextInt(10, 30));	//7, 3-7 for part scraping
+					9-ThreadLocalRandom.current().nextInt(15, 30));	//7, 3-7 for part scraping
 			}
 			if (delayQueueList.get(i).getCommandsExecuted()<0)
 			{

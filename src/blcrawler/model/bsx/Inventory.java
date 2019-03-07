@@ -405,7 +405,7 @@ public class Inventory
 				ArrayList<Integer> divisions = new ArrayList<>();
 				divisions.add(i);
 				subtractToBe(i,1);
-				divisions.addAll(combinatorics(left));
+				divisions.addAll(recursiveDrawerBuilder(left));
 				String output="";
 				for (int k=0;k<divisions.size();k++)
 				{
@@ -419,16 +419,40 @@ public class Inventory
 		System.out.println("Total drawers to be glued: "+(drawersToBeMade.size()+tomake2x+tomake4x+tomake6x+tomake8x+tomake10x));
 	}
 
-	public ArrayList<Integer> combinatorics(int sizeToFill)
+	/**
+	 * Recursively develops a division plan for a full drawer or sub-section of a drawer, creating
+	 * compartments of sizes demanded by the pending parts not yet assigned divided compartments
+	 * when possible. 
+	 * 
+	 * @param sizeToFill The size compartment being filled, measured in studs. Always starts at 16,
+	 * but recursive calls can fill a smaller compartment
+	 * @return
+	 */
+	public ArrayList<Integer> recursiveDrawerBuilder(int sizeToFill)
 	{
-		//System.out.println("Started a new combinatorics instance for size "+sizeToFill);
-		for (int i=sizeToFill;i>0;i--)
+		/*
+		 * toBe is a map which maps division sizes (1-16 studs) to the number of compartments of
+		 * that division size which should be made, based on the parts in inventory which haven't
+		 * yet been placed in divided drawers
+		 */
+	    
+	    /*
+	     * Loop through each size compartment, starting with the total volume being filled and 
+	     * iterating downwards
+	     */
+	    
+		for (int i=sizeToFill; i>0; i--)
 		{
-			//execute this loop for each primary division size i, starting with the value to be filled
 			if (toBe(i)>0)
-				{
+			{
+			    
 				if (i==sizeToFill)
 				{
+				    /*
+				     * Path A. Executed if the largest pending part requires the entire volume
+				     * being evaluated. Returns a list with a single entry, and decrements the list
+				     * of pending parts demanding this size by one. 
+				     */
 					ArrayList<Integer> returnValue = new ArrayList<>();
 					returnValue.add(i);
 					subtractToBe(i,1);
@@ -439,18 +463,39 @@ public class Inventory
 				}
 				else
 				{
+				    /*
+				     * Path B. Executed if the largest pending part is less than, not equal to, the
+				     * volume being evaluated. Fills the volume with the part's requisite 
+				     * compartment size, then recursively calls the drawer builder method on the
+				     * remaining volume, appending the output to the return list
+				     * 
+				     * For example, if evaluating a full length (16 stud) drawer, and the largest
+				     * part requires a 10 stud drawer, it will add a 10 stud compartment as the
+				     * first entry on the list, then recursively call the method on the 6 stud
+				     * remainder, which will be filled with 1 or more divisions adding up to 6. 
+				     */
 					ArrayList<Integer> returnValue = new ArrayList<>();
 					returnValue.add(i);
 					subtractToBe(i,1);
 					//System.out.println("Subtracted a drawer of size "+i+ " in combinatorics path B. "+toBe(i)+
 					//		" remaining.");
 					int left = sizeToFill-i;
-					returnValue.addAll(combinatorics(left));
+					returnValue.addAll(recursiveDrawerBuilder(left));
 					return returnValue;
 				}
 			}
 		}
-		//Code will not be reached unless all lists of sizeToFill and under are empty
+		/*
+		 * Path C, usually not reached due to return statements in A and B terminating the method
+		 * early. Adds a single compartment to fill the remaining space, 
+		 * 
+		 * This part of the code is typically only reached during recursive calls. For example, say
+		 * a 16 stud drawer starts out by being given a 9 stud compartment. There are no pending
+		 * parts which require a 7 stud compartment, but there are some which require 6 studs. 
+		 * So a 9 and a 6 have been added, leaving a 1 stud remainder, which the method again gets
+		 * recursively called on. If no parts exist which require a 1 stud compartment, this part of
+		 * the code will add one anyways, knowing that it will initially be empty. 
+		 */
 		ArrayList<Integer> returnValue = new ArrayList<>();
 		returnValue.add(sizeToFill);
 		subtractToBe(sizeToFill,1);

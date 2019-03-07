@@ -36,7 +36,7 @@ public class ConsoleGUIModel {
 	private static APIModel apitest;
 	private static DatabaseController database;
 	private static IMSGUIView imsgui;
-	//private static BSXImporter bsxImporter;
+	private static BSXImporter bsxImporter;
 	private static MasterClock masterClock;
 
 
@@ -137,8 +137,8 @@ public class ConsoleGUIModel {
 			System.err.println("Caught CommandErr exception: " + e.getMessage());
 		}
 
-		headerLabel = "Test for region that's having some issues displaying text, it looks all funny";
-		statusLabel = "status";
+		headerLabel = "";
+		statusLabel = "Toolbar placeholder";
 
 		guiController = new GUIMainController(this);
 		guiView = new ConsoleGUIView(guiController, this);

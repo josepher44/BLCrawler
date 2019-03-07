@@ -36,7 +36,7 @@ public class DelayQueue extends Queue
 		selenium = new SeleniumModel(String.valueOf(id));
 		currentCommand = new InitialCommand();
 		commandsExecuted = 0;
-		limit = ThreadLocalRandom.current().nextInt(4500, 4600);
+		limit = ThreadLocalRandom.current().nextInt(300, 600);
 		clear = false;
 
 		System.out.println("Created a queue with ID "+ID);
