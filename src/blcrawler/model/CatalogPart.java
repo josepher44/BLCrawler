@@ -30,7 +30,10 @@ import blcrawler.primatives.ColorMap;
 public class CatalogPart
 {
 	private String partNumber;
-	private Date dateAdded;
+	private int bricklinkInternalID;
+
+
+    private Date dateAdded;
 	private int categoryID;
 	private String categoryName;
 	private String name;
@@ -454,6 +457,7 @@ public class CatalogPart
 		}
 
 		generateCategoryID();
+		generateBLBackgroundID();
 		generateCategoryName();
 		generateName();
 		generateInventory();
@@ -508,6 +512,11 @@ public class CatalogPart
 		Element PartNumber = new Element("partnumber");
 		PartNumber.setText(partNumber);
 		part.addContent(PartNumber);
+		
+
+        Element bricklinkInternalID = new Element("blidInternal");
+        bricklinkInternalID.setText(String.valueOf(bricklinkInternalID));
+        part.addContent(bricklinkInternalID);
 
 		Element Date = new Element("date");
 		Date.setText(dateAdded.toString());
@@ -779,6 +788,34 @@ public class CatalogPart
 
 
 	}
+	
+   public void generateBLBackgroundID()
+   {
+       int index = 0 + txtRep.indexOf("data-itemid=")+12;
+       if (index==11)
+       {
+           index=txtRep.indexOf("itemID=")+7;
+       }
+       //System.out.println(index);
+       String IDSubstring = txtRep.substring(index, index+10);
+
+
+       //System.out.println("Say something else");
+       //System.out.println("Pre-shorten substring: "+IDSubstring);
+       IDSubstring = IDSubstring.replaceAll("[^0-9]","");
+
+       //System.out.println("Post-shorten substring: "+IDSubstring);
+       try
+        {   
+            bricklinkInternalID = Integer.valueOf(IDSubstring);
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Parsing exception in part "+partNumber+"at blInternalID new.");
+        }
+
+        //System.out.println("Part number "+partNumber+" has a category ID of "+categoryID);
+    }
 
 	public void generateCategoryID()
 	{
@@ -1629,8 +1666,8 @@ public class CatalogPart
 	{
 		try
 		{
-			String ForSaleSubstring = txtRep.substring(txtRep.indexOf("Lots For Sale:"));
-			ForSaleSubstring = ForSaleSubstring.substring(ForSaleSubstring.indexOf("Lots For Sale:"), ForSaleSubstring.indexOf("</td>"));
+			String ForSaleSubstring = txtRep.substring(txtRep.indexOf("Items For Sale:"));
+			ForSaleSubstring = ForSaleSubstring.substring(ForSaleSubstring.indexOf("Items For Sale:"), ForSaleSubstring.indexOf("</td>"));
 
 			while (!ForSaleSubstring.equals(""))
 			{
@@ -2176,6 +2213,14 @@ public class CatalogPart
 		return coloredSubParts;
 	}
 
+    public int getBricklinkInternalID()
+    {
+        return bricklinkInternalID;
+    }
 
+    public void setBricklinkInternalID(int bricklinkInternalID)
+    {
+        this.bricklinkInternalID = bricklinkInternalID;
+    }
 
 }

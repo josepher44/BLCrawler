@@ -26,6 +26,7 @@ public class SeleniumDistributor
 	public InstantQueue consoleQueue;
 	public int lastcount;
 	public int queued;
+	public boolean relaunchable;
 	
 	public SeleniumDistributor()
 	{
@@ -34,6 +35,7 @@ public class SeleniumDistributor
 		processIDs = new LinkedList<Integer>();
 		processIDtoModule = new Hashtable<Integer, Integer>();
 		currentModuleCreationProcess = 0;
+		relaunchable=true;
 		
 		Thread thread = new Thread() {
 			public void run() {
@@ -233,13 +235,14 @@ public class SeleniumDistributor
 	
 	public void relaunch(int module)
 	{
+	    relaunchable=false;
 		currentModuleCreationProcess = module;
 		for (int i=0; i<delayQueueList.size(); i++)
 		{
-			if (delayQueueList.get(i).getLimit()-delayQueueList.get(i).getCommandsExecuted()<25)//10 for part scraping
+			if (delayQueueList.get(i).getLimit()-delayQueueList.get(i).getCommandsExecuted()<35)//10 for part scraping
 			{
 				delayQueueList.get(i).setCommandsExecuted(delayQueueList.get(i).getCommandsExecuted()-
-					9-ThreadLocalRandom.current().nextInt(15, 30));	//7, 3-7 for part scraping
+					9-ThreadLocalRandom.current().nextInt(25, 45));	//7, 3-7 for part scraping
 			}
 			if (delayQueueList.get(i).getCommandsExecuted()<0)
 			{
@@ -262,11 +265,25 @@ public class SeleniumDistributor
 			e.printStackTrace();
 		}
 		updateProcessLinks();
-		
+		relaunchable=true;
 		
 	}
 	
-	//Called on program exit
+	public boolean isRelaunchable()
+    {
+        return relaunchable;
+    }
+
+
+
+    public void setRelaunchable(boolean relaunchable)
+    {
+        this.relaunchable = relaunchable;
+    }
+
+
+
+    //Called on program exit
 	public void killAllProcesses()
 	{
 		for (int i=0; i<processIDs.size();i++)

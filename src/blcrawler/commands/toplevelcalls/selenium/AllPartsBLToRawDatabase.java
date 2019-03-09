@@ -1,9 +1,16 @@
 package blcrawler.commands.toplevelcalls.selenium;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import blcrawler.commands.individualcalls.scraping.PartBLToRawDatabase;
 import blcrawler.commands.templates.Command;
@@ -64,10 +71,75 @@ public class AllPartsBLToRawDatabase implements Command
 				for(File file: dir.listFiles()) 
 				{
 					//TODO: Make this a more comprehensive check -- read the last characters maybe?
-					if (file.length()<50000)
+					if (file.length()<99000)
 					{
-						partID = file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"));
-						partIDs.add(partID);
+
+                        partID = file.getAbsolutePath().substring(file.getAbsolutePath().indexOf("part_"));
+                        partIDs.add(partID);
+                        String partidNumeric = partID.substring(5, partID.indexOf(".xml"));
+					    
+					    
+					    try
+		                {
+		                    Element part = new Element("part");
+		                    Document subdoc = new Document();
+		                    subdoc.setRootElement(part);
+		    
+		                    Element blid = new Element("blid");
+		                    blid.setText(partidNumeric);
+		    
+		    
+		    
+		                    subdoc.getRootElement().addContent(blid);
+		    
+		                    // new XMLOutputter().output(doc, System.out);
+		                    XMLOutputter xmlOutput = new XMLOutputter();
+		    
+		                    // display nice nice
+		                    xmlOutput.setFormat(Format.getPrettyFormat());
+		                    xmlOutput.output(subdoc, new FileWriter(file.getAbsolutePath()));
+		    
+		                    System.out.println("File overwritten for part "+partID);
+		                }
+		                catch (IOException e)
+		                {
+		                    // TODO Auto-generated catch block
+		                    e.printStackTrace();
+		                }
+					    
+					    
+					    
+					    
+					    
+					    
+					    
+					    
+					    
+					    
+					    
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 					}
 					else
 					{

@@ -25,6 +25,8 @@ public class DelayQueue extends Queue
 	public Command currentCommand;
 	public boolean nextStepFlag;
 	public long delay;
+
+    int timeSinceLast;
 	
 	public DelayQueue(int ID) 
 	{
@@ -36,8 +38,9 @@ public class DelayQueue extends Queue
 		selenium = new SeleniumModel(String.valueOf(id));
 		currentCommand = new InitialCommand();
 		commandsExecuted = 0;
-		limit = ThreadLocalRandom.current().nextInt(300, 600);
+		limit = ThreadLocalRandom.current().nextInt(500, 700);
 		clear = false;
+		timeSinceLast = 0;
 
 		System.out.println("Created a queue with ID "+ID);
 		
@@ -50,6 +53,7 @@ public class DelayQueue extends Queue
 						sleep(200);
 						//new ConsoleOutput("Master Clock Step Count", String.valueOf(currentStep));
 						executeQueue();
+						timeSinceLast++;
 					} catch (InterruptedException e) {
 						System.out.println("ERR: delayQueue thread interrupted");
 						e.printStackTrace();
@@ -81,6 +85,21 @@ public class DelayQueue extends Queue
 	
 	public void executeQueue() {
 		double percentDone;
+		
+		if (timeSinceLast>=ThreadLocalRandom.current().nextInt(1400, 1600) && ConsoleGUIModel.getSelenium().isRelaunchable() && queue.size()>=2)
+		{
+            System.out.println("Relaunching probably dead module");
+            commandsExecuted = 0;
+            limit = ThreadLocalRandom.current().nextInt(500, 700);//40-60 for part scraping
+            ConsoleGUIModel.getSelenium().relaunch(id);
+            addToBeginning(new Delay(150));
+            timeSinceLast=0;
+		}
+		else if (queue.size()<2)
+		{
+		    timeSinceLast=0;
+		}
+		
 		if ((currentCommand.equals(null)||currentCommand.isFinished())&&queue.size()!=0)
 		{
 			if (!nextStepFlag)
@@ -97,18 +116,21 @@ public class DelayQueue extends Queue
 			}
 			if (delay<=0)
 			{
-				currentCommand = queue.get(0).getCommand();
-				currentCommand.execute();
-				commandsExecuted++;
-				System.out.println("Current commands for module "+id+" is "+commandsExecuted+". Current limit is "+limit);
-				queue.remove(0);
-				nextStepFlag=false;
-				
-				if (clear)
-				{
-					queue.clear();
-					clear = false;
-				}
+
+                    currentCommand = queue.get(0).getCommand();
+                    currentCommand.execute();
+                    timeSinceLast=0;
+                    commandsExecuted++;
+                    System.out.println("Current commands for module "+id+" is "+commandsExecuted+". Current limit is "+limit);
+                    queue.remove(0);
+                    nextStepFlag=false;
+                    
+                    if (clear)
+                    {
+                    	queue.clear();
+                    	clear = false;
+                    }
+
 				/*
 				 * totalCommands++;
 				 * if (totalCommands%75 == 0)
@@ -127,11 +149,18 @@ public class DelayQueue extends Queue
 			
 			if (commandsExecuted>=limit)
 			{
-				System.out.println("Called exit tor, commandsExecuted = "+commandsExecuted+" limit= "+limit);
-				commandsExecuted = 0;
-				limit = ThreadLocalRandom.current().nextInt(90, 150);//40-60 for part scraping
-				ConsoleGUIModel.getSelenium().relaunch(id);
-				addToBeginning(new Delay(125));
+			    if (ConsoleGUIModel.getSelenium().isRelaunchable())
+			    {
+	                System.out.println("Called exit tor, commandsExecuted = "+commandsExecuted+" limit= "+limit);
+	                commandsExecuted = 0;
+	                limit = ThreadLocalRandom.current().nextInt(500, 700);//40-60 for part scraping
+	                ConsoleGUIModel.getSelenium().relaunch(id);
+	                addToBeginning(new Delay(150));
+			    }
+			    else
+			    {
+			        limit+=8;
+			    }
 				
 			}
 			

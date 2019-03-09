@@ -35,14 +35,19 @@ public class PullPartFromSite implements Command {
 	}
 	
 	@Override
-	public void execute() {
-		String url = "https://www.bricklink.com/v2/catalog/catalogitem.page?P="+
-				partID.substring(partID.indexOf('_')+1, partID.indexOf(".xml"))+"#T=C";
-		
-		String checkString = "BrickLink - Part "+partID.substring(partID.indexOf('_')+1, partID.indexOf(".xml"));
-		parent.setPageHTML(ConsoleGUIModel.getSelenium().getURLWithCheck(url, queueID, checkString));
-		//new ConsoleOutput("CommandResult", "Directed Selenium module to parse data for url "+url);
-		isFinished = true;
+	public void execute() 
+	{
+
+
+        String url = "https://www.bricklink.com/v2/catalog/catalogitem.page?P="+
+                partID.substring(partID.indexOf('_')+1, partID.indexOf(".xml"))+"#T=C";
+        
+        String checkString = "BrickLink - Part "+partID.substring(partID.indexOf('_')+1, partID.indexOf(".xml"));
+        parent.setPageHTML(ConsoleGUIModel.getSelenium().getURLWithCheck(url, queueID, checkString));
+        //new ConsoleOutput("CommandResult", "Directed Selenium module to parse data for url "+url);
+        isFinished = true;
+
+
 		
 	}
 
