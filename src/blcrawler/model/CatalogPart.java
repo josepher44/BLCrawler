@@ -792,21 +792,16 @@ public class CatalogPart
 	
    public void generateBLBackgroundID()
    {
-       int index = 0 + txtRep.indexOf("data-itemid=")+12;
-       if (index==11)
-       {
-           index=txtRep.indexOf("itemID=")+7;
-           if (index==6)
-           {
-               index=txtRep.indexOf("ItemID=")+7;
-           }
-       }
        //System.out.println(index);
-       String IDSubstring = txtRep.substring(index, index+10);
+       //String IDSubstring = txtRep.substring(index, index+10);
 
+       String IDSubstring = txtRep.substring(txtRep.indexOf("_var_item"));
+       IDSubstring = IDSubstring.substring(0, IDSubstring.indexOf(","));
+       
+       
 
        //System.out.println("Say something else");
-       //System.out.println("Pre-shorten substring: "+IDSubstring);
+       System.out.println("Pre-shorten substring: "+IDSubstring);
        IDSubstring = IDSubstring.replaceAll("[^0-9]","");
 
        //System.out.println("Post-shorten substring: "+IDSubstring);
@@ -819,7 +814,7 @@ public class CatalogPart
             System.out.println("Parsing exception in part "+partNumber+"at blInternalID new.");
         }
 
-        //System.out.println("Part number "+partNumber+" has a category ID of "+categoryID);
+        //System.out.println("Part number "+partNumber+" has an internal id of "+bricklinkInternalID);
     }
 
 	public void generateCategoryID()
