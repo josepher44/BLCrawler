@@ -87,6 +87,8 @@ public class CatalogPart
 
 	private ArrayList<String> knownColorsVerified;
 
+    private ArrayList<Integer> knownColorsComposite;
+
 	private Boolean hasInventory;
 
 	String txtRep;
@@ -138,7 +140,7 @@ public class CatalogPart
 		knownColorsBL = new ArrayList<>();
 		knownColorsBLMenu = new ArrayList<>();
 
-
+		bricklinkInternalID = Integer.parseInt(e.getChildText("blidInternal"));
 		categoryID = Integer.parseInt(e.getChildText("categoryid"));
 		categoryName = e.getChildText("categoryname");
 		name = e.getChildText("name");
@@ -337,6 +339,8 @@ public class CatalogPart
 				//System.out.println(ele.getText());
 			}
 		}
+		
+		generateKnownColorsComposite();
 
 
 		//System.out.println(knownColorsBLMenu);
@@ -483,6 +487,7 @@ public class CatalogPart
 		generatePriceGuideColors();
 		generateKnownColors();
 		generateMenuColors();
+		generateKnownColorsComposite();
 		
 
 		txtRep = "";
@@ -747,6 +752,12 @@ public class CatalogPart
 				PriceGuides.addContent(Color);
 			}
 			part.addContent(PriceGuides);
+			
+		}
+		else
+		{
+		    
+		    System.out.println("No price guides for part "+partNumber);
 		}
 
 		if (knownColorsBL.size()!=0)
@@ -762,6 +773,11 @@ public class CatalogPart
 			}
 			part.addContent(KnownColors);
 		}
+        else
+        {
+                
+            System.out.println("No known colors on bottom for part "+partNumber);
+        }
 
 		if (knownColorsBLMenu.size()!=0)
 		{
@@ -1752,13 +1768,13 @@ public class CatalogPart
 
 			while (!PriceGuideSubstring.equals(""))
 			{
-				if (PriceGuideSubstring.contains("http://www.bricklink.com/Catalog/PG"))
+				if (PriceGuideSubstring.contains("http://www.bricklink.com/catalogPG.asp"))
 				{
 					String Color = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("colorID="),PriceGuideSubstring.indexOf("</span><br")+11);
 					PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("colorID=")+8);
-					if (PriceGuideSubstring.contains("http://www.bricklink.com/Catalog/PG"))
+					if (PriceGuideSubstring.contains("http://www.bricklink.com/catalogPG.asp"))
 					{
-						PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("http://www.bricklink.com/Catalog/PG"));
+						PriceGuideSubstring = PriceGuideSubstring.substring(PriceGuideSubstring.indexOf("http://www.bricklink.com/catalogPG.asp"));
 					}
 
 					String Count = Color;
@@ -1798,13 +1814,13 @@ public class CatalogPart
 
 			while (!KnownSubstring.equals(""))
 			{
-				if (KnownSubstring.contains("http://www.bricklink.com/Catalog/ItemIn"))
+				if (KnownSubstring.contains("http://www.bricklink.com/catalogItemIn.asp?"))
 				{
 					String Color = KnownSubstring.substring(KnownSubstring.indexOf("colorID="),KnownSubstring.indexOf("</span><br")+11);
 					KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("colorID=")+8);
-					if (KnownSubstring.contains("http://www.bricklink.com/Catalog/ItemIn"))
+					if (KnownSubstring.contains("http://www.bricklink.com/catalogItemIn.asp?"))
 					{
-						KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("http://www.bricklink.com/Catalog/ItemIn"));
+						KnownSubstring = KnownSubstring.substring(KnownSubstring.indexOf("http://www.bricklink.com/catalogItemIn.asp?"));
 					}
 
 					String Count = Color;
@@ -1846,9 +1862,13 @@ public class CatalogPart
 	{
 		try
 		{
-			String MenuSubstring = txtRep.substring(txtRep.indexOf("div class=\"pciSelectColorDropdownList\""));
+		    int index = Math.max(txtRep.indexOf("div class=\"pciSelectColorColorItem\""), txtRep.indexOf("div class=\"pciSelectColorDropdownList\""));
+			String MenuSubstring = txtRep.substring(index);
 			MenuSubstring = MenuSubstring.substring(0,MenuSubstring.indexOf("</td>"));
-			//System.out.println(MenuSubstring);
+			if (partNumber.contains("3001miA"))
+			{
+			    System.out.println(MenuSubstring);
+			}
 			for(String color: ConsoleGUIModel.getDatabase().getColormap().getColorNames())
 			{
 				//System.out.println(color);
@@ -1896,6 +1916,44 @@ public class CatalogPart
 
 	}
 
+	public void generateKnownColorsComposite()
+	{
+	    ArrayList<Integer> colors = new ArrayList<>();
+	    for (String c : knownColorsBLMenu)
+	    {
+	        colors.add(ConsoleGUIModel.getDatabase().getColormap().idFromName(c));
+	    }
+	    for (ColorCount c: knownColorsBL)
+	    {
+	        if (!colors.contains(c.getColorID()))
+	        {
+	            colors.add(c.getColorID());
+	        }
+	    }
+       for (ColorCount c: priceGuides)
+        {
+            if (!colors.contains(c.getColorID()))
+            {
+                colors.add(c.getColorID());
+            }
+        }
+        for (ColorCount c: wantedLists)
+        {
+            if (!colors.contains(c.getColorID()))
+            {
+                colors.add(c.getColorID());
+            }
+        }
+        for (ColorCount c: itemsForSale)
+        {
+            if (!colors.contains(c.getColorID()))
+            {
+                colors.add(c.getColorID());
+            }
+        }
+        
+        knownColorsComposite = colors;
+	}
 
 
 	public String getPartNumber()
@@ -2221,6 +2279,16 @@ public class CatalogPart
     public void setBricklinkInternalID(int bricklinkInternalID)
     {
         this.bricklinkInternalID = bricklinkInternalID;
+    }
+
+    public ArrayList<Integer> getKnownColorsComposite()
+    {
+        return knownColorsComposite;
+    }
+
+    public void setKnownColorsComposite(ArrayList<Integer> knownColorsComposite)
+    {
+        this.knownColorsComposite = knownColorsComposite;
     }
 
 }

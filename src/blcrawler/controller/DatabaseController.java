@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -57,7 +58,7 @@ public class DatabaseController
 	{
 		catalogParts = new LinkedList<>();
 		masterMolds = new ArrayList<>();
-		catalogPartsByID = new Hashtable<>();
+		catalogPartsByID = new Hashtable<>(727070);
 		masterMoldsByID = new Hashtable<>();
 		childToMasterMold = new Hashtable<>();
 		relationshipBufferTriggers = new ArrayList<>();
@@ -634,6 +635,7 @@ public class DatabaseController
 	public void addCatalogPart(CatalogPart part)
 	{
 		catalogParts.add(part);
+
 		catalogPartsByID.put(part.getPartNumber(), part);
 	}
 

@@ -86,7 +86,7 @@ public class DelayQueue extends Queue
 	public void executeQueue() {
 		double percentDone;
 		
-		if (timeSinceLast>=ThreadLocalRandom.current().nextInt(1400, 1600) && ConsoleGUIModel.getSelenium().isRelaunchable() && queue.size()>=2)
+		/*if (timeSinceLast>=ThreadLocalRandom.current().nextInt(1400, 1600) && ConsoleGUIModel.getSelenium().isRelaunchable() && queue.size()>=2)
 		{
             System.out.println("Relaunching probably dead module");
             commandsExecuted = 0;
@@ -99,7 +99,7 @@ public class DelayQueue extends Queue
 		{
 		    timeSinceLast=0;
 		}
-		
+		*/
 		if ((currentCommand.equals(null)||currentCommand.isFinished())&&queue.size()!=0)
 		{
 			if (!nextStepFlag)
@@ -146,7 +146,7 @@ public class DelayQueue extends Queue
 				
 					
 			}
-			
+			/*
 			if (commandsExecuted>=limit)
 			{
 			    if (ConsoleGUIModel.getSelenium().isRelaunchable())
@@ -163,6 +163,7 @@ public class DelayQueue extends Queue
 			    }
 				
 			}
+			*/
 			
 
 		}

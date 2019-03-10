@@ -55,6 +55,7 @@ public class AllPartHTMLToMasterXML extends InstantCommand {
 				
 				//For every file in the directory, read the part number from the filename. If it
 				//isn't already in memory, build a CatalogPart by parsing the HTML
+				int flength = dir.listFiles().length;
 				for(File file: dir.listFiles()) 
 				{
 					String partNumber="";
@@ -63,15 +64,16 @@ public class AllPartHTMLToMasterXML extends InstantCommand {
 						partNumber = 
 								file.getAbsolutePath().substring(file.getAbsolutePath().indexOf('_')
 										+1, file.getAbsolutePath().indexOf(".html"));
-						
+
 						//Check if part is in memory. If not, build it
 						if (!ConsoleGUIModel.getDatabase().partExists(partNumber))
 						{
 							ConsoleGUIModel.getDatabase().addCatalogPart(new CatalogPart(
 									file.getAbsolutePath()));
+
 							i++;
 							System.out.println("Built part# "+partNumber+". "+i+" of "+
-													dir.listFiles().length);
+													flength);
 						}
 					}
 					catch (Exception e)

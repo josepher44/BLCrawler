@@ -31,6 +31,7 @@ import blcrawler.commands.toplevelcalls.admin.CancelScrape;
 import blcrawler.commands.toplevelcalls.AllPartHTMLToMasterXML;
 import blcrawler.commands.toplevelcalls.api.AllInventoriesBLToRawDatabase;
 import blcrawler.commands.toplevelcalls.selenium.AllImagesBLToDatabase;
+import blcrawler.commands.toplevelcalls.selenium.AllPGBLToRawDatabase;
 import blcrawler.commands.toplevelcalls.selenium.AllPartsBLToRawDatabase;
 import blcrawler.commands.toplevelcalls.selenium.CreateSelenium;
 import blcrawler.model.ConsoleOutput;
@@ -68,6 +69,8 @@ public class ConsoleController
 		commandLibrary.put("buildinventories", () -> {buildInventories();});
 		commandLibrary.put("startgui", () -> {startGUI();});
 	    commandLibrary.put("readBLSummary", () -> {readBLSummary();});
+        commandLibrary.put("buildapriceguide", () -> {pullPG();});
+        commandLibrary.put("addpriceguides", () -> {pullPGs();});
 
 		//Depreciated Methods old system. Avoid using or investigate function
 		commandLibrary.put("timertest", () -> {createTimertest();});
@@ -140,6 +143,20 @@ public class ConsoleController
 		command.queue();
 		ConsoleGUIModel.getSelenium().addToInstant(command);
 	}
+	
+   public void pullPGs()
+    {
+        AllPGBLToRawDatabase command = new AllPGBLToRawDatabase();
+        command.queue();
+        ConsoleGUIModel.getSelenium().addToInstant(command);
+    }
+   
+   public void pullPG()
+   {
+       PullPGFromSite command = new PullPGFromSite(264, 110, ConsoleGUIModel.getDatabase().getPart("3001"));
+       command.queue();
+       ConsoleGUIModel.getSelenium().addToInstant(command);
+   }
 
 	public void writeXMLParts()
 	{

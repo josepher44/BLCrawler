@@ -43,7 +43,7 @@ public class SeleniumDistributor
 				{
 					try {
 						sleep(200);
-						scanProcesses();
+						//scanProcesses();
 					} catch (InterruptedException e) {
 						System.out.println("ERR: Timer thread interrupted");
 						e.printStackTrace();
@@ -102,7 +102,7 @@ public class SeleniumDistributor
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					updateProcessLinks();
+					//updateProcessLinks();
 				}
 			}
 		};
@@ -117,6 +117,7 @@ public class SeleniumDistributor
 		delayQueueMap.get(id).getSelenium().gotoURL(url);
 		return delayQueueMap.get(id).getSelenium().getHTML();
 	}
+	
 	
 	   //
     public String getURLWithCheck(String url, int id, String checkstring)
@@ -290,7 +291,8 @@ public class SeleniumDistributor
 		{
 			try
 			{
-				String cmd = "taskkill /F /PID " + processIDs.get(i);
+				//String cmd = "taskkill /F /PID " + processIDs.get(i);
+			    String cmd = "taskkill /IM firefox.exe /F";
 				Runtime.getRuntime().exec(cmd);
 			}
 			catch (IOException e)

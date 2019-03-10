@@ -25,7 +25,7 @@ public class ColorMap
 		colorNames = new ArrayList<>();
 		colorIDs = new ArrayList<>();
 		
-		String path = "C:/Users/Owner/Documents/BLCrawler/ColorCodes.xml";
+		String path = "C:/Users/Owner/Documents/BLCrawler/colorsComplete.xml";
 		File colors = new File(path);
 		
 		SAXBuilder builder3 = new SAXBuilder();
@@ -44,14 +44,14 @@ public class ColorMap
 		
 		Element root = readDoc3.getRootElement();
 		
-		for (Element currentElement : root.getChildren("row"))
+		for (Element currentElement : root.getChildren("ITEM"))
 		{
-			String color = currentElement.getChildText("Name");
-			color = color.substring(0, color.length()-1);
-			nameFromID.put(Integer.valueOf(currentElement.getChildText("ID")), color);
-			idFromName.put(color, Integer.valueOf(currentElement.getChildText("ID")));
+			String color = currentElement.getChildText("COLORNAME");
+			//color = color.substring(0, color.length());
+			nameFromID.put(Integer.valueOf(currentElement.getChildText("COLOR")), color);
+			idFromName.put(color, Integer.valueOf(currentElement.getChildText("COLOR")));
 			colorNames.add(color);
-			colorIDs.add(Integer.valueOf(currentElement.getChildText("ID")));
+			colorIDs.add(Integer.valueOf(currentElement.getChildText("COLOR")));
 		}
 
 	}

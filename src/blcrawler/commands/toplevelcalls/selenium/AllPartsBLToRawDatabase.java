@@ -107,37 +107,6 @@ public class AllPartsBLToRawDatabase implements Command
 		                    e.printStackTrace();
 		                }
 					    
-					    
-					    
-					    
-					    
-					    
-					    
-					    
-					    
-					    
-					    
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
 						
 						
 					}
