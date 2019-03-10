@@ -483,6 +483,7 @@ public class CatalogPart
 		generatePriceGuideColors();
 		generateKnownColors();
 		generateMenuColors();
+		
 
 		txtRep = "";
 	}
@@ -514,9 +515,9 @@ public class CatalogPart
 		part.addContent(PartNumber);
 		
 
-        Element bricklinkInternalID = new Element("blidInternal");
-        bricklinkInternalID.setText(String.valueOf(bricklinkInternalID));
-        part.addContent(bricklinkInternalID);
+        Element blidInternal = new Element("blidInternal");
+        blidInternal.setText(String.valueOf(bricklinkInternalID));
+        part.addContent(blidInternal);
 
 		Element Date = new Element("date");
 		Date.setText(dateAdded.toString());
@@ -795,6 +796,10 @@ public class CatalogPart
        if (index==11)
        {
            index=txtRep.indexOf("itemID=")+7;
+           if (index==6)
+           {
+               index=txtRep.indexOf("ItemID=")+7;
+           }
        }
        //System.out.println(index);
        String IDSubstring = txtRep.substring(index, index+10);
@@ -1402,7 +1407,7 @@ public class CatalogPart
 		{
 			if (txtRep.contains("This Door fits with the following Door Frame"))
 			{
-				String DoorSubstring = txtRep.substring(txtRep.indexOf("Door Frame"));
+				String DoorSubstring = txtRep.substring(txtRep.indexOf("following Door Frame")+10);
 				DoorSubstring = DoorSubstring.substring(DoorSubstring.indexOf("<ul>")+4, DoorSubstring.indexOf("</ul>"));
 				System.out.println(DoorSubstring);
 				while (!DoorSubstring.equals(""))
@@ -1666,8 +1671,8 @@ public class CatalogPart
 	{
 		try
 		{
-			String ForSaleSubstring = txtRep.substring(txtRep.indexOf("Items For Sale:"));
-			ForSaleSubstring = ForSaleSubstring.substring(ForSaleSubstring.indexOf("Items For Sale:"), ForSaleSubstring.indexOf("</td>"));
+			String ForSaleSubstring = txtRep.substring(txtRep.indexOf("Lots For Sale:"));
+			ForSaleSubstring = ForSaleSubstring.substring(ForSaleSubstring.indexOf("Lots For Sale:"), ForSaleSubstring.indexOf("</td>"));
 
 			while (!ForSaleSubstring.equals(""))
 			{
