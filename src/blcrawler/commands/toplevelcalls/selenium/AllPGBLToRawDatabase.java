@@ -88,17 +88,30 @@ public class AllPGBLToRawDatabase implements Command
 				 * the instant queue is the correct place for this even though it feels wrong
 				 * TODO: Refactor this so that it's more straightforwards and intuitive
 				 */
-				int i=1;
-				System.out.println("Total pages to scrape: "+pseudonames.size());
+				int i=0;
+				System.out.println("Total parts to scrape: "+pseudonames.size());
 				for (String root : pseudonames)
 				{
 					CatalogPart part = ConsoleGUIModel.getDatabase().getPart(root.substring(0,root.indexOf("~~")));
 					int internalid = Integer.valueOf(root.substring(root.indexOf("~~")+2, root.indexOf("%%")));
 					int colorid = Integer.valueOf(root.substring(root.indexOf("%%")+2));
+					
+					File f = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/PriceGuides/Parts/part_"+part.getPartNumber()+"_color_"+colorid+".txt");
+					if (f.exists())
+					{
+	                    i--;
+	                    if (i%100==0)
+	                    {
+					    System.out.println("part_"+part.getPartNumber()+"_color_"+colorid+".txt already exists. Actual total is "+(pseudonames.size()-i));
+	                    }
+	                }
+					else
+					{
 				    
-				    ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new PullPGFromSite(internalid, colorid, part));
-					//System.out.println("Command built for part #"+part.getPartNumber()+", color "+ConsoleGUIModel.getDatabase().getColormap().nameFromID(colorid)+". "+i+" out of "+pseudonames.size());
-					i++;
+    				    ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new PullPGFromSite(internalid, colorid, part));
+    					//System.out.println("Command built for part #"+part.getPartNumber()+", color "+ConsoleGUIModel.getDatabase().getColormap().nameFromID(colorid)+". "+i+" out of "+pseudonames.size());
+
+					}
 				}
 				
 				//Finish execution

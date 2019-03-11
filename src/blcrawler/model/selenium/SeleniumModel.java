@@ -43,6 +43,7 @@ import org.openqa.selenium.firefox.ProfilesIni;
 
 
 import blcrawler.model.ConsoleOutput;
+import blcrawler.commands.residuals.Delay;
 import blcrawler.model.ConsoleGUIModel;
 
 public class SeleniumModel {
@@ -359,8 +360,27 @@ public class SeleniumModel {
 
 	
 	public void gotoURL(String url) {
-		driver.get(url);
-		driver.manage().deleteAllCookies();
+	    try {
+
+	        driver.get(url);
+	        driver.manage().deleteAllCookies();
+	    }
+	    catch( Exception e)
+	    {
+	        System.out.println("WARNING: Scrape exception thrown in module "+socksport
+	                +", restarting module");
+	        try
+            {
+                Thread.sleep(5000);
+            }
+            catch (InterruptedException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+	        
+	        gotoURL(url);
+	    }
 		//new ConsoleOutput("Selenium: ", "Page title is: " + driver.getTitle());
 	}
 	

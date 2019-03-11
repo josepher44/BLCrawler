@@ -4,15 +4,18 @@ import random
 import os
 import subprocess
 import time
+import numpy as np
 
 paths = []
 args = []
 controllers = []
+cutoffs = []
 
 for k in range(20):
     cmport = 9152+k
     paths.append("C:\Users\Owner\Desktop\cmdtor\\"+str(cmport)+"\Tor\\tor.exe")
     args.append("C:\Users\Owner\Desktop\cmdtor\\"+str(cmport)+"\Data\Tor\\torrc")
+    cutoffs.append(random.randint(15,60))
     subprocess.Popen([paths[k], '-f', args[k]], shell=True)
     try:
         controllers.append(Controller.from_port(port = 9052+k))
@@ -33,15 +36,19 @@ for k in range(20):
 print("TestPrint")
 
 
-i=0
+
+i=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+timesince = np.array(i)
+print(cutoffs)
+
 while True:
     time.sleep(1)
-    i+=1
-    cutoff = random.randint(15,45)
+    timesince+=1
+    cutoff = random.randint(5,25)
     module = random.randint(0,19)
-    if i >=cutoff:
-        controllers[module].signal(Signal.NEWNYM)
-        print("Tor "+str(9152+module)+" reset, rand was "+str(module))
-        cutoff = random.randint(15,45)
-        module = random.randint(0,19)
-        i=0
+    for idx in range(20):
+        if timesince[idx]>cutoffs[idx]:
+            timesince[idx]=0
+            cutoffs[idx] = random.randint(15,60)
+            controllers[idx].signal(Signal.NEWNYM)
+            print("Tor "+str(9152+idx)+" reset, rand was "+str(idx))

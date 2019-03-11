@@ -218,6 +218,11 @@ public class SeleniumDistributor
 		//System.out.println("Added command to queue #"+out.getId()+", queue size of "+out.getQueueSize());
 	}
 	
+	public void addToSpecificQueueBeginning(Command command, int queueid)
+	{
+	    delayQueueList.get(queueid).addToBeginning(command);
+	}
+	
 	public void updateProcessLinks()
 	{
 		for (int i=0; i<processIDs.size(); i++)
