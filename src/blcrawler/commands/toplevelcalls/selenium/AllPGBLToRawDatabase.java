@@ -99,7 +99,7 @@ public class AllPGBLToRawDatabase implements Command
 					File f = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/PriceGuides/Parts/part_"+part.getPartNumber()+"_color_"+colorid+".txt");
 					if (f.exists())
 					{
-	                    i--;
+	                    i++;
 	                    if (i%100==0)
 	                    {
 					    System.out.println("part_"+part.getPartNumber()+"_color_"+colorid+".txt already exists. Actual total is "+(pseudonames.size()-i));

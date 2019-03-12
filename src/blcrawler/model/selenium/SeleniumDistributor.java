@@ -3,6 +3,9 @@ package blcrawler.model.selenium;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Set;
@@ -11,6 +14,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 import blcrawler.commands.templates.Command;
+import blcrawler.commands.toplevelcalls.admin.CancelScrape;
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.ConsoleOutput;
 import blcrawler.model.queue.DelayQueue;
@@ -115,7 +119,43 @@ public class SeleniumDistributor
 	public String getURL(String url, int id)
 	{
 		delayQueueMap.get(id).getSelenium().gotoURL(url);
-		return delayQueueMap.get(id).getSelenium().getHTML();
+		String outputs = delayQueueMap.get(id).getSelenium().getHTML();
+		
+		//if (outputs.contains("quota"))
+		//{
+		    System.out.println("WARNING: BL QUOTA EXCEEDED");
+            System.out.println("Error occured at module "+id);
+            System.out.println("Error occured at url "+url);
+
+            delayQueueMap.get(id).getSelenium().gotoURL("https://api.ipify.org/");
+            String ipad = delayQueueMap.get(id).getSelenium().getHTML();
+            String ipshort = ipad.substring(ipad.indexOf("<pre>")+5, ipad.indexOf("</pre>"));
+            
+            try {
+                Files.write(Paths.get("C:/Users/Owner/Documents/BLCrawler/Catalog/log/ipblacklist.txt"), (ipshort+System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+            }catch (IOException e) {
+                //exception handling left as an exercise for the reader
+            }
+            
+            
+            
+            System.out.println("Tor IP was "+ipad);
+            System.out.println("Pausing scrape operation");
+            try
+            {
+                Thread.sleep(120000);
+            }
+            catch (InterruptedException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            outputs = getURL(url, id);
+            //ConsoleGUIModel.getSelenium().addToInstant(new CancelScrape());
+            
+		//}
+		return outputs;
+		
 	}
 	
 	
