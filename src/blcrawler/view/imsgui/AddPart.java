@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -306,6 +307,27 @@ public class AddPart
         mainLayout.setRight(right);
         
         Scene scene = new Scene(mainLayout);
+        
+        scene.setOnKeyPressed(ke -> {
+            KeyCode keyCode = ke.getCode();
+            if (keyCode.equals(KeyCode.ENTER)) 
+            
+            {
+                ConsoleGUIModel.getImsgui().addPart();
+            }
+        });
+        
+        colorList.setOnKeyPressed(ke -> {
+            KeyCode keyCode = ke.getCode();
+            if (keyCode.equals(KeyCode.ENTER)) 
+            
+            {
+                ConsoleGUIModel.getImsgui().addPart();
+            }
+        });
+        
+        
+        
         scene.getStylesheets().add("test.css");
         window.setScene(scene);
         window.show();
