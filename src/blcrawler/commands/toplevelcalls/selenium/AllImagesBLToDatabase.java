@@ -83,17 +83,17 @@ public class AllImagesBLToDatabase implements Command
 					 * Run on every known color the part comes in
 					 * TODO: Checking for cases where the menu does not represent all actual colors
 					 */
-					for(String color : part.getKnownColorsBLMenu())
+					for(Integer color : part.getKnownColorsComposite())
 					{
 						/*
 						 * Generate the url to the image, and the path it should be saved. Puts
 						 * them into pathMap and urls
 						 */
-						path = basepath+part.getPartNumber() + "_" + color + ".png";
+						path = basepath+part.getPartNumber() + "_" + colormap.nameFromID(color) + ".png";
 						urls.add(	"https://img.bricklink.com/ItemImage/PN/"+
-									colormap.idFromName(color)+"/"+part.getPartNumber()+".png"
+									color+"/"+part.getPartNumber()+".png"
 									);
-						pathMap.put("https://img.bricklink.com/ItemImage/PN/"+colormap.idFromName(color)+"/"+part.getPartNumber()+".png",
+						pathMap.put("https://img.bricklink.com/ItemImage/PN/"+color+"/"+part.getPartNumber()+".png",
 								path);
 					
 					}
@@ -135,19 +135,28 @@ public class AllImagesBLToDatabase implements Command
 					//Execution of this command is way slower than it should be, probable cause
 					if (notfound.contains(geturl))	//If the part has no image according to file
 					{
+					    if (i%100==0)
+                        {
 						System.out.println("(" + i + " of " + size + ") Already scraped "+geturl+","
 								+ " image does not exist");
+                        }
 					}
 					else if (!filepath.exists())//If the part needs to be scraped
 					{
-						System.out.println("(" + i + " of " + size + "Scraping " + geturl);
+					    if (i%100==0)
+                        {
+					        System.out.println("(" + i + " of " + size + "Scraping " + geturl);
+                        }
 						ConsoleGUIModel.getSelenium().distributeToSmallestQueue(new AddImage(geturl,
 								pathMap.get(geturl)));
 					}
 					else						//If the part has already been successfully scraped	
 					{
-						//System.out.println("(" + i + " of " + size + ") Already scraped "+geturl+","
-						//		+ " file in to folder");
+						if (i%100==0)
+						{
+					    System.out.println("(" + i + " of " + size + ") Already scraped "+geturl+","
+								+ " file in to folder");
+						}
 					}
 					i++;
 				}

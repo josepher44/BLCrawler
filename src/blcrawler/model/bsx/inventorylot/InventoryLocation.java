@@ -25,7 +25,7 @@ public class InventoryLocation extends InventoryEntry
 
 
 	//Right now, total quantity across all multis. Eventually under new datastructure, Quantity will be specific to each location
-	int Qty;
+	Integer Qty;
 
 
 	//Information pulled from remarks is only used in inventoryLocation, not Lot

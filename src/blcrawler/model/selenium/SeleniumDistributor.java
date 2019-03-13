@@ -121,8 +121,8 @@ public class SeleniumDistributor
 		delayQueueMap.get(id).getSelenium().gotoURL(url);
 		String outputs = delayQueueMap.get(id).getSelenium().getHTML();
 		
-		//if (outputs.contains("quota"))
-		//{
+		if (outputs.contains("quota"))
+		{
 		    System.out.println("WARNING: BL QUOTA EXCEEDED");
             System.out.println("Error occured at module "+id);
             System.out.println("Error occured at url "+url);
@@ -153,7 +153,7 @@ public class SeleniumDistributor
             outputs = getURL(url, id);
             //ConsoleGUIModel.getSelenium().addToInstant(new CancelScrape());
             
-		//}
+		}
 		return outputs;
 		
 	}

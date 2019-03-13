@@ -57,6 +57,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.ShortStringConverter;
 
 import java.awt.event.*;
@@ -252,8 +253,21 @@ public class IMSGUIView
             @Override public void handle(TableColumn.CellEditEvent<InventoryLocation, Short> t) {
                 ((InventoryLocation)t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setCabinet(t.getNewValue());
+                System.out.println("Updated cabinet from "+t.getOldValue()+" to "+t.getNewValue());
             }
         });
+        
+        QtyColumn.setCellFactory(TextFieldTableCellInteger.forTableColumn(new IntegerStringConverter()));
+        QtyColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<InventoryLocation, Integer>>()
+        {
+            @Override public void handle(TableColumn.CellEditEvent<InventoryLocation, Integer> t) {
+                int oldval = t.getTableView().getItems().get(t.getTablePosition().getRow()).getQty();
+                ((InventoryLocation)t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setQty(t.getNewValue());
+                System.out.println("Updated qty from "+oldval+" to "+t.getNewValue());
+            }
+        });
+
 
 
 
