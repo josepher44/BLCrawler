@@ -1,5 +1,6 @@
 package blcrawler.view.imsgui;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.IllegalFormatException;
 
@@ -27,10 +28,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -59,6 +62,7 @@ public class AddPart
     static RadioButton conditionUsed;
     static ToggleGroup condition;
     static Image previewImage;
+    static ImageView previewImageView;
     
     
     public static void display()
@@ -168,6 +172,7 @@ public class AddPart
                     {
                         colorList.getSelectionModel().select(0);
                     }
+                    
                 }
                 else if (newValue == null)
                 {
@@ -199,6 +204,22 @@ public class AddPart
         colorList = new ListView<>();
         //colorList.getItems().addAll(colors);
         colorList.setPrefHeight(500);
+        
+
+        colorList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldvalue, String newvalue)
+            {
+                System.out.println("Changed the image");
+                String partNumber = partTable.getSelectionModel().getSelectedItem().getPartNumber();
+                String color = newvalue;
+                updateImage(partNumber, color);
+                
+            }
+        });
+        
         
         quantityLabel = new Label("Quantity: ");
         quantityLabel.setPadding(new Insets(0,20,0,10));
@@ -254,7 +275,15 @@ public class AddPart
         conditionUsed.setSelected(true);
         conditionUsed.setPadding(new Insets(0,20,0,20));
         
-        //previewImage = new Image();
+        //Load image
+        File imgfile = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/Images/61487_Light Bluish Gray.png");
+        previewImage = new Image(imgfile.toURI().toString());
+        previewImageView = new ImageView(previewImage);
+        previewImageView.setPreserveRatio(true);
+        previewImageView.setFitHeight(100);
+        StackPane imageStackPane = new StackPane();
+        imageStackPane.setPadding(new Insets(0,30,0,30));
+        imageStackPane.getChildren().add(previewImageView);
         
         
         BorderPane mainLayout = new BorderPane();
@@ -273,6 +302,7 @@ public class AddPart
         dataBoxes.add(quantity, 1, 0);
         dataBoxes.add(conditionNew, 2, 0);
         dataBoxes.add(conditionUsed, 3, 0);
+        dataBoxes.add(imageStackPane, 2, 1, 5,3);
         dataBoxes.add(priceLabel, 0, 1);
         dataBoxes.add(price, 1, 1);
         dataBoxes.add(commentsLabel, 0, 2);
@@ -371,6 +401,14 @@ public class AddPart
             throw new IllegalArgumentException();
         }
         return s;
+    }
+    
+    public static void updateImage(String partNumber, String color)
+    {
+        String path = "C:/Users/Owner/Documents/BLCrawler/Catalog/Images/"+partNumber+"_"+color+".png";
+        File imgfile = new File(path);
+        previewImage = new Image(imgfile.toURI().toString());
+        previewImageView.setImage(previewImage);
     }
     
     public static String getColor()
