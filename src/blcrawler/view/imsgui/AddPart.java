@@ -2,6 +2,7 @@ package blcrawler.view.imsgui;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IllegalFormatException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -102,6 +103,7 @@ public class AddPart
         filtertype = new ChoiceBox<>();
         filtertype.getItems().add("Exact Text");
         filtertype.getItems().add("Nearest Mass");
+        filtertype.setValue("Exact Text");
         
         colorDisplayMode = new ChoiceBox<>();
         colorDisplayMode.getItems().add("Show All");
@@ -136,12 +138,32 @@ public class AddPart
                 {
                     categoryToDisplay = categoryList.getSelectionModel().getSelectedItem();
                     partSubList.clear();
-                    for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())
+                    
+                    if (filtertype.getValue().equalsIgnoreCase("Exact Text"))
                     {
-                        if ((categoryToDisplay.equals("All Items") || part.getCategoryName().equals(categoryToDisplay)) && (part.getName().contains(newValue)))
-                            partSubList.add(part);
+                        
+                        for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())
+                        {
+                            if ((categoryToDisplay.equals("All Items") || part.getCategoryName().equals(categoryToDisplay)) && (part.getName().contains(newValue)))
+                                partSubList.add(part);
+                        }
+                        partSubList.sort(Comparator.comparing(CatalogPart::getWeight));
+                        partTable.scrollTo(0);
+                    
+                    
                     }
-                    partTable.scrollTo(0);
+                    
+                    else
+                    {
+                        for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())
+                        {
+                            if (categoryToDisplay.equals("All Items") || part.getCategoryName().equals(categoryToDisplay))
+                                partSubList.add(part);
+                        }
+                        partSubList.sort(Comparator.comparing(a -> a.getWeightAbs(Double.valueOf(filter.getText()))));
+                    }
+                    
+                    
                     System.out.println("ListView selection changed from oldValue = "
                             + oldValue + " to newValue = " + newValue);
                 }
@@ -160,6 +182,7 @@ public class AddPart
                     if ((newValue.equals("All Items") || part.getCategoryName().equals(newValue)) && (part.getName().contains(filter.getText())))
                         partSubList.add(part);
                 }
+                partSubList.sort(Comparator.comparing(CatalogPart::getWeight));
                 partTable.scrollTo(0);
                 System.out.println("ListView selection changed from oldValue = "
                         + oldValue + " to newValue = " + newValue);
@@ -171,14 +194,19 @@ public class AddPart
         Number.setCellValueFactory(new PropertyValueFactory<>("partNumber"));
         
         TableColumn<CatalogPart,String> Name = new TableColumn<>("Name");
-        Name.setMinWidth(550);
+        Name.setMinWidth(500);
         Name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        
+        TableColumn<CatalogPart,Double> Weight = new TableColumn<>("Weight");
+        Weight.setMinWidth(50);
+        Weight.setCellValueFactory(new PropertyValueFactory<>("weight"));
         
         
         partTable = new TableView<>();
         partTable.setItems(partSubList);
         partTable.getColumns().add(Number);
         partTable.getColumns().add(Name);
+        partTable.getColumns().add(Weight);
         partTable.setPrefHeight(500);
         
         partTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CatalogPart>() {
@@ -358,6 +386,7 @@ public class AddPart
         top.getChildren().add(itemTypes);
         top.getChildren().add(filterLabel);
         top.getChildren().add(filter);
+        top.getChildren().add(filtertype);
         top.getChildren().add(colorDisplayMode);
         mainLayout.setTop(top);
         mainLayout.setBottom(bottom);

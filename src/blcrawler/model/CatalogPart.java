@@ -2290,5 +2290,10 @@ public class CatalogPart
     {
         this.knownColorsComposite = knownColorsComposite;
     }
+    
+    public Double getWeightAbs(Double comparison)
+    {
+        return Math.abs(comparison - weight);
+    }
 
 }
