@@ -1,6 +1,7 @@
 package blcrawler.view.imsgui;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.IllegalFormatException;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
+import blcrawler.model.PriceGuide;
 import blcrawler.model.bsx.inventorylot.InventoryLocation;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -263,6 +265,7 @@ public class AddPart
         colorList.setPrefHeight(500);
         
 
+        //Color selection action
         colorList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
 
@@ -273,6 +276,10 @@ public class AddPart
                 String partNumber = partTable.getSelectionModel().getSelectedItem().getPartNumber();
                 String color = newvalue;
                 updateImage(partNumber, color);
+                PriceGuide priceguide = new PriceGuide(partNumber, ConsoleGUIModel.getDatabase().getColormap().idFromName(color));
+                System.out.println("Average price: "+priceguide.getSalesUsedQuantityAverage());
+                DecimalFormat df = new DecimalFormat("0.000");
+                price.setText(df.format(priceguide.getSalesUsedQuantityAverage()));
                 
             }
         });

@@ -35,14 +35,14 @@ public class PriceGuideForSale
             quantity = Integer.valueOf(html.substring(html.indexOf("</a></td><td>")+13, html.indexOf("</td><td style=\"text-align: left")));
             if (html.contains("(x"))
             {
-                String bulkstring = html.substring(html.indexOf("(x"));
+                String bulkstring = html.substring(html.indexOf("(x")+2);
                 bulk = Integer.valueOf(bulkstring.substring(2,bulkstring.indexOf(")")));
             }
             else
             {
                 bulk = 1;
             }
-            price = Double.valueOf(html.substring(html.indexOf('$'), html.indexOf("</td></tr>")));
+            price = Double.valueOf(html.substring(html.indexOf('$')+1, html.indexOf("</td></tr>")));
         }
         catch (Exception e)
         {

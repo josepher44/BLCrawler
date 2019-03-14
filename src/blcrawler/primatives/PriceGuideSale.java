@@ -10,9 +10,16 @@ public class PriceGuideSale
     
     public PriceGuideSale(String htmltag)
     {   
-        String qstring1 = htmltag.substring(htmltag.indexOf("</td><td>")+9);
-        quantity = Integer.valueOf(qstring1.substring(0, qstring1.indexOf("</td>")));
-        price = Double.valueOf(htmltag.substring(htmltag.indexOf('$'), htmltag.indexOf("</td></tr>")));
+        try
+        {
+            String qstring1 = htmltag.substring(htmltag.indexOf("</td><td>")+9);
+            quantity = Integer.valueOf(qstring1.substring(0, qstring1.indexOf("</td>")));
+            price = Double.valueOf(htmltag.substring(htmltag.indexOf('$')+1, htmltag.indexOf("</td></tr>")));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Failed to parse HTML. HTML was "+htmltag);
+        }
     }
 
     public int getQuantity()
