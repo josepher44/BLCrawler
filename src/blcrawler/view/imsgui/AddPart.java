@@ -49,6 +49,7 @@ public class AddPart
     static ChoiceBox<String> itemTypes;
     static Label filterLabel;
     static TextField filter;
+    static ChoiceBox<String> filtertype;
     static ChoiceBox<String> colorDisplayMode;
     static TextField quantity;
     static TextField price;
@@ -98,6 +99,10 @@ public class AddPart
         filter = new TextField();
         filter.setMinWidth(500);
         
+        filtertype = new ChoiceBox<>();
+        filtertype.getItems().add("Exact Text");
+        filtertype.getItems().add("Nearest Mass");
+        
         colorDisplayMode = new ChoiceBox<>();
         colorDisplayMode.getItems().add("Show All");
         colorDisplayMode.getItems().add("BL For Sale");
@@ -119,6 +124,30 @@ public class AddPart
         partSubList = FXCollections.observableArrayList();
         colors = FXCollections.observableArrayList();
         
+        //Filter change listener
+        filter.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+
+                System.out.println(" Text Changed to  " + newValue + ")\n");
+                
+                if (newValue.length()>0)
+                {
+                    categoryToDisplay = categoryList.getSelectionModel().getSelectedItem();
+                    partSubList.clear();
+                    for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())
+                    {
+                        if ((categoryToDisplay.equals("All Items") || part.getCategoryName().equals(categoryToDisplay)) && (part.getName().contains(newValue)))
+                            partSubList.add(part);
+                    }
+                    partTable.scrollTo(0);
+                    System.out.println("ListView selection changed from oldValue = "
+                            + oldValue + " to newValue = " + newValue);
+                }
+            }
+        });
+        
         //Selection listening code
         categoryList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -128,7 +157,7 @@ public class AddPart
                 partSubList.clear();
                 for (CatalogPart part : ConsoleGUIModel.getDatabase().getCatalogParts())
                 {
-                    if (newValue.equals("All Items") || part.getCategoryName().equals(newValue))
+                    if ((newValue.equals("All Items") || part.getCategoryName().equals(newValue)) && (part.getName().contains(filter.getText())))
                         partSubList.add(part);
                 }
                 partTable.scrollTo(0);
