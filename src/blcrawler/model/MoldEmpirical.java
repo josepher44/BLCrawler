@@ -6,7 +6,7 @@ public class MoldEmpirical
     int[] empiricalMeasurementsDouble;
     int extrapolateAt;
     int multiple;
-    boolean doublePreferred;
+    public boolean doublePreferred;
     boolean doublePossible;
     boolean empty;
     String partNumber;
@@ -15,11 +15,24 @@ public class MoldEmpirical
     {
         empty = true;
         partNumber=pn;
+        empiricalMeasurementsSingle = new int[17];
+        empiricalMeasurementsDouble = new int[11];
+        doublePreferred = false;
+        
+        for (int i=1; i<17; i++)
+        {
+            empiricalMeasurementsSingle[i]=0;
+            if (i<12 && (i%2)==0)
+            {
+                empiricalMeasurementsDouble[i]=0;
+            }
+        }
     }
+   
 
-    public int[] getEmpiricalMeasurementsSingle()
+    public int getEmpiricalMeasurementsSingle(int index)
     {
-        return empiricalMeasurementsSingle;
+        return empiricalMeasurementsSingle[index];
     }
 
     public void setEmpiricalMeasurementsSingle(int[] empiricalMeasurementsSingle)
@@ -28,9 +41,9 @@ public class MoldEmpirical
         empty=false;
     }
 
-    public int[] getEmpiricalMeasurementsDouble()
+    public int getEmpiricalMeasurementsDouble(int index)
     {
-        return empiricalMeasurementsDouble;
+        return empiricalMeasurementsDouble[index];
     }
 
     public void setEmpiricalMeasurementsDouble(int[] empiricalMeasurementsDouble)

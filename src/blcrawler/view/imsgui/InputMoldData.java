@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -56,6 +57,10 @@ public class InputMoldData
     private static TextField capacity8x;
     private static TextField capacity10x;
     
+    private static TextField extrapolateAt;
+    private static TextField multiples;
+    private static CheckBox doublePreferred;
+    
     private static Label l_capacity1;
     private static Label l_capacity2;
     private static Label l_capacity3;
@@ -78,6 +83,10 @@ public class InputMoldData
     private static Label l_capacity8x;
     private static Label l_capacity10x;
     
+    private static Label l_extrapolateAt;
+    private static Label l_multiples;
+    private static Label l_doublePreferred;
+    
     private static HBox h_capacity1;
     private static HBox h_capacity2;
     private static HBox h_capacity3;
@@ -99,44 +108,13 @@ public class InputMoldData
     private static HBox h_capacity6x;
     private static HBox h_capacity8x;
     private static HBox h_capacity10x;
+    
+    private static HBox h_extrapolateAt;
+    private static HBox h_multiples;
+    private static HBox h_doublePreferred;
 	
     public InputMoldData(CatalogPart a_part)
     {
-        part = a_part;
-        moldData = part.getMoldData();
-        int[] capacities = moldData.getEmpiricalMeasurementsSingle();
-        int[] capacities2x = moldData.getEmpiricalMeasurementsDouble();
-        capacity1.setText(String.valueOf(capacities[1]));
-        capacity2.setText(String.valueOf(capacities[2]));
-        capacity3.setText(String.valueOf(capacities[3]));
-        capacity4.setText(String.valueOf(capacities[4]));
-        capacity5.setText(String.valueOf(capacities[5]));
-        capacity6.setText(String.valueOf(capacities[6]));
-        capacity7.setText(String.valueOf(capacities[7]));
-        capacity8.setText(String.valueOf(capacities[8]));
-        capacity9.setText(String.valueOf(capacities[9]));
-        capacity10.setText(String.valueOf(capacities[10]));
-        capacity11.setText(String.valueOf(capacities[11]));
-        capacity12.setText(String.valueOf(capacities[12]));
-        capacity13.setText(String.valueOf(capacities[13]));
-        capacity14.setText(String.valueOf(capacities[14]));
-        capacity15.setText(String.valueOf(capacities[15]));
-        capacity16.setText(String.valueOf(capacities[16]));
-        capacity2x.setText(String.valueOf(capacities2x[2]));
-        capacity4x.setText(String.valueOf(capacities2x[4]));
-        capacity6x.setText(String.valueOf(capacities2x[6]));
-        capacity8x.setText(String.valueOf(capacities2x[8]));
-        capacity10x.setText(String.valueOf(capacities2x[10]));
-        
-        
-    }
-	
-	public void display()
-	{
-		Stage window = new Stage();
-		
-		window.setTitle("Assess Molds");
-		
         capacity1 = new TextField();
         capacity2 = new TextField();
         capacity3 = new TextField();
@@ -153,6 +131,15 @@ public class InputMoldData
         capacity14 = new TextField();
         capacity15 = new TextField();
         capacity16 = new TextField();
+        capacity2x = new TextField();
+        capacity4x = new TextField();
+        capacity6x = new TextField();
+        capacity8x = new TextField();
+        capacity10x = new TextField();
+        
+        extrapolateAt = new TextField();
+        multiples = new TextField();
+        doublePreferred = new CheckBox();
         
         l_capacity1 = new Label("Measured Capacity, Size 1 ");
         l_capacity2 = new Label("Measured Capacity, Size 2 ");
@@ -170,23 +157,77 @@ public class InputMoldData
         l_capacity14 = new Label("Measured Capacity, Size 14");
         l_capacity15 = new Label("Measured Capacity, Size 15");
         l_capacity16 = new Label("Measured Capacity, Size 16");
+        l_capacity2x = new Label("Measured Capacity, Size 2x");
+        l_capacity4x = new Label("Measured Capacity, Size 4x");
+        l_capacity6x = new Label("Measured Capacity, Size 6x");
+        l_capacity8x = new Label("Measured Capacity, Size 8x");
+        l_capacity10x = new Label("Measured Capacity, Size 10x");
         
-        l_capacity1.setPadding(new Insets(0,0,10,0));
-        l_capacity2.setPadding(new Insets(0,0,10,0));
-        l_capacity3.setPadding(new Insets(0,0,10,0));
-        l_capacity4.setPadding(new Insets(0,0,10,0));
-        l_capacity5.setPadding(new Insets(0,0,10,0));
-        l_capacity6.setPadding(new Insets(0,0,10,0));
-        l_capacity7.setPadding(new Insets(0,0,10,0));
-        l_capacity8.setPadding(new Insets(0,0,10,0));
-        l_capacity9.setPadding(new Insets(0,0,10,0));
-        l_capacity10.setPadding(new Insets(0,0,10,0));
-        l_capacity11.setPadding(new Insets(0,0,10,0));
-        l_capacity12.setPadding(new Insets(0,0,10,0));
-        l_capacity13.setPadding(new Insets(0,0,10,0));
-        l_capacity14.setPadding(new Insets(0,0,10,0));
-        l_capacity15.setPadding(new Insets(0,0,10,0));
-        l_capacity16.setPadding(new Insets(0,0,10,0));
+
+        l_extrapolateAt = new Label("Extrapolate beyond");
+        l_multiples = new Label("Minimum Sizing Step");
+        l_doublePreferred = new Label("Prefer double wide?");
+        
+        l_capacity1.setPadding(new Insets(0,10,0,0));
+        l_capacity2.setPadding(new Insets(0,10,0,0));
+        l_capacity3.setPadding(new Insets(0,10,0,0));
+        l_capacity4.setPadding(new Insets(0,10,0,0));
+        l_capacity5.setPadding(new Insets(0,10,0,0));
+        l_capacity6.setPadding(new Insets(0,10,0,0));
+        l_capacity7.setPadding(new Insets(0,10,0,0));
+        l_capacity8.setPadding(new Insets(0,10,0,0));
+        l_capacity9.setPadding(new Insets(0,10,0,0));
+        l_capacity10.setPadding(new Insets(0,10,0,0));
+        l_capacity11.setPadding(new Insets(0,10,0,0));
+        l_capacity12.setPadding(new Insets(0,10,0,0));
+        l_capacity13.setPadding(new Insets(0,10,0,0));
+        l_capacity14.setPadding(new Insets(0,10,0,0));
+        l_capacity15.setPadding(new Insets(0,10,0,0));
+        l_capacity16.setPadding(new Insets(0,10,0,0));
+        l_capacity2x.setPadding(new Insets(0,10,0,0));
+        l_capacity4x.setPadding(new Insets(0,10,0,0));
+        l_capacity6x.setPadding(new Insets(0,10,0,0));
+        l_capacity8x.setPadding(new Insets(0,10,0,0));
+        l_capacity10x.setPadding(new Insets(0,10,0,0));
+        
+        part = a_part;
+        moldData = part.getMoldData();
+        capacity1.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(1)));
+        capacity2.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(2)));
+        capacity3.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(3)));
+        capacity4.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(4)));
+        capacity5.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(5)));
+        capacity6.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(6)));
+        capacity7.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(7)));
+        capacity8.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(8)));
+        capacity9.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(9)));
+        capacity10.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(10)));
+        capacity11.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(11)));
+        capacity12.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(12)));
+        capacity13.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(13)));
+        capacity14.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(14)));
+        capacity15.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(15)));
+        capacity16.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(16)));
+        capacity2x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(2)));
+        capacity4x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(4)));
+        capacity6x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(6)));
+        capacity8x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(8)));
+        capacity10x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(10)));
+        
+        extrapolateAt.setText(String.valueOf(moldData.getExtrapolateAt()));
+        multiples.setText(String.valueOf(moldData.getMultiple()));
+        doublePreferred.setSelected(moldData.isDoublePreferred());
+        
+        
+    }
+	
+	public void display()
+	{
+		Stage window = new Stage();
+		
+		window.setTitle("Assess Molds");
+		
+
         
         
 
@@ -238,6 +279,21 @@ public class InputMoldData
         h_capacity16 = new HBox();
         h_capacity16.getChildren().add(l_capacity16);
         h_capacity16.getChildren().add(capacity16);
+        h_capacity2x = new HBox();
+        h_capacity2x.getChildren().add(l_capacity2x);
+        h_capacity2x.getChildren().add(capacity2x);
+        h_capacity4x = new HBox();
+        h_capacity4x.getChildren().add(l_capacity4x);
+        h_capacity4x.getChildren().add(capacity4x);
+        h_capacity6x = new HBox();
+        h_capacity6x.getChildren().add(l_capacity6x);
+        h_capacity6x.getChildren().add(capacity6x);
+        h_capacity8x = new HBox();
+        h_capacity8x.getChildren().add(l_capacity8x);
+        h_capacity8x.getChildren().add(capacity8x);
+        h_capacity10x = new HBox();
+        h_capacity10x.getChildren().add(l_capacity10x);
+        h_capacity10x.getChildren().add(capacity10x);
         h_capacity1.setPadding(new Insets(5,5,5,5));
         h_capacity2.setPadding(new Insets(5,5,5,5));
         h_capacity3.setPadding(new Insets(5,5,5,5));
@@ -254,32 +310,63 @@ public class InputMoldData
         h_capacity14.setPadding(new Insets(5,5,5,5));
         h_capacity15.setPadding(new Insets(5,5,5,5));
         h_capacity16.setPadding(new Insets(5,5,5,5));
+        h_capacity2x.setPadding(new Insets(5,5,5,5));
+        h_capacity4x.setPadding(new Insets(5,5,5,5));
+        h_capacity6x.setPadding(new Insets(5,5,5,5));
+        h_capacity8x.setPadding(new Insets(5,5,5,5));
+        h_capacity10x.setPadding(new Insets(5,5,5,5));
         
+
+        h_extrapolateAt = new HBox();
+        h_extrapolateAt.getChildren().add(l_extrapolateAt);
+        h_extrapolateAt.getChildren().add(extrapolateAt);
+
+        h_multiples = new HBox();
+        h_multiples.getChildren().add(l_multiples);
+        h_multiples.getChildren().add(multiples);
+
+        h_doublePreferred = new HBox();
+        h_doublePreferred.getChildren().add(l_doublePreferred);
+        h_doublePreferred.getChildren().add(doublePreferred);
         
 		
 		acceptButton = new Button("Enter Mold Data");
 		acceptButton.setOnAction(e -> window.close());
 		
-		VBox mainLayout = new VBox();
+		VBox sizecolumn = new VBox();
 		
-		mainLayout.getChildren().add(h_capacity1);
-        mainLayout.getChildren().add(h_capacity2);
-        mainLayout.getChildren().add(h_capacity3);
-        mainLayout.getChildren().add(h_capacity4);
-        mainLayout.getChildren().add(h_capacity5);
-        mainLayout.getChildren().add(h_capacity6);
-        mainLayout.getChildren().add(h_capacity7);
-        mainLayout.getChildren().add(h_capacity8);
-        mainLayout.getChildren().add(h_capacity9);
-        mainLayout.getChildren().add(h_capacity10);
-        mainLayout.getChildren().add(h_capacity11);
-        mainLayout.getChildren().add(h_capacity12);
-        mainLayout.getChildren().add(h_capacity13);
-        mainLayout.getChildren().add(h_capacity14);
-        mainLayout.getChildren().add(h_capacity15);
-        mainLayout.getChildren().add(h_capacity16);
+		sizecolumn.getChildren().add(h_capacity1);
+        sizecolumn.getChildren().add(h_capacity2);
+        sizecolumn.getChildren().add(h_capacity3);
+        sizecolumn.getChildren().add(h_capacity4);
+        sizecolumn.getChildren().add(h_capacity5);
+        sizecolumn.getChildren().add(h_capacity6);
+        sizecolumn.getChildren().add(h_capacity7);
+        sizecolumn.getChildren().add(h_capacity8);
+        sizecolumn.getChildren().add(h_capacity9);
+        sizecolumn.getChildren().add(h_capacity10);
+        sizecolumn.getChildren().add(h_capacity11);
+        sizecolumn.getChildren().add(h_capacity12);
+        sizecolumn.getChildren().add(h_capacity13);
+        sizecolumn.getChildren().add(h_capacity14);
+        sizecolumn.getChildren().add(h_capacity15);
+        sizecolumn.getChildren().add(h_capacity16);
+        sizecolumn.getChildren().add(h_capacity2x);
+        sizecolumn.getChildren().add(h_capacity4x);
+        sizecolumn.getChildren().add(h_capacity6x);
+        sizecolumn.getChildren().add(h_capacity8x);
+        sizecolumn.getChildren().add(h_capacity10x);
         
-        mainLayout.setPadding(new Insets(5,5,5,5));
+        sizecolumn.setPadding(new Insets(5,5,5,5));
+        
+        VBox modifierColumn = new VBox();
+        modifierColumn.getChildren().add(h_extrapolateAt);
+        modifierColumn.getChildren().add(h_multiples);
+        modifierColumn.getChildren().add(h_doublePreferred);
+        
+        HBox mainLayout = new HBox();
+        mainLayout.getChildren().add(sizecolumn);
+        mainLayout.getChildren().add(modifierColumn);
 		
 		Scene scene = new Scene(mainLayout);
 		window.setScene(scene);
