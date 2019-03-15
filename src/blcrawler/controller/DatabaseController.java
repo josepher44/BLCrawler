@@ -29,6 +29,7 @@ import org.jdom2.output.XMLOutputter;
 import blcrawler.commands.ReadPartsFromXML;
 import blcrawler.model.CatalogPart;
 import blcrawler.model.ConsoleGUIModel;
+import blcrawler.model.MoldEmpirical;
 import blcrawler.model.MoldMaster;
 import blcrawler.model.PartInventory;
 import blcrawler.primatives.ColorCount;
@@ -253,6 +254,7 @@ public class DatabaseController
 				i++;
 			}
 			System.out.println("total parts imported: "+i);
+			readMoldXML();
 
 		}
 		catch (JDOMException | IOException e)
@@ -339,7 +341,73 @@ public class DatabaseController
 
 	public void readMoldXML()
 	{
+	    File moldXML = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/mold_database.xml");
 
+        SAXBuilder builder3 = new SAXBuilder();
+        moldsDoc = null;
+        
+        try
+        {
+            moldsDoc = builder3.build(moldXML);
+            Element rootElement = moldsDoc.getRootElement();
+            //doc.getRootElement().sortChildren(elementComp);
+            System.out.println("Built mold xml database "+rootElement.getChildren().size());
+            int i=0;
+            for (Element currentElement : rootElement.getChildren())
+            {
+                String master = currentElement.getChildText("masterpart");
+                try
+                {
+                    catalogPartsByID.get(master).setMasterMoldID("SELF");
+                    if (currentElement.getChildText("verified").equalsIgnoreCase("false"))
+                    {
+                        catalogPartsByID.get(master).setMoldData(new MoldEmpirical(master));
+                    }
+                    i++;
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Error occured trying to write to part "+master);
+                }
+                Element subparts = currentElement.getChild("subparts");
+                if (subparts.getChildren().size()>0)
+                {
+                    for (Element subElement : subparts.getChildren())
+                    {
+                        try
+                        {
+                            catalogPartsByID.get(subElement.getText()).setMasterMoldID(master);
+                            if (currentElement.getChildText("verified").equalsIgnoreCase("false"))
+                            {
+                                catalogPartsByID.get(subElement.getText()).setMoldData(new MoldEmpirical(subElement.getText()));
+                                i++;
+                            }
+                            else
+                            {
+                                System.out.println("verified wasn't false, it was "+currentElement.getChildText("verified")+" for part number "+subElement.getText());
+                            }
+                            
+                        }
+                        catch (Exception e)
+                        {
+                            System.out.println("Error occured trying to write subpart "+subElement.getChildText("part")+" given a masterpart of "+master);
+                        }
+                    }
+                }
+                
+            }
+            System.out.println("total parts with mold data written: "+i);
+
+        }
+        catch (JDOMException | IOException e)
+        {
+            System.out.println("ERROR: Mold XML does not exist or is corrupt");
+        }
+        
+        
+        
+        
+        
 	}
 
 

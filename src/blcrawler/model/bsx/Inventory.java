@@ -1,5 +1,8 @@
 package blcrawler.model.bsx;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -13,6 +16,7 @@ import javafx.collections.ObservableList;
 public class Inventory
 {
 	ObservableList<InventoryLot> inventoryLotList = FXCollections.observableArrayList();
+	//Seemingly empty/unused?
 	ObservableList<InventoryLocation> inventoryLocationList = FXCollections.observableArrayList();
 	Hashtable<String, DrawerDivision> divisionTable;
 	Hashtable<Integer, InventoryLocation>locationsBySequential;
@@ -881,6 +885,28 @@ public class Inventory
 	{
 		this.inventoryLocationList = inventoryLocationList;
 
+	}
+	
+	public String exportBricklinkXML()
+	{
+	    System.out.println("Inventory locations in Inventory: "+inventoryLocationList.size());
+	    String output = "<INVENTORY>\n";
+	    for (InventoryLocation i : inventoryLocationList)
+	    {
+	        output = output + i.generateBLXMLText();
+	    }
+	    output = output+"</INVENTORY>\n";
+	    
+        
+        StringSelection toclip = new StringSelection(output);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(toclip, toclip);
+	    return output;
+	}
+	
+	public void addInventoryLocation(InventoryLocation e)
+	{
+	    inventoryLocationList.add(e);
 	}
 
 

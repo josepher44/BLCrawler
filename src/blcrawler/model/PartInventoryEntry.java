@@ -32,13 +32,22 @@ public class PartInventoryEntry
 		String txtRep = entry.substring(entry.indexOf("\"no\":\"")+6);
 		txtRep = txtRep.substring(0, txtRep.indexOf("\","));
 		//System.out.println("Part number is "+txtRep);
-		if(ConsoleGUIModel.getDatabase().getPart(txtRep).getHasInventory())
-		{
-			flagForRemoval = true;
-			//System.out.println("Warning: Stacked parts with inventory, part number "+txtRep);
-			String basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/";
-			inv_parent.addToInventory(new PartInventory(basepath+"part_"+txtRep+".txt"));
-		}
+		try
+        {
+            if(ConsoleGUIModel.getDatabase().getPart(txtRep).getHasInventory())
+            {
+            	flagForRemoval = true;
+            	//System.out.println("Warning: Stacked parts with inventory, part number "+txtRep);
+            	String basepath = "C:/Users/Owner/Documents/BLCrawler/Catalog/Inventories/Parts/";
+            	inv_parent.addToInventory(new PartInventory(basepath+"part_"+txtRep+".txt"));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("INVENTORY PARSE EXCEPTION");
+            System.out.println("Failure occured at part number "+txtRep);
+            e.printStackTrace();
+        }
 		return txtRep;
 	}
 	

@@ -198,8 +198,8 @@ public class IMSGUIView
 
 		ObservableList<TablePosition> selectedCells = FXCollections.observableArrayList();
 		Button btn = new Button();
-        btn.setText("Toolbar Placeholder'");
-        btn.setOnAction(e -> System.out.println("Hello World!"));
+        btn.setText("Export XML'");
+        btn.setOnAction(e -> getCurrentInventory().exportBricklinkXML());
 
 
 

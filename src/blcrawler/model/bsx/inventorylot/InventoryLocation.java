@@ -1,5 +1,8 @@
 package blcrawler.model.bsx.inventorylot;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.File;
@@ -615,6 +618,25 @@ public class InventoryLocation extends InventoryEntry
 	    }
 
 	    return image_param.getSubimage(minX, minY, maxX - minX + 1, maxY - minY + 1);
+	}
+	
+	public String generateBLXMLText()
+	{
+	    System.out.println("Generating XML for part "+ItemID);
+	    String output = "<ITEM>\n";
+	    output = output+"\t<ITEMID>"+ItemID+"</ITEMID>\n";
+	    output = output+"\t<COLOR>"+ColorID+"</COLOR>\n";
+        output = output+"\t<CATEGORY>"+CategoryID+"</CATEGORY>\n";
+        output = output+"\t<ITEMTYPE>"+"P"+"</ITEMTYPE>\n";
+        output = output+"\t<QTY>"+Qty+"</QTY>\n";
+        output = output+"\t<PRICE>"+Price.get()+"</PRICE>\n";
+        output = output+"\t<CONDITION>"+Condition+"</CONDITION>\n";
+        output = output+"\t<DESCRIPTION>"+Comments+"</DESCRIPTION>\n";
+        output = output+"\t<REMARKS>"+Remarks+"</REMARKS>\n";
+        output = output+"</ITEM>\n";
+
+        return output;
+
 	}
 
 

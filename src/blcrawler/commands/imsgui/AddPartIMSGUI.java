@@ -2,6 +2,7 @@ package blcrawler.commands.imsgui;
 
 import blcrawler.model.ConsoleGUIModel;
 import blcrawler.model.bsx.inventorylot.InventoryLocation;
+import blcrawler.view.imsgui.IMSGUIView;
 
 /**
  * Add a part to the IMSGUI system. The part is represented with an InventoryLocation class, 
@@ -36,6 +37,8 @@ public class AddPartIMSGUI implements GUICommand
 	public void execute()
 	{
 		ConsoleGUIModel.getImsgui().addItem(item, indecies);
+		ConsoleGUIModel.getImsgui();
+        IMSGUIView.getCurrentInventory().addInventoryLocation(item);
 	}
 
 	@Override

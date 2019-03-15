@@ -54,6 +54,8 @@ public class CatalogPart
 	private ArrayList<CatalogGear> gearInventories;
 	private ArrayList<CatalogBook> bookInventories;
 	private String notes;
+	private String masterMoldID;
+	private MoldEmpirical moldData;
 
 	private ArrayList<String> similarMold;
 	private ArrayList<String> pairsWith;
@@ -2295,5 +2297,27 @@ public class CatalogPart
     {
         return Math.abs(comparison - weight);
     }
+
+    public String getMasterMoldID()
+    {
+        return masterMoldID;
+    }
+
+    public void setMasterMoldID(String masterMoldID)
+    {
+        this.masterMoldID = masterMoldID;
+    }
+
+    public MoldEmpirical getMoldData()
+    {
+        return moldData;
+    }
+
+    public void setMoldData(MoldEmpirical moldData)
+    {
+        this.moldData = moldData;
+    }
+    
+    
 
 }

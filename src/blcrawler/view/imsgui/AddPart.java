@@ -67,6 +67,7 @@ public class AddPart
     static ToggleGroup condition;
     static Image previewImage;
     static ImageView previewImageView;
+    static Button addMoldData;
     
     
     public static void display()
@@ -77,6 +78,11 @@ public class AddPart
         
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> window.close());
+        
+        addMoldData = new Button("Update mold info");
+        addMoldData.setOnAction(e -> {InputMoldData data = new InputMoldData(partTable.getSelectionModel().getSelectedItem());
+            data.display();
+        });
         
         Button addButton = new Button("Add Part");
         addButton.setOnAction(e -> ConsoleGUIModel.getImsgui().addPart());
@@ -366,6 +372,7 @@ public class AddPart
         dataBoxes.add(quantity, 1, 0);
         dataBoxes.add(conditionNew, 2, 0);
         dataBoxes.add(conditionUsed, 3, 0);
+        dataBoxes.add(addMoldData, 4, 0);
         dataBoxes.add(imageStackPane, 2, 1, 5,3);
         dataBoxes.add(priceLabel, 0, 1);
         dataBoxes.add(price, 1, 1);
