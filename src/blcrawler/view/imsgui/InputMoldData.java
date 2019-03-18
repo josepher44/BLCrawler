@@ -593,27 +593,31 @@ public class InputMoldData
     
     public void extrapolateSingles(int entryIndex, int entryValue)
     {
-        if (entryIndex >= Integer.valueOf(extrapolateAt.getText()))
+        if (extrapolateAt.getText().length()>0 && multiples.getText().length()>0)
         {
-            int index = entryIndex;
-            while (index%Integer.valueOf(multiples.getText()) != 0)
+            if (entryIndex >= Integer.valueOf(extrapolateAt.getText()))
             {
-                index++;
-            }
-            Double countper = Double.valueOf(singleCaps[index].getText())/index;
-            for (int j = index; j<17; j++)
-            {
-                if (j%Integer.valueOf(multiples.getText())==0)
+                int index = entryIndex;
+                while (index%Integer.valueOf(multiples.getText()) != 0)
                 {
-                    singleCaps[j].setText(String.valueOf((int)Math.floor(countper*j)));
+                    index++;
                 }
-                else
+                Double countper = Double.valueOf(singleCaps[index].getText())/index;
+                for (int j = index; j<17; j++)
                 {
-                    singleCaps[j].setText(singleCaps[j-1].getText());
+                    if (j%Integer.valueOf(multiples.getText())==0)
+                    {
+                        singleCaps[j].setText(String.valueOf((int)Math.floor(countper*j)));
+                    }
+                    else
+                    {
+                        singleCaps[j].setText(singleCaps[j-1].getText());
+                    }
                 }
-            }
 
+            }
         }
+
     }
     
     public MoldEmpirical buildMoldData()

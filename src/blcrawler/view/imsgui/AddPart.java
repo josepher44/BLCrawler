@@ -5,8 +5,11 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.IllegalFormatException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+
+import blcrawler.commands.residuals.Delay;
 
 //import blcrawler.view.css.*;
 
@@ -73,9 +76,12 @@ public class AddPart
     static ImageView previewImageView;
     static Button addMoldData;
     static Label consoleout;
+    static long msecs;
     
     public static void display()
     {
+
+        
         Stage window = new Stage();
         
         window.setTitle("Add part");
@@ -93,7 +99,7 @@ public class AddPart
         
         consoleout = new Label("Test text");
         consoleout.setBackground(new Background(new BackgroundFill(Color.LIGHTSALMON, CornerRadii.EMPTY, Insets.EMPTY)));
-        consoleout.setPrefWidth(500);
+        consoleout.setPrefWidth(900);
         
         itemTypes = new ChoiceBox<>();
         itemTypes.getItems().add("Book");
@@ -266,6 +272,18 @@ public class AddPart
                     {
                         colorList.getSelectionModel().select(0);
                     }
+                }
+                
+                //Alert user to whether or not mold data is needed
+                if (newValue.getMoldData().isEmpty())
+                {
+                    consoleout.setText(newValue.getName()+" does not have mold data set. Recommend that it be added now");
+                    consoleout.setBackground(new Background(new BackgroundFill(Color.LIGHTSALMON, CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                else
+                {
+                    consoleout.setText(newValue.getName()+" has valid mold data");
+                    consoleout.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 
                 
@@ -514,4 +532,5 @@ public class AddPart
             return 'N';
         }
     }
+    
 }

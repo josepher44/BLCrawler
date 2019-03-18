@@ -139,6 +139,16 @@ public class MoldEmpirical
         this.doublePossible = doublePossible;
         empty=false;
     }
+
+    public boolean isEmpty()
+    {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty)
+    {
+        this.empty = empty;
+    }
     
     
 }
