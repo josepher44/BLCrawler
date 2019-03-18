@@ -2459,6 +2459,8 @@ public class CatalogPart
         {
             System.out.println("XML IO error at part "+partNumber);
         }
+        
+        ConsoleGUIModel.getDatabase().readMoldXML();
     }
     
     

@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -77,6 +78,8 @@ public class AddPart
     static Button addMoldData;
     static Label consoleout;
     static long msecs;
+    static CheckBox consolidate;
+    static Label consolidateLabel;
     
     public static void display()
     {
@@ -361,6 +364,10 @@ public class AddPart
         
         condition = new ToggleGroup();
         
+        consolidate = new CheckBox();
+        consolidate.setPadding(new Insets(0,30,0,5));
+        consolidateLabel = new Label("Consolidate?");
+        
         conditionNew = new RadioButton("New");
         conditionNew.setToggleGroup(condition);
         conditionNew.setPadding(new Insets(0,20,0,20));
@@ -413,6 +420,8 @@ public class AddPart
         bottomMaster.getChildren().add(bottomMain);
         bottomButtons.getChildren().add(addButton);
         bottomButtons.getChildren().add(closeButton);
+        bottomButtons.getChildren().add(consolidate);
+        bottomButtons.getChildren().add(consolidateLabel);
         bottomMaster.getChildren().add(bottomButtons);
         bottomMaster.getChildren().add(consoleout);
         
@@ -531,6 +540,20 @@ public class AddPart
         {
             return 'N';
         }
+    }
+    
+    public static void writeToAddPartConsole(String text, String alertlevel)
+    {
+        consoleout.setText(text);
+        if (alertlevel.equalsIgnoreCase("caution"));
+        {
+            consoleout.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+    
+    public static Boolean getConsolidation()
+    {
+        return consolidate.isSelected();
     }
     
 }

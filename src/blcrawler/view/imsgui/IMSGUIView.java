@@ -692,6 +692,8 @@ public class IMSGUIView
 		comments = AddPart.getComments();
 		quantity = AddPart.getQuantityString();
 		condition = AddPart.getCondition();
+		
+		
 
 		if(part==null||colorString==null)
 		{
@@ -700,45 +702,73 @@ public class IMSGUIView
 		}
 		else
 		{
-			try
-			{
-				price = AddPart.getPriceString();
-				if (!price.equals(""))
-				{
-					lot.setPrice(Double.valueOf(price));
-				}
-				else
-				{
-					lot.setPrice(0.00);
-				}
-			}
-			catch (IllegalArgumentException e)
-			{
-				System.out.println("Illegal argument exception: Invalid Price");
-				error=true;
-			}
-			try
-			{
-				locationString = AddPart.getLocationString();
-				System.out.println(locationString);
-				if(locationString.length()==9)
-				{
-					lot.setSectionID(Short.valueOf(locationString.substring(7, 9)));
-					lot.setCabinet(Short.valueOf(locationString.substring(0,3)));
-					lot.setDrawer(Short.valueOf(locationString.substring(4,6)));
-				}
-				else if(locationString.length()==6)
-				{
-					lot.setSectionID((short) 1);
-					lot.setCabinet(Short.valueOf(locationString.substring(0,3)));
-					lot.setDrawer(Short.valueOf(locationString.substring(4,6)));
-				}
-			}
-			catch (IllegalArgumentException e)
-			{
-				System.out.println("Illegal argument exception: Invalid Location");
-				error=true;
-			}
+		    
+		    //Check if the part is meant to be consolidated
+		    InventoryLocation consolindex=null;
+		    for(InventoryLocation a : lots)
+		    {
+		        if (a.getItemID().equalsIgnoreCase(part.getPartNumber()) && a.getColorName().equalsIgnoreCase(colorString) && a.getCondition()==condition && AddPart.getConsolidation())
+		        {
+		            System.out.println("Lot already exists and should be consolidated");
+		            consolindex = a;
+		            break;
+		        }
+		    }
+		    if (consolindex==null)
+		    {
+		 
+		    
+    			try
+    			{
+    				price = AddPart.getPriceString();
+    				if (!price.equals(""))
+    				{
+    					lot.setPrice(Double.valueOf(price));
+    				}
+    				else
+    				{
+    					lot.setPrice(0.00);
+    				}
+    			}
+    			catch (IllegalArgumentException e)
+    			{
+    				System.out.println("Illegal argument exception: Invalid Price");
+    				error=true;
+    			}
+    			try
+    			{
+    				locationString = AddPart.getLocationString();
+    				System.out.println(locationString);
+    				if(locationString.length()==9)
+    				{
+    					lot.setSectionID(Short.valueOf(locationString.substring(7, 9)));
+    					lot.setCabinet(Short.valueOf(locationString.substring(0,3)));
+    					lot.setDrawer(Short.valueOf(locationString.substring(4,6)));
+    				}
+    				else if(locationString.length()==6)
+    				{
+    					lot.setSectionID((short) 1);
+    					lot.setCabinet(Short.valueOf(locationString.substring(0,3)));
+    					lot.setDrawer(Short.valueOf(locationString.substring(4,6)));
+    				}
+    			}
+    			catch (IllegalArgumentException e)
+    			{
+    				System.out.println("Illegal argument exception: Invalid Location");
+    				error=true;
+    			}
+		    }
+		    
+		    
+		    else
+		    {
+		        consolindex.setQty(consolindex.getQty()+Integer.valueOf(quantity));
+		        AddPart.writeToAddPartConsole("Consolidating parts into existing entry with remarks "+consolindex.getRemarks()+", new quantity of "+consolindex.getQty(), "caution");
+                System.out.println("Consolidation code goes here");
+                inventoryView.setItems(lots);
+                inventoryView.refresh();
+                return;
+		    }
 		}
 
 
