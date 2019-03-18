@@ -363,10 +363,16 @@ public class DatabaseController
                     {
                         catalogPartsByID.get(master).setMoldData(new MoldEmpirical(master));
                     }
+                    else
+                    {
+                        catalogPartsByID.get(master).setMoldData(new MoldEmpirical(currentElement, master));
+                        System.out.println("verified wasn't false, it was "+currentElement.getChildText("verified")+" for part number "+master);
+                    }
                     i++;
                 }
                 catch (Exception e)
                 {
+                    e.printStackTrace();
                     System.out.println("Error occured trying to write to part "+master);
                 }
                 Element subparts = currentElement.getChild("subparts");
@@ -384,6 +390,7 @@ public class DatabaseController
                             }
                             else
                             {
+                                catalogPartsByID.get(subElement.getText()).setMoldData(new MoldEmpirical(currentElement, subElement.getText()));
                                 System.out.println("verified wasn't false, it was "+currentElement.getChildText("verified")+" for part number "+subElement.getText());
                             }
                             

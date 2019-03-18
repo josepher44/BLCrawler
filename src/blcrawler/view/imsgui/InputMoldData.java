@@ -57,6 +57,8 @@ public class InputMoldData
     private static TextField capacity8x;
     private static TextField capacity10x;
     
+    private static TextField[] singleCaps;
+    
     private static TextField extrapolateAt;
     private static TextField multiples;
     private static CheckBox doublePreferred;
@@ -136,6 +138,206 @@ public class InputMoldData
         capacity6x = new TextField();
         capacity8x = new TextField();
         capacity10x = new TextField();
+        
+        singleCaps = new TextField[17];
+        singleCaps[1]=capacity1;
+        singleCaps[2]=capacity2;
+        singleCaps[3]=capacity3;
+        singleCaps[4]=capacity4;
+        singleCaps[5]=capacity5;
+        singleCaps[6]=capacity6;
+        singleCaps[7]=capacity7;
+        singleCaps[8]=capacity8;
+        singleCaps[9]=capacity9;
+        singleCaps[10]=capacity10;
+        singleCaps[11]=capacity11;
+        singleCaps[12]=capacity12;
+        singleCaps[13]=capacity13;
+        singleCaps[14]=capacity14;
+        singleCaps[15]=capacity15;
+        singleCaps[16]=capacity16;
+        
+
+        capacity1.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(1,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity2.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(2,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity3.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(3,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity4.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(4,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity5.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(5,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity6.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(6,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity7.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(7,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity8.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(8,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity9.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(9,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity10.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(10,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity11.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(11,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity12.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(12,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity13.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(13,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity14.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(14,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity15.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(15,Integer.valueOf(newValue));    
+            }
+            
+        });
+        capacity16.textProperty().addListener(new ChangeListener<String>() 
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue)
+            {
+                extrapolateSingles(16,Integer.valueOf(newValue));    
+            }
+            
+        });
+        
+    
+
+        
         
         extrapolateAt = new TextField();
         multiples = new TextField();
@@ -331,7 +533,10 @@ public class InputMoldData
         
 		
 		acceptButton = new Button("Enter Mold Data");
-		acceptButton.setOnAction(e -> window.close());
+		acceptButton.setOnAction(e -> {
+		    part.updateAndWriteMoldData(buildMoldData());
+		    window.close();
+		});
 		
 		VBox sizecolumn = new VBox();
 		
@@ -356,6 +561,7 @@ public class InputMoldData
         sizecolumn.getChildren().add(h_capacity6x);
         sizecolumn.getChildren().add(h_capacity8x);
         sizecolumn.getChildren().add(h_capacity10x);
+        sizecolumn.getChildren().add(acceptButton);
         
         sizecolumn.setPadding(new Insets(5,5,5,5));
         
@@ -383,6 +589,66 @@ public class InputMoldData
     public void setPart(CatalogPart part)
     {
         this.part = part;
+    }
+    
+    public void extrapolateSingles(int entryIndex, int entryValue)
+    {
+        if (entryIndex >= Integer.valueOf(extrapolateAt.getText()))
+        {
+            int index = entryIndex;
+            while (index%Integer.valueOf(multiples.getText()) != 0)
+            {
+                index++;
+            }
+            Double countper = Double.valueOf(singleCaps[index].getText())/index;
+            for (int j = index; j<17; j++)
+            {
+                if (j%Integer.valueOf(multiples.getText())==0)
+                {
+                    singleCaps[j].setText(String.valueOf((int)Math.floor(countper*j)));
+                }
+                else
+                {
+                    singleCaps[j].setText(singleCaps[j-1].getText());
+                }
+            }
+
+        }
+    }
+    
+    public MoldEmpirical buildMoldData()
+    {
+        MoldEmpirical output = new MoldEmpirical(part.getPartNumber());
+        output.setExtrapolateAt(Integer.valueOf(extrapolateAt.getText()));
+        output.setMultiple(Integer.valueOf(multiples.getText()));
+        output.setDoublePreferred(doublePreferred.isSelected());
+        int[] singleArray = new int[17];
+        singleArray[1] = Integer.valueOf(capacity1.getText());
+        singleArray[2] = Integer.valueOf(capacity2.getText());
+        singleArray[3] = Integer.valueOf(capacity3.getText());
+        singleArray[4] = Integer.valueOf(capacity4.getText());
+        singleArray[5] = Integer.valueOf(capacity5.getText());
+        singleArray[6] = Integer.valueOf(capacity6.getText());
+        singleArray[7] = Integer.valueOf(capacity7.getText());
+        singleArray[8] = Integer.valueOf(capacity8.getText());
+        singleArray[9] = Integer.valueOf(capacity9.getText());
+        singleArray[10] = Integer.valueOf(capacity10.getText());
+        singleArray[11] = Integer.valueOf(capacity11.getText());
+        singleArray[12] = Integer.valueOf(capacity12.getText());
+        singleArray[13] = Integer.valueOf(capacity13.getText());
+        singleArray[14] = Integer.valueOf(capacity14.getText());
+        singleArray[15] = Integer.valueOf(capacity15.getText());
+        singleArray[16] = Integer.valueOf(capacity16.getText());
+        int[] doubleArray = new int[11];
+        doubleArray[2] = Integer.valueOf(capacity2x.getText());
+        doubleArray[4] = Integer.valueOf(capacity4x.getText());
+        doubleArray[6] = Integer.valueOf(capacity6x.getText());
+        doubleArray[8] = Integer.valueOf(capacity8x.getText());
+        doubleArray[10] = Integer.valueOf(capacity10x.getText());
+        output.setEmpiricalMeasurementsSingle(singleArray);
+        output.setEmpiricalMeasurementsDouble(doubleArray);
+        
+        return output;
     }
 	
 	

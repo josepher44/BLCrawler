@@ -1,5 +1,8 @@
 package blcrawler.model;
 
+
+import org.jdom2.*;
+
 public class MoldEmpirical
 {
     int[] empiricalMeasurementsSingle;
@@ -17,16 +20,57 @@ public class MoldEmpirical
         partNumber=pn;
         empiricalMeasurementsSingle = new int[17];
         empiricalMeasurementsDouble = new int[11];
+        extrapolateAt=16;
+        multiple = 1;
         doublePreferred = false;
         
         for (int i=1; i<17; i++)
         {
+            
             empiricalMeasurementsSingle[i]=0;
             if (i<12 && (i%2)==0)
             {
                 empiricalMeasurementsDouble[i]=0;
             }
         }
+    }
+    
+    public MoldEmpirical(Element moldElement, String pn)
+    {
+        empty = false;
+        partNumber=pn;
+        empiricalMeasurementsSingle = new int[17];
+        empiricalMeasurementsDouble = new int[11];
+        try
+        {
+            extrapolateAt=Integer.valueOf(moldElement.getChild("extrapolationpoint").getText());
+            multiple = Integer.valueOf(moldElement.getChild("multiples").getText());
+            doublePreferred = Boolean.valueOf(moldElement.getChild("doublepref").getText());
+        }
+        catch (Exception e1)
+        {
+            System.out.println("Error at metaparsing");
+            e1.printStackTrace();
+        }
+        
+        for (int i=1; i<17; i++)
+        {
+            empiricalMeasurementsSingle[i]=Integer.valueOf(moldElement.getChild("singlecaps").getChild("cap"+i).getText());
+            if (i<12 && (i%2)==0)
+            {
+                try
+                {
+                    empiricalMeasurementsDouble[i]=Integer.valueOf(moldElement.getChild("doublecaps").getChild("cap"+i+"x").getText());
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("Error trying to read child cap"+i+"x");
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        
     }
    
 

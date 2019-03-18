@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -2316,6 +2317,148 @@ public class CatalogPart
     public void setMoldData(MoldEmpirical moldData)
     {
         this.moldData = moldData;
+    }
+    
+    public void buildMoldFromXML(Element moldElement)
+    {
+        
+    }
+    
+    public void updateAndWriteMoldData(MoldEmpirical mold_Data)
+    {
+        this.moldData = mold_Data;
+        
+        File moldXML = new File("C:/Users/Owner/Documents/BLCrawler/Catalog/mold_database.xml");
+
+        SAXBuilder builder3 = new SAXBuilder();
+        
+        Document moldsDoc;
+        try
+        {
+            Element partElement = null;
+            moldsDoc = builder3.build(moldXML);
+            Element rootElement = moldsDoc.getRootElement();
+            for (Element e : rootElement.getChildren())
+            {
+                if (e.getChildText("masterpart").equalsIgnoreCase(masterMoldID) || (e.getChildText("masterpart").equalsIgnoreCase(partNumber)&&
+                        masterMoldID.equalsIgnoreCase("SELF")))
+                {
+                    partElement = e;
+                    break;
+                }
+            }
+            
+            partElement.getChild("verified").setText("true");
+            Element singlecapacities = new Element("singlecaps");
+            partElement.getChildren().add(singlecapacities);
+            Element cap1 = new Element("cap1");
+            cap1.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(1)));
+            Element cap2 = new Element("cap2");
+            cap2.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(2)));
+            Element cap3 = new Element("cap3");
+            cap3.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(3)));
+            Element cap4 = new Element("cap4");
+            cap4.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(4)));
+            Element cap5 = new Element("cap5");
+            cap5.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(5)));
+            Element cap6 = new Element("cap6");
+            cap6.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(6)));
+            Element cap7 = new Element("cap7");
+            cap7.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(7)));
+            Element cap8 = new Element("cap8");
+            cap8.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(8)));
+            Element cap9 = new Element("cap9");
+            cap9.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(9)));
+            Element cap10 = new Element("cap10");
+            cap10.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(10)));
+            Element cap11 = new Element("cap11");
+            cap11.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(11)));
+            Element cap12 = new Element("cap12");
+            cap12.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(12)));
+            Element cap13 = new Element("cap13");
+            cap13.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(13)));
+            Element cap14 = new Element("cap14");
+            cap14.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(14)));
+            Element cap15 = new Element("cap15");
+            cap15.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(15)));
+            Element cap16 = new Element("cap16");
+            cap16.setText(String.valueOf(moldData.getEmpiricalMeasurementsSingle(16)));
+            singlecapacities.getChildren().add(cap1);
+            singlecapacities.getChildren().add(cap2);
+            singlecapacities.getChildren().add(cap3);
+            singlecapacities.getChildren().add(cap4);
+            singlecapacities.getChildren().add(cap5);
+            singlecapacities.getChildren().add(cap6);
+            singlecapacities.getChildren().add(cap7);
+            singlecapacities.getChildren().add(cap8);
+            singlecapacities.getChildren().add(cap9);
+            singlecapacities.getChildren().add(cap10);
+            singlecapacities.getChildren().add(cap11);
+            singlecapacities.getChildren().add(cap12);
+            singlecapacities.getChildren().add(cap13);
+            singlecapacities.getChildren().add(cap14);
+            singlecapacities.getChildren().add(cap15);
+            singlecapacities.getChildren().add(cap16);
+            
+            Element doublecapacities = new Element("doublecaps");
+            partElement.getChildren().add(doublecapacities);
+            Element cap2x = new Element("cap2x");
+            cap2x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(2)));
+            Element cap4x = new Element("cap4x");
+            cap4x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(4)));
+            Element cap6x = new Element("cap6x");
+            cap6x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(6)));
+            Element cap8x = new Element("cap8x");
+            cap8x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(8)));
+            Element cap10x = new Element("cap10x");
+            cap10x.setText(String.valueOf(moldData.getEmpiricalMeasurementsDouble(10)));
+            doublecapacities.getChildren().add(cap2x);
+            doublecapacities.getChildren().add(cap4x);
+            doublecapacities.getChildren().add(cap6x);
+            doublecapacities.getChildren().add(cap8x);
+            doublecapacities.getChildren().add(cap10x);
+            
+            Element extrapolationpoint = new Element("extrapolationpoint");
+            partElement.getChildren().add(extrapolationpoint);
+            extrapolationpoint.setText(String.valueOf(moldData.getExtrapolateAt()));
+            
+            Element multiples = new Element("multiples");
+            partElement.getChildren().add(multiples);
+            multiples.setText(String.valueOf(moldData.getMultiple()));
+            
+            Element preferDouble = new Element("doublepref");
+            partElement.getChildren().add(preferDouble);
+            preferDouble.setText(String.valueOf(moldData.isDoublePreferred()));
+            
+            
+            //Write data
+            XMLOutputter xmlOutput = new XMLOutputter();
+
+            // display nice nice
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            try
+            {
+                xmlOutput.output(moldsDoc, new FileWriter
+                        ("C:/Users/Owner/Documents/BLCrawler/Catalog/mold_database.xml"));
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            System.out.println("Updated mold xml with data for part "+partNumber);
+            
+            
+        }
+        catch (JDOMException e)
+        {
+            System.out.println("XML parse error at part "+partNumber);
+        }
+        catch (IOException e)
+        {
+            System.out.println("XML IO error at part "+partNumber);
+        }
     }
     
     

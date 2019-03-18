@@ -33,11 +33,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -68,7 +72,7 @@ public class AddPart
     static Image previewImage;
     static ImageView previewImageView;
     static Button addMoldData;
-    
+    static Label consoleout;
     
     public static void display()
     {
@@ -87,6 +91,9 @@ public class AddPart
         Button addButton = new Button("Add Part");
         addButton.setOnAction(e -> ConsoleGUIModel.getImsgui().addPart());
         
+        consoleout = new Label("Test text");
+        consoleout.setBackground(new Background(new BackgroundFill(Color.LIGHTSALMON, CornerRadii.EMPTY, Insets.EMPTY)));
+        consoleout.setPrefWidth(500);
         
         itemTypes = new ChoiceBox<>();
         itemTypes.getItems().add("Book");
@@ -389,6 +396,7 @@ public class AddPart
         bottomButtons.getChildren().add(addButton);
         bottomButtons.getChildren().add(closeButton);
         bottomMaster.getChildren().add(bottomButtons);
+        bottomMaster.getChildren().add(consoleout);
         
         
         
