@@ -62,7 +62,7 @@ public class ReadBLSummary extends InstantCommand
             if(f.exists())
             {
     
-                //System.out.println("file already exists for part "+node.getChildText("ITEMID"));
+                System.out.println("file already exists for part "+node.getChildText("ITEMID"));
             }
             else
             {

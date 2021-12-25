@@ -83,7 +83,7 @@ public class PartBLToRawDatabase implements Command {
 	{
 		if (ConsoleGUIModel.getTaskTimer().queue.size() > 0)
 		{
-			//TODO: Update more fully formed print statem
+			//TODO: Update more fully formed print statement
 			//new ConsoleOutput("CommandResult", "Addition of url " + value + " added to queue. " +
 			//ConsoleGUIModel.getTaskTimer().queue.size() + " tasks queued, standby");
 			System.out.println("Part "+value+" queued");

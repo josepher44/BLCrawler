@@ -87,7 +87,7 @@ public class SeleniumModel {
 			System.setProperty("webdriver.gecko.driver", "C:/Users/Owner/Desktop/Multicircuit Tors/Geckodriver/geckodriver-v0.23.0-win64/geckodriver.exe");
 
 		    String cmd = "C:/Users/Owner/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ";
-		    //Runtime.getRuntime().exec(cmd);
+		    Runtime.getRuntime().exec(cmd);
 			//Runtime.getRuntime().exec("C:/Users/Joseph/Desktop/Multicircuit Tors/"+controlport+"_"+socksport+"/Browser/firefox.exe /C START /MIN ");
 			
 			profile = new ProfilesIni();
